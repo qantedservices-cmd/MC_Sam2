@@ -172,12 +172,12 @@ export default function UsersManagement() {
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           placeholder="Rechercher un utilisateur..."
-          className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
         />
       </div>
 
-      {/* Users table */}
-      <div className="bg-white rounded-lg shadow overflow-hidden">
+      {/* Desktop table */}
+      <div className="hidden md:block bg-white rounded-lg shadow overflow-hidden">
         <table className="w-full">
           <thead className="bg-gray-50">
             <tr>
@@ -258,6 +258,71 @@ export default function UsersManagement() {
         )}
       </div>
 
+      {/* Mobile cards */}
+      <div className="md:hidden space-y-3">
+        {filteredUsers.length === 0 ? (
+          <div className="bg-white rounded-lg shadow p-8 text-center text-gray-500">
+            Aucun utilisateur trouve
+          </div>
+        ) : (
+          filteredUsers.map(user => (
+            <div key={user.id} className="bg-white rounded-lg shadow p-4 space-y-3">
+              <div className="flex items-start justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                    <Users className="w-6 h-6 text-blue-600" />
+                  </div>
+                  <div>
+                    <p className="font-medium text-gray-900">{user.prenom} {user.nom}</p>
+                    <p className="text-sm text-gray-500">{user.email}</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => handleToggleActive(user)}
+                  className={`inline-flex items-center gap-1 px-2 py-1 text-xs font-medium rounded transition-colors ${
+                    user.actif
+                      ? 'bg-green-100 text-green-700'
+                      : 'bg-red-100 text-red-700'
+                  }`}
+                >
+                  {user.actif ? <Check className="w-3 h-3" /> : <X className="w-3 h-3" />}
+                  {user.actif ? 'Actif' : 'Inactif'}
+                </button>
+              </div>
+              <div className="flex items-center justify-between pt-2 border-t">
+                <div className="flex items-center gap-2">
+                  <span className={`inline-flex px-2 py-1 text-xs font-medium rounded ${
+                    user.role === 'admin' ? 'bg-purple-100 text-purple-700' :
+                    user.role === 'gestionnaire' ? 'bg-blue-100 text-blue-700' :
+                    user.role === 'utilisateur' ? 'bg-green-100 text-green-700' :
+                    'bg-gray-100 text-gray-700'
+                  }`}>
+                    {USER_ROLES[user.role]}
+                  </span>
+                  <span className="text-xs text-gray-500">
+                    {user.chantierIds?.length === 0 ? 'Tous les chantiers' : `${user.chantierIds?.length || 0} chantier(s)`}
+                  </span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <button
+                    onClick={() => handleOpenModal(user)}
+                    className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                  >
+                    <Edit2 className="w-5 h-5" />
+                  </button>
+                  <button
+                    onClick={() => handleDelete(user)}
+                    className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                  >
+                    <Trash2 className="w-5 h-5" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))
+        )}
+      </div>
+
       {/* Modal */}
       {showModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
@@ -269,7 +334,7 @@ export default function UsersManagement() {
             </div>
 
             <form onSubmit={handleSubmit} className="p-6 space-y-4">
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Prenom</label>
                   <input
@@ -277,7 +342,7 @@ export default function UsersManagement() {
                     value={formData.prenom}
                     onChange={(e) => setFormData(prev => ({ ...prev, prenom: e.target.value }))}
                     required
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-base focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
                 <div>
@@ -287,7 +352,7 @@ export default function UsersManagement() {
                     value={formData.nom}
                     onChange={(e) => setFormData(prev => ({ ...prev, nom: e.target.value }))}
                     required
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-base focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
               </div>
@@ -299,7 +364,7 @@ export default function UsersManagement() {
                   value={formData.email}
                   onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
                   required
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-base focus:ring-2 focus:ring-blue-500"
                 />
               </div>
 
@@ -313,7 +378,7 @@ export default function UsersManagement() {
                   onChange={(e) => setFormData(prev => ({ ...prev, password: e.target.value }))}
                   required={!editingUser}
                   minLength={6}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-base focus:ring-2 focus:ring-blue-500"
                 />
               </div>
 
@@ -322,7 +387,7 @@ export default function UsersManagement() {
                 <select
                   value={formData.role}
                   onChange={(e) => setFormData(prev => ({ ...prev, role: e.target.value as UserRole }))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-base focus:ring-2 focus:ring-blue-500"
                 >
                   {Object.entries(USER_ROLES).map(([key, label]) => (
                     <option key={key} value={key}>{label}</option>

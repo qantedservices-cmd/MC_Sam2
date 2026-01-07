@@ -6,7 +6,7 @@ import { ACTOR_TYPE_LABELS } from '../types';
 import ActorCard from '../components/ActorCard';
 import Loading from '../components/Loading';
 import ErrorMessage from '../components/ErrorMessage';
-import { PlusCircle, Users, Building2, Briefcase, HardHat, Search } from 'lucide-react';
+import { PlusCircle, Users, Building2, Briefcase, HardHat, Search, ChevronDown } from 'lucide-react';
 
 type Actor = Client | MOA | MOE | Entreprise;
 
@@ -112,9 +112,28 @@ export default function ActeursIndex() {
         </Link>
       </div>
 
-      {/* Tabs */}
+      {/* Tabs - Desktop */}
       <div className="bg-white rounded-lg shadow mb-6">
-        <div className="flex border-b overflow-x-auto">
+        {/* Mobile dropdown */}
+        <div className="sm:hidden p-3 border-b">
+          <div className="relative">
+            <select
+              value={activeTab}
+              onChange={(e) => handleTabChange(e.target.value as ActorType)}
+              className="w-full appearance-none bg-white border border-gray-300 rounded-lg px-4 py-3 pr-10 font-medium text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              {TABS.map(tab => (
+                <option key={tab.type} value={tab.type}>
+                  {tab.label} ({actors[tab.type].length})
+                </option>
+              ))}
+            </select>
+            <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
+          </div>
+        </div>
+
+        {/* Desktop tabs */}
+        <div className="hidden sm:flex border-b">
           {TABS.map(tab => (
             <button
               key={tab.type}
@@ -145,7 +164,7 @@ export default function ActeursIndex() {
               placeholder={`Rechercher un ${ACTOR_TYPE_LABELS[activeTab].toLowerCase()}...`}
               value={searchTerm}
               onChange={e => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             />
           </div>
         </div>

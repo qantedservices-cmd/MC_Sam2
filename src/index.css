@@ -15,3 +15,50 @@
 .animate-slide-in {
   animation: slide-in 0.3s ease-out;
 }
+
+/* Mobile touch optimization */
+@media (max-width: 640px) {
+  /* Prevent iOS zoom on input focus - minimum 16px font */
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="number"],
+  input[type="tel"],
+  input[type="url"],
+  input[type="search"],
+  input[type="date"],
+  textarea,
+  select {
+    font-size: 16px !important;
+    min-height: 44px;
+  }
+
+  /* Larger touch targets for buttons */
+  button,
+  .btn,
+  [role="button"] {
+    min-height: 44px;
+  }
+
+  /* Better spacing for form labels */
+  label {
+    display: block;
+    margin-bottom: 0.25rem;
+  }
+}
+
+/* Smooth scrolling on mobile */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Hide scrollbar but allow scrolling */
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}

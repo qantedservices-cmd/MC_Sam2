@@ -96,30 +96,30 @@ export default function Dashboard() {
   return (
     <>
       {/* KPIs */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-        <div className="bg-white rounded-lg shadow p-6">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-6 sm:mb-8">
+        <div className="bg-white rounded-lg shadow p-4 sm:p-6">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-gray-500 text-sm">Budget Total</p>
-              <p className="text-2xl font-bold text-blue-600">{formatMontant(budgetTotal)}</p>
+              <p className="text-xl sm:text-2xl font-bold text-blue-600">{formatMontant(budgetTotal)}</p>
             </div>
             <div className="bg-blue-100 p-3 rounded-full">
               <Wallet className="w-6 h-6 text-blue-600" />
             </div>
           </div>
         </div>
-        <div className="bg-white rounded-lg shadow p-6">
+        <div className="bg-white rounded-lg shadow p-4 sm:p-6">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-gray-500 text-sm">Dépenses Totales</p>
-              <p className="text-2xl font-bold text-red-600">{formatMontant(depensesTotal)}</p>
+              <p className="text-xl sm:text-2xl font-bold text-red-600">{formatMontant(depensesTotal)}</p>
             </div>
             <div className="bg-red-100 p-3 rounded-full">
               <TrendingDown className="w-6 h-6 text-red-600" />
             </div>
           </div>
         </div>
-        <div className="bg-white rounded-lg shadow p-6">
+        <div className="bg-white rounded-lg shadow p-4 sm:p-6">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-gray-500 text-sm">Reste</p>
@@ -136,7 +136,7 @@ export default function Dashboard() {
 
       {/* Statistiques des chantiers */}
       <div className="bg-white rounded-lg shadow p-4 mb-8">
-        <div className="flex flex-wrap items-center justify-center gap-6 text-sm">
+        <div className="flex flex-wrap items-center justify-center gap-4 sm:p-6 text-sm">
           <div className="flex items-center gap-2">
             <span className="w-3 h-3 rounded-full bg-blue-500"></span>
             <span className="text-gray-600">{chantiersEnCours} en cours</span>
@@ -197,7 +197,7 @@ export default function Dashboard() {
 
       {/* Affichage grille */}
       {viewMode === 'grid' && (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:p-6">
           {chantiers.map(chantier => (
             <ChantierCard
               key={chantier.id}

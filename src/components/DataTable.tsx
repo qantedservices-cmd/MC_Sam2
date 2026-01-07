@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { ChevronUp, ChevronDown, Search, Download, ExternalLink } from 'lucide-react';
+import { ChevronUp, ChevronDown, Search, Download, ExternalLink, ChevronLeft, ChevronRight } from 'lucide-react';
 import { formatMontant } from '../utils/format';
 
 interface Column<T> {
@@ -100,12 +100,55 @@ export default function DataTable<T extends object>({
     link.click();
   };
 
+  const renderMobileCard = (row: T, idx: number) => {
+    const dateCol = columns.find(c => c.key === 'date');
+    const typeCol = columns.find(c => c.key === 'type');
+    const montantCol = columns.find(c => c.key === 'montant');
+    const descCol = columns.find(c => c.key === 'description');
+    const otherCols = columns.filter(c =>
+      !['date', 'type', 'montant', 'description'].includes(String(c.key))
+    );
+
+    return (
+      <div key={idx} className="bg-white border rounded-lg p-4 space-y-2">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            {typeCol && typeCol.render && typeCol.render(row)}
+            {dateCol && (
+              <span className="text-sm text-gray-500">
+                {dateCol.render ? dateCol.render(row) : String(row[dateCol.key as keyof T] ?? '')}
+              </span>
+            )}
+          </div>
+          {montantCol && (
+            <div className="text-right font-semibold text-gray-800">
+              {montantCol.render ? montantCol.render(row) : String(row[montantCol.key as keyof T] ?? '')}
+            </div>
+          )}
+        </div>
+        {descCol && (
+          <div className="text-sm text-gray-700">
+            {descCol.render ? descCol.render(row) : String(row[descCol.key as keyof T] ?? '-')}
+          </div>
+        )}
+        <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-gray-500">
+          {otherCols.map(col => (
+            <div key={String(col.key)}>
+              <span className="font-medium">{col.header}:</span>{' '}
+              {col.render ? col.render(row) : String(row[col.key as keyof T] ?? '-')}
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="bg-white rounded-lg shadow overflow-hidden">
       {/* Header */}
-      <div className="p-4 border-b flex items-center justify-between gap-4">
+      <div className="p-3 sm:p-4 border-b flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
         {searchable && (
-          <div className="relative flex-1 max-w-xs">
+          <div className="relative flex-1 sm:max-w-xs">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
             <input
               type="text"
@@ -115,7 +158,7 @@ export default function DataTable<T extends object>({
                 setSearchTerm(e.target.value);
                 setCurrentPage(1);
               }}
-              className="w-full pl-9 pr-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full pl-9 pr-3 py-2.5 border rounded-lg text-base focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
         )}
@@ -134,7 +177,7 @@ export default function DataTable<T extends object>({
       </div>
 
       {/* Table */}
-      <div className="overflow-x-auto">
+      <div className="hidden md:block overflow-x-auto">
         <table className="w-full">
           <thead className="bg-gray-50 border-b">
             <tr>
@@ -203,45 +246,45 @@ export default function DataTable<T extends object>({
         </table>
       </div>
 
+
+      {/* Mobile Card View */}
+      <div className="md:hidden">
+        {paginatedData.length === 0 ? (
+          <div className="p-8 text-center text-gray-500">Aucune donnee trouvee</div>
+        ) : (
+          <div className="p-3 space-y-3">
+            {paginatedData.map((row, idx) => renderMobileCard(row, idx))}
+          </div>
+        )}
+      </div>
+
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="px-4 py-3 border-t flex items-center justify-between">
+        <div className="px-3 sm:px-4 py-3 border-t flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="text-sm text-gray-500">
             Affichage {(currentPage - 1) * pageSize + 1} -{' '}
             {Math.min(currentPage * pageSize, sortedData.length)} sur{' '}
             {sortedData.length}
           </div>
-          <div className="flex gap-1">
-            <button
-              onClick={() => setCurrentPage(1)}
-              disabled={currentPage === 1}
-              className="px-3 py-1 text-sm border rounded hover:bg-gray-50 disabled:opacity-50"
-            >
-              Premier
-            </button>
+          <div className="flex items-center gap-2 w-full sm:w-auto justify-center">
             <button
               onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
               disabled={currentPage === 1}
-              className="px-3 py-1 text-sm border rounded hover:bg-gray-50 disabled:opacity-50"
+              className="flex items-center justify-center w-11 h-11 sm:w-auto sm:h-auto sm:px-3 sm:py-1.5 text-sm border rounded-lg hover:bg-gray-50 disabled:opacity-50"
             >
-              Precedent
+              <ChevronLeft className="w-5 h-5 sm:hidden" />
+              <span className="hidden sm:inline">Precedent</span>
             </button>
-            <span className="px-3 py-1 text-sm">
+            <span className="px-4 py-2 text-sm font-medium">
               {currentPage} / {totalPages}
             </span>
             <button
               onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
               disabled={currentPage === totalPages}
-              className="px-3 py-1 text-sm border rounded hover:bg-gray-50 disabled:opacity-50"
+              className="flex items-center justify-center w-11 h-11 sm:w-auto sm:h-auto sm:px-3 sm:py-1.5 text-sm border rounded-lg hover:bg-gray-50 disabled:opacity-50"
             >
-              Suivant
-            </button>
-            <button
-              onClick={() => setCurrentPage(totalPages)}
-              disabled={currentPage === totalPages}
-              className="px-3 py-1 text-sm border rounded hover:bg-gray-50 disabled:opacity-50"
-            >
-              Dernier
+              <ChevronRight className="w-5 h-5 sm:hidden" />
+              <span className="hidden sm:inline">Suivant</span>
             </button>
           </div>
         </div>

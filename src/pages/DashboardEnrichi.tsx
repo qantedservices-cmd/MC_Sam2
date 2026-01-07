@@ -268,9 +268,9 @@ export default function DashboardEnrichi() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       <div className="flex items-center justify-between flex-wrap gap-4">
-        <h1 className="text-2xl font-bold text-gray-800">Dashboard</h1>
+        <h1 className="text-xl sm:text-2xl font-bold text-gray-800">Dashboard</h1>
         <div className="flex items-center gap-3">
           {/* Currency selector */}
           <div className="flex items-center gap-2 bg-gray-100 rounded-lg px-3 py-1">
@@ -316,7 +316,7 @@ export default function DashboardEnrichi() {
       />
 
       {/* KPI Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         <KPICard
           title="Total Depenses"
           value={formatInDisplayCurrency(filteredStats.totalDepenses)}
@@ -352,7 +352,7 @@ export default function DashboardEnrichi() {
       </div>
 
       {/* Charts Row */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
         <ChartDepensesParChantier
           data={filteredStats.depensesParChantier}
           height={280}
