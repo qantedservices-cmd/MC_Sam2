@@ -1,0 +1,263 @@
+// ============ CONTACTS / MANDATAIRES ============
+export interface Contact {
+  id: string;
+  nom: string;
+  prenom: string;
+  fonction: string;
+  email: string;
+  telephone: string;
+}
+
+// ============ BASE ACTOR INTERFACE ============
+export interface BaseActor {
+  id: string;
+  nom: string;
+  adresse: string;
+  email: string;
+  telephone: string;
+  contacts: Contact[];
+}
+
+// ============ ACTOR TYPES ============
+export interface Client extends BaseActor {}
+
+export interface MOA extends BaseActor {}
+
+export interface MOE extends BaseActor {}
+
+export interface Entreprise extends BaseActor {
+  siret: string;
+  specialites: string[];
+}
+
+export type ActorType = 'client' | 'moa' | 'moe' | 'entreprise';
+
+export type Actor = Client | MOA | MOE | Entreprise;
+
+export const ACTOR_TYPE_LABELS: Record<ActorType, string> = {
+  client: 'Client',
+  moa: 'Maître d\'ouvrage',
+  moe: 'Maître d\'oeuvre',
+  entreprise: 'Entreprise'
+} as const;
+
+// ============ SPECIALITES ENTREPRISE ============
+export const SPECIALITES_ENTREPRISE = {
+  maconnerie: 'Maçonnerie',
+  gros_oeuvre: 'Gros oeuvre',
+  menuiserie: 'Menuiserie',
+  plomberie: 'Plomberie',
+  electricite: 'Électricité',
+  peinture: 'Peinture',
+  carrelage: 'Carrelage',
+  couverture: 'Couverture',
+  chauffage: 'Chauffage',
+  isolation: 'Isolation',
+  demolition: 'Démolition',
+  terrassement: 'Terrassement',
+  ravalement: 'Ravalement'
+} as const;
+
+export type SpecialiteEntreprise = keyof typeof SPECIALITES_ENTREPRISE;
+
+// ============ CATEGORIES HIERARCHIQUES ============
+export interface Categorie {
+  id: string;
+  nom: string;
+  parentId: string | null;
+}
+
+export interface CategorieTree extends Categorie {
+  children: CategorieTree[];
+}
+
+// ============ CHANTIER ============
+export interface Chantier {
+  id: string;
+  nom: string;
+  adresse: string;
+  budgetPrevisionnel: number;
+  statut: 'en_cours' | 'termine' | 'suspendu';
+  dateCreation: string;
+  devise: DeviseType;
+  // Acteurs lies
+  clientId?: string | null;
+  moaId?: string | null;
+  moeId?: string | null;
+  entrepriseIds?: string[];
+}
+
+export type StatutChantier = Chantier['statut'];
+
+export const STATUTS_CHANTIER: Record<StatutChantier, string> = {
+  en_cours: 'En cours',
+  termine: 'Terminé',
+  suspendu: 'Suspendu'
+} as const;
+
+// ============ TYPES ENTREES FINANCIERES ============
+export type EntryType = 'depense' | 'devis' | 'transfert';
+
+export const ENTRY_TYPE_LABELS: Record<EntryType, string> = {
+  depense: 'Depense',
+  devis: 'Devis',
+  transfert: 'Transfert'
+} as const;
+
+// ============ DEPENSE ============
+export interface Depense {
+  id: string;
+  chantierId: string;
+  description: string;
+  montant: number;
+  date: string;
+  categorieId: string;
+  // Nouveaux champs pour import Forms
+  payeur?: string;
+  beneficiaire?: string;
+  commentaire?: string;
+  photosUrls?: string[];
+  validated?: boolean;
+}
+
+// ============ DEVIS ============
+export type StatutDevis = 'en_attente' | 'accepte' | 'refuse';
+
+export const STATUTS_DEVIS: Record<StatutDevis, string> = {
+  en_attente: 'En attente',
+  accepte: 'Accepte',
+  refuse: 'Refuse'
+} as const;
+
+export interface Devis {
+  id: string;
+  chantierId: string;
+  categorieId: string;
+  montant: number;
+  date: string;
+  fournisseur: string;
+  description?: string;
+  commentaire?: string;
+  photosUrls?: string[];
+  statut: StatutDevis;
+}
+
+// ============ TRANSFERT BUDGET ============
+export type DeviseType = 'DNT' | 'EUR' | 'USD';
+
+export const DEVISES: Record<DeviseType, string> = {
+  DNT: 'Dinar Tunisien',
+  EUR: 'Euro',
+  USD: 'Dollar US'
+} as const;
+
+export interface TransfertBudget {
+  id: string;
+  date: string;
+  source: string;
+  destination: string;
+  montant: number;
+  devise: DeviseType;
+  tauxChange?: number;
+  montantConverti?: number;
+  commentaire?: string;
+  photoUrl?: string;
+}
+
+// ============ CONFIGURATION ============
+export interface ExchangeRates {
+  EUR: number;  // 1 EUR = X DNT
+  USD: number;  // 1 USD = X DNT
+  DNT: number;  // Toujours 1
+}
+
+export interface AppConfig {
+  id: string;
+  deviseAffichage: DeviseType;
+  tauxChange: ExchangeRates;
+  lastUpdated: string;
+}
+
+// ============ LOTS FORMS (Mapping) ============
+export const LOTS_FORMS_MAPPING: Record<string, string> = {
+  'Materiel': 'materiel',
+  'Matériel': 'materiel',
+  'Mounir (Tvx)': 'main_oeuvre',
+  'Menuiserie': 'travaux_menuiserie',
+  'Peinture': 'travaux_peinture',
+  'Carrelage': 'travaux_carrelage',
+  'Dalles': 'travaux_maconnerie',
+  'Hdid': 'materiel_fournitures',
+  'Aluminium': 'travaux_menuiserie',
+  'Marbre': 'travaux_carrelage',
+  'Meubles': 'materiel_equipement',
+  'Electricite': 'travaux_electricite',
+  'Électricité': 'travaux_electricite',
+  'Peinture Matériel': 'materiel_fournitures'
+} as const;
+
+// ============ CHANTIERS FORMS (Mapping) ============
+export const CHANTIERS_FORMS_MAPPING: Record<string, string> = {
+  'Samir Maison': 'samir_maison',
+  'Commun Garages': 'commun_garages',
+  'Wissem Housh': 'wissem_housh',
+  'Commun Autre': 'commun_autre',
+  'Samir Autre': 'samir_autre',
+  'Wissem Autre': 'wissem_autre',
+  'Anis & Samiha': 'anis_samiha'
+} as const;
+
+// ============ LEGACY SUPPORT ============
+// Kept for backward compatibility during migration
+export type CategorieDepenseLegacy = 'main_oeuvre' | 'materiaux' | 'location' | 'sous_traitance' | 'menuiserie' | 'autre';
+
+export const CATEGORIES_DEPENSE_LEGACY: Record<CategorieDepenseLegacy, string> = {
+  main_oeuvre: "Main d'oeuvre",
+  materiaux: 'Matériaux',
+  location: 'Location',
+  sous_traitance: 'Sous-traitance',
+  menuiserie: 'Menuiserie',
+  autre: 'Autre'
+} as const;
+
+// ============ AUTHENTIFICATION ============
+export type UserRole = 'admin' | 'gestionnaire' | 'utilisateur' | 'lecteur';
+
+export const USER_ROLES: Record<UserRole, string> = {
+  admin: 'Administrateur',
+  gestionnaire: 'Gestionnaire',
+  utilisateur: 'Utilisateur',
+  lecteur: 'Lecteur'
+} as const;
+
+export interface User {
+  id: string;
+  email: string;
+  password: string;
+  nom: string;
+  prenom: string;
+  role: UserRole;
+  chantierIds: string[];
+  actif: boolean;
+  createdAt: string;
+  createdBy?: string;
+}
+
+export interface UserSession {
+  id: string;
+  email: string;
+  nom: string;
+  prenom: string;
+  role: UserRole;
+  chantierIds: string[];
+}
+
+export interface RolePermissions {
+  canViewAllChantiers: boolean;
+  canCreateChantier: boolean;
+  canEditChantier: boolean;
+  canDeleteChantier: boolean;
+  canCreateDepense: boolean;
+  canImportData: boolean;
+  canManageUsers: boolean;
+}
