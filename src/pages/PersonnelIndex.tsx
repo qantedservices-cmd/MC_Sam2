@@ -185,6 +185,15 @@ export default function PersonnelIndex() {
             <span className="hidden sm:inline">Pointage</span>
           </Link>
           {canEdit && (
+            <Link
+              to="/personnel/paiements"
+              className="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+            >
+              <DollarSign className="w-5 h-5" />
+              <span className="hidden sm:inline">Paiements</span>
+            </Link>
+          )}
+          {canEdit && (
             <button
               onClick={() => handleOpenModal()}
               className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"

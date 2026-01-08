@@ -370,3 +370,106 @@ export interface PaiementEmploye {
   notes?: string;
   createdAt: string;
 }
+
+// ============ MODULE MATERIEL ============
+
+export type MaterielType =
+  | 'vehicule_utilitaire'
+  | 'camion'
+  | 'betonniere'
+  | 'grue'
+  | 'echafaudage'
+  | 'outillage'
+  | 'autre';
+
+export const TYPES_MATERIEL: Record<MaterielType, string> = {
+  vehicule_utilitaire: 'Vehicule utilitaire',
+  camion: 'Camion',
+  betonniere: 'Betonniere',
+  grue: 'Grue',
+  echafaudage: 'Echafaudage',
+  outillage: 'Outillage',
+  autre: 'Autre'
+} as const;
+
+export type ProprietaireMateriel = 'entreprise' | 'location';
+
+export const PROPRIETAIRES_MATERIEL: Record<ProprietaireMateriel, string> = {
+  entreprise: 'Entreprise',
+  location: 'Location'
+} as const;
+
+export interface Materiel {
+  id: string;
+  nom: string;
+  type: MaterielType;
+  proprietaire: ProprietaireMateriel;
+  coutJournalier?: number;
+  immatriculation?: string;
+  description?: string;
+  actif: boolean;
+  createdAt: string;
+}
+
+export type TypeDeplacement = 'vehicule_perso' | 'vehicule_entreprise' | 'location';
+
+export const TYPES_DEPLACEMENT: Record<TypeDeplacement, string> = {
+  vehicule_perso: 'Vehicule personnel',
+  vehicule_entreprise: 'Vehicule entreprise',
+  location: 'Location'
+} as const;
+
+export interface UtilisationMateriel {
+  id: string;
+  materielId: string;
+  chantierId: string;
+  date: string;
+  employeId?: string;
+  typeDeplacement?: TypeDeplacement;
+  kilometrage?: number;
+  fraisKm?: number;
+  coutLocation?: number;
+  dureeHeures?: number;
+  notes?: string;
+  createdAt: string;
+  createdBy?: string;
+}
+
+// ============ MODULE PRODUCTION / AVANCEMENT ============
+
+export type StatutTache = 'a_faire' | 'en_cours' | 'termine';
+
+export const STATUTS_TACHE: Record<StatutTache, string> = {
+  a_faire: 'A faire',
+  en_cours: 'En cours',
+  termine: 'Termine'
+} as const;
+
+export interface Tache {
+  id: string;
+  chantierId: string;
+  titre: string;
+  description?: string;
+  categorieId?: string;
+  ordre: number;
+  statut: StatutTache;
+  dateDebut?: string;
+  dateFin?: string;
+  quantitePrevue?: number;
+  unite?: string;
+  prixUnitaire?: number;
+  createdAt: string;
+}
+
+export interface Production {
+  id: string;
+  tacheId: string;
+  chantierId: string;
+  date: string;
+  quantiteRealisee: number;
+  notes?: string;
+  photosUrls?: string[];
+  saisieParId?: string;
+  valide: boolean;
+  createdAt: string;
+}

@@ -1,4 +1,4 @@
-import type { Chantier, Depense, Client, MOA, MOE, Entreprise, Categorie, CategorieTree, Devis, TransfertBudget, AppConfig, User, UserSession, Employe, Pointage, PaiementEmploye } from '../types';
+import type { Chantier, Depense, Client, MOA, MOE, Entreprise, Categorie, CategorieTree, Devis, TransfertBudget, AppConfig, User, UserSession, Employe, Pointage, PaiementEmploye, Materiel, UtilisationMateriel, Tache, Production } from '../types';
 import { hashPassword, verifyPassword, generateToken, AUTH_TOKEN_KEY } from '../utils/crypto';
 import { createCrudApi, createChantierFilteredCrudApi } from './crudFactory';
 
@@ -28,6 +28,10 @@ const usersApi = createCrudApi<User>('users', 'utilisateur');
 const employesApi = createCrudApi<Employe>('employes', 'employe');
 const pointagesApi = createChantierFilteredCrudApi<Pointage>('pointages', 'pointage');
 const paiementsEmployeApi = createChantierFilteredCrudApi<PaiementEmploye>('paiements-employes', 'paiement');
+const materielsApi = createCrudApi<Materiel>('materiels', 'materiel');
+const utilisationsMaterielApi = createChantierFilteredCrudApi<UtilisationMateriel>('utilisations-materiel', 'utilisation');
+const tachesApi = createChantierFilteredCrudApi<Tache>('taches', 'tache');
+const productionsApi = createChantierFilteredCrudApi<Production>('productions', 'production');
 
 // ============ CHANTIERS ============
 
@@ -477,5 +481,144 @@ export async function calculerPaiementEmploye(
     montantTotal: montantBase + montantHeuresSupp,
     statut: 'en_attente',
     createdAt: new Date().toISOString().split('T')[0]
+  };
+}
+
+// ============ MATERIELS ============
+
+export const getMateriels = materielsApi.getAll;
+export const getMateriel = materielsApi.getById;
+export const createMateriel = materielsApi.create;
+export const updateMateriel = materielsApi.update;
+export const deleteMateriel = materielsApi.delete;
+
+export async function getMaterielsActifs(): Promise<Materiel[]> {
+  const materiels = await getMateriels();
+  return materiels.filter(m => m.actif);
+}
+
+// ============ UTILISATIONS MATERIEL ============
+
+export async function getUtilisationsMateriel(chantierId?: string): Promise<UtilisationMateriel[]> {
+  return chantierId ? utilisationsMaterielApi.getByChantier(chantierId) : utilisationsMaterielApi.getAll();
+}
+export const createUtilisationMateriel = utilisationsMaterielApi.create;
+export const updateUtilisationMateriel = utilisationsMaterielApi.update;
+export const deleteUtilisationMateriel = utilisationsMaterielApi.delete;
+
+export async function calculerCoutsMaterielMois(chantierId: string, periode: string): Promise<{
+  coutLocation: number;
+  coutKilometrage: number;
+  total: number;
+}> {
+  const utilisations = await getUtilisationsMateriel(chantierId);
+  const monthUtilisations = utilisations.filter(u => u.date.startsWith(periode));
+  
+  let coutLocation = 0;
+  let coutKilometrage = 0;
+
+  monthUtilisations.forEach(u => {
+    coutLocation += u.coutLocation || 0;
+    coutKilometrage += u.fraisKm || 0;
+  });
+
+  return {
+    coutLocation,
+    coutKilometrage,
+    total: coutLocation + coutKilometrage
+  };
+}
+
+// ============ TACHES ============
+
+export async function getTaches(chantierId?: string): Promise<Tache[]> {
+  return chantierId ? tachesApi.getByChantier(chantierId) : tachesApi.getAll();
+}
+export const getTache = tachesApi.getById;
+export const createTache = tachesApi.create;
+export const updateTache = tachesApi.update;
+export const deleteTache = tachesApi.delete;
+
+export async function getTachesByStatut(chantierId: string, statut: string): Promise<Tache[]> {
+  const taches = await getTaches(chantierId);
+  return taches.filter(t => t.statut === statut).sort((a, b) => a.ordre - b.ordre);
+}
+
+export async function reorderTaches(_chantierId: string, tacheIds: string[]): Promise<void> {
+  const updates = tacheIds.map((id, index) =>
+    updateTache(id, { ordre: index })
+  );
+  await Promise.all(updates);
+}
+
+// ============ PRODUCTIONS ============
+
+export async function getProductions(chantierId?: string): Promise<Production[]> {
+  return chantierId ? productionsApi.getByChantier(chantierId) : productionsApi.getAll();
+}
+export const getProduction = productionsApi.getById;
+export const createProduction = productionsApi.create;
+export const updateProduction = productionsApi.update;
+export const deleteProduction = productionsApi.delete;
+
+export async function getProductionsByTache(tacheId: string): Promise<Production[]> {
+  const productions = await productionsApi.getAll();
+  return productions.filter(p => p.tacheId === tacheId);
+}
+
+export async function getProductionsByDate(date: string, chantierId?: string): Promise<Production[]> {
+  const productions = await getProductions(chantierId);
+  return productions.filter(p => p.date === date);
+}
+
+export async function calculerAvancementTache(tacheId: string): Promise<{
+  quantiteRealisee: number;
+  pourcentage: number;
+}> {
+  const [tache, productions] = await Promise.all([
+    getTache(tacheId),
+    getProductionsByTache(tacheId)
+  ]);
+
+  const quantiteRealisee = productions.reduce((sum, p) => sum + p.quantiteRealisee, 0);
+  const pourcentage = tache.quantitePrevue 
+    ? Math.min(100, (quantiteRealisee / tache.quantitePrevue) * 100)
+    : 0;
+
+  return { quantiteRealisee, pourcentage };
+}
+
+export async function calculerAvancementChantier(chantierId: string): Promise<{
+  tachesTotal: number;
+  tachesTerminees: number;
+  pourcentageGlobal: number;
+  montantPrevu: number;
+  montantRealise: number;
+}> {
+  const taches = await getTaches(chantierId);
+  const tachesTotal = taches.length;
+  const tachesTerminees = taches.filter(t => t.statut === 'termine').length;
+
+  let montantPrevu = 0;
+  let montantRealise = 0;
+
+  for (const tache of taches) {
+    if (tache.quantitePrevue && tache.prixUnitaire) {
+      montantPrevu += tache.quantitePrevue * tache.prixUnitaire;
+      const { quantiteRealisee } = await calculerAvancementTache(tache.id);
+      montantRealise += quantiteRealisee * tache.prixUnitaire;
+    }
+  }
+
+  const pourcentageGlobal = tachesTotal > 0 
+    ? (tachesTerminees / tachesTotal) * 100 
+    : 0;
+
+  return {
+    tachesTotal,
+    tachesTerminees,
+    pourcentageGlobal,
+    montantPrevu,
+    montantRealise
   };
 }

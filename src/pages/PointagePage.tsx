@@ -1,8 +1,8 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import {
   ArrowLeft, Calendar, UserCheck, UserX, Clock, Save,
-  Loader2, ChevronLeft, ChevronRight, Users
+  Loader2, ChevronLeft, ChevronRight, Users, BarChart2, ChevronDown, ChevronUp
 } from 'lucide-react';
 import { getEmployesByChantier, getChantiers, getPointages, createPointage, updatePointage } from '../services/api';
 import type { Employe, Chantier, Pointage, TypePointage } from '../types';
@@ -21,6 +21,7 @@ export default function PointagePage() {
   const [employes, setEmployes] = useState<Employe[]>([]);
   const [pointages, setPointages] = useState<Pointage[]>([]);
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
+  const [showStats, setShowStats] = useState(false);
 
   // Pointages du jour en cours d'edition
   const [dailyPointages, setDailyPointages] = useState<Record<string, { type: TypePointage; heuresSupp: number; notes: string }>>({});
@@ -78,6 +79,50 @@ export default function PointagePage() {
   useEffect(() => {
     loadEmployesAndPointages();
   }, [loadEmployesAndPointages]);
+
+  // Calculer les statistiques mensuelles
+  const monthlyStats = useMemo(() => {
+    const currentMonth = selectedDate.substring(0, 7);
+    const monthPointages = pointages.filter(p => p.date.startsWith(currentMonth));
+
+    const stats = employes.map(emp => {
+      const empPointages = monthPointages.filter(p => p.employeId === emp.id);
+      let joursPresent = 0;
+      let demiJournees = 0;
+      let absences = 0;
+      let conges = 0;
+      let maladies = 0;
+      let heuresSupp = 0;
+
+      empPointages.forEach(p => {
+        switch (p.type) {
+          case 'present': joursPresent++; break;
+          case 'demi_journee': demiJournees++; break;
+          case 'absent': absences++; break;
+          case 'conge': conges++; break;
+          case 'maladie': maladies++; break;
+        }
+        heuresSupp += p.heuresSupp || 0;
+      });
+
+      const totalJours = joursPresent + (demiJournees * 0.5);
+
+      return {
+        employeId: emp.id,
+        nom: `${emp.prenom} ${emp.nom}`,
+        poste: emp.poste,
+        joursPresent,
+        demiJournees,
+        totalJours,
+        absences,
+        conges,
+        maladies,
+        heuresSupp
+      };
+    });
+
+    return stats;
+  }, [pointages, employes, selectedDate]);
 
   const handleTypeChange = (employeId: string, type: TypePointage) => {
     setDailyPointages(prev => ({
@@ -138,6 +183,13 @@ export default function PointagePage() {
     return new Date(dateStr).toLocaleDateString('fr-FR', {
       weekday: 'long',
       day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    });
+  };
+
+  const formatMonth = (dateStr: string) => {
+    return new Date(dateStr).toLocaleDateString('fr-FR', {
       month: 'long',
       year: 'numeric'
     });
@@ -280,6 +332,84 @@ export default function PointagePage() {
           </div>
           <p className="text-xs text-gray-500">Maladies</p>
         </div>
+      </div>
+
+      {/* Statistiques mensuelles */}
+      <div className="bg-white rounded-lg shadow overflow-hidden">
+        <button
+          onClick={() => setShowStats(!showStats)}
+          className="w-full px-4 py-3 flex items-center justify-between hover:bg-gray-50 transition-colors"
+        >
+          <div className="flex items-center gap-2">
+            <BarChart2 className="w-5 h-5 text-blue-600" />
+            <span className="font-medium text-gray-800">
+              Statistiques du mois ({formatMonth(selectedDate)})
+            </span>
+          </div>
+          {showStats ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
+        </button>
+
+        {showStats && (
+          <div className="border-t overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-4 py-2 text-left font-medium text-gray-700">Employe</th>
+                  <th className="px-4 py-2 text-center font-medium text-green-600">Presents</th>
+                  <th className="px-4 py-2 text-center font-medium text-yellow-600">1/2 J.</th>
+                  <th className="px-4 py-2 text-center font-medium text-gray-700">Total J.</th>
+                  <th className="px-4 py-2 text-center font-medium text-red-600">Absents</th>
+                  <th className="px-4 py-2 text-center font-medium text-blue-600">Conges</th>
+                  <th className="px-4 py-2 text-center font-medium text-purple-600">Maladies</th>
+                  <th className="px-4 py-2 text-center font-medium text-gray-700">H. Supp</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y">
+                {monthlyStats.map(stat => (
+                  <tr key={stat.employeId} className="hover:bg-gray-50">
+                    <td className="px-4 py-2">
+                      <p className="font-medium">{stat.nom}</p>
+                      <p className="text-xs text-gray-500">{stat.poste}</p>
+                    </td>
+                    <td className="px-4 py-2 text-center text-green-600 font-medium">{stat.joursPresent}</td>
+                    <td className="px-4 py-2 text-center text-yellow-600">{stat.demiJournees}</td>
+                    <td className="px-4 py-2 text-center font-bold">{stat.totalJours}</td>
+                    <td className="px-4 py-2 text-center text-red-600">{stat.absences}</td>
+                    <td className="px-4 py-2 text-center text-blue-600">{stat.conges}</td>
+                    <td className="px-4 py-2 text-center text-purple-600">{stat.maladies}</td>
+                    <td className="px-4 py-2 text-center">{stat.heuresSupp}h</td>
+                  </tr>
+                ))}
+              </tbody>
+              <tfoot className="bg-gray-50 font-semibold">
+                <tr>
+                  <td className="px-4 py-2">Total</td>
+                  <td className="px-4 py-2 text-center text-green-600">
+                    {monthlyStats.reduce((s, e) => s + e.joursPresent, 0)}
+                  </td>
+                  <td className="px-4 py-2 text-center text-yellow-600">
+                    {monthlyStats.reduce((s, e) => s + e.demiJournees, 0)}
+                  </td>
+                  <td className="px-4 py-2 text-center">
+                    {monthlyStats.reduce((s, e) => s + e.totalJours, 0)}
+                  </td>
+                  <td className="px-4 py-2 text-center text-red-600">
+                    {monthlyStats.reduce((s, e) => s + e.absences, 0)}
+                  </td>
+                  <td className="px-4 py-2 text-center text-blue-600">
+                    {monthlyStats.reduce((s, e) => s + e.conges, 0)}
+                  </td>
+                  <td className="px-4 py-2 text-center text-purple-600">
+                    {monthlyStats.reduce((s, e) => s + e.maladies, 0)}
+                  </td>
+                  <td className="px-4 py-2 text-center">
+                    {monthlyStats.reduce((s, e) => s + e.heuresSupp, 0)}h
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        )}
       </div>
 
       {/* Liste employes */}

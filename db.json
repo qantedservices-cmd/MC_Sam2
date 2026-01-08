@@ -4767,5 +4767,10 @@
       "createdAt": "2024-09-01"
     }
   ],
-  "pointages": []
+  "pointages": [],
+  "paiements-employes": [],
+  "materiels": [],
+  "utilisations-materiel": [],
+  "taches": [],
+  "productions": []
 }

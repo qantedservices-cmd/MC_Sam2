@@ -18,6 +18,11 @@ import RegisterPage from './pages/RegisterPage';
 import UsersManagement from './pages/UsersManagement';
 import PersonnelIndex from './pages/PersonnelIndex';
 import PointagePage from './pages/PointagePage';
+import PaiementsPage from './pages/PaiementsPage';
+import MaterielIndex from './pages/MaterielIndex';
+import UtilisationMaterielPage from './pages/UtilisationMaterielPage';
+import TachesPage from './pages/TachesPage';
+import ProductionPage from './pages/ProductionPage';
 import { ShieldOff } from 'lucide-react';
 
 function UnauthorizedPage() {
@@ -53,6 +58,16 @@ function App() {
               <Route path="chantiers/:id" element={<ChantierDetail />} />
               <Route path="chantiers/:id/modifier" element={<ChantierForm />} />
               <Route path="chantiers/:id/depenses/nouveau" element={<DepenseForm />} />
+              <Route path="chantiers/:id/taches" element={
+                <ProtectedRoute requiredPermission="canSaisieProduction">
+                  <TachesPage />
+                </ProtectedRoute>
+              } />
+              <Route path="chantiers/:id/production" element={
+                <ProtectedRoute requiredPermission="canSaisieProduction">
+                  <ProductionPage />
+                </ProtectedRoute>
+              } />
               <Route path="acteurs" element={<ActeursIndex />} />
               <Route path="acteurs/:type/nouveau" element={<ActeurForm />} />
               <Route path="acteurs/:type/:id" element={<ActeurDetail />} />
@@ -78,6 +93,21 @@ function App() {
               <Route path="personnel/pointage" element={
                 <ProtectedRoute requiredPermission="canSaisiePointage">
                   <PointagePage />
+                </ProtectedRoute>
+              } />
+              <Route path="personnel/paiements" element={
+                <ProtectedRoute requiredPermission="canViewCoutsInternes">
+                  <PaiementsPage />
+                </ProtectedRoute>
+              } />
+              <Route path="materiel" element={
+                <ProtectedRoute requiredPermission="canSaisiePointage">
+                  <MaterielIndex />
+                </ProtectedRoute>
+              } />
+              <Route path="materiel/utilisation" element={
+                <ProtectedRoute requiredPermission="canSaisiePointage">
+                  <UtilisationMaterielPage />
                 </ProtectedRoute>
               } />
             </Route>
