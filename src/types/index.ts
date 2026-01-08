@@ -288,3 +288,85 @@ export interface RolePermissions {
   canManageUsers: boolean;        // Gerer les utilisateurs
   canManageChantierUsers: boolean; // Gerer les users de son chantier (limite 15)
 }
+
+// ============ MODULE PERSONNEL ============
+
+export type TypeContrat = 'cdi' | 'cdd' | 'interim' | 'journalier';
+export type StatutEmploye = 'actif' | 'inactif' | 'conge';
+
+export const TYPES_CONTRAT: Record<TypeContrat, string> = {
+  cdi: 'CDI',
+  cdd: 'CDD',
+  interim: 'Intérimaire',
+  journalier: 'Journalier'
+} as const;
+
+export const STATUTS_EMPLOYE: Record<StatutEmploye, string> = {
+  actif: 'Actif',
+  inactif: 'Inactif',
+  conge: 'En congé'
+} as const;
+
+export interface Employe {
+  id: string;
+  nom: string;
+  prenom: string;
+  telephone?: string;
+  poste: string;                    // Ex: Maçon, Chef d'équipe, Conducteur
+  typeContrat: TypeContrat;
+  tauxJournalier: number;           // Salaire journalier en DNT
+  tauxHeuresSupp?: number;          // Taux horaire heures supp (optionnel)
+  chantierIds: string[];            // Chantiers assignés
+  statut: StatutEmploye;
+  dateEmbauche: string;
+  dateFin?: string;                 // Pour CDD/interim
+  notes?: string;
+  createdAt: string;
+  createdBy?: string;
+}
+
+export type TypePointage = 'present' | 'absent' | 'demi_journee' | 'conge' | 'maladie';
+
+export const TYPES_POINTAGE: Record<TypePointage, string> = {
+  present: 'Présent',
+  absent: 'Absent',
+  demi_journee: 'Demi-journée',
+  conge: 'Congé',
+  maladie: 'Maladie'
+} as const;
+
+export interface Pointage {
+  id: string;
+  employeId: string;
+  chantierId: string;
+  date: string;                     // Format YYYY-MM-DD
+  type: TypePointage;
+  heuresSupp?: number;              // Heures supplémentaires
+  notes?: string;
+  createdAt: string;
+  createdBy?: string;               // ID utilisateur qui a saisi
+}
+
+export type StatutPaiement = 'en_attente' | 'paye' | 'partiel';
+
+export const STATUTS_PAIEMENT: Record<StatutPaiement, string> = {
+  en_attente: 'En attente',
+  paye: 'Payé',
+  partiel: 'Partiel'
+} as const;
+
+export interface PaiementEmploye {
+  id: string;
+  employeId: string;
+  chantierId: string;
+  periode: string;                  // Format YYYY-MM (mois de paie)
+  joursPresent: number;
+  heuresSupp: number;
+  montantBase: number;              // joursPresent * tauxJournalier
+  montantHeuresSupp: number;
+  montantTotal: number;
+  statut: StatutPaiement;
+  datePaiement?: string;
+  notes?: string;
+  createdAt: string;
+}

@@ -4716,5 +4716,56 @@
       "actif": true,
       "createdAt": "2025-01-01"
     }
-  ]
+  ],
+  "employes": [
+    {
+      "id": "emp1",
+      "nom": "Ben Ali",
+      "prenom": "Mohamed",
+      "telephone": "+216 98 765 432",
+      "poste": "Macon",
+      "typeContrat": "journalier",
+      "tauxJournalier": 80,
+      "tauxHeuresSupp": 15,
+      "chantierIds": [
+        "1",
+        "2"
+      ],
+      "statut": "actif",
+      "dateEmbauche": "2024-06-15",
+      "createdAt": "2024-06-15"
+    },
+    {
+      "id": "emp2",
+      "nom": "Trabelsi",
+      "prenom": "Ahmed",
+      "telephone": "+216 55 123 456",
+      "poste": "Chef equipe",
+      "typeContrat": "cdi",
+      "tauxJournalier": 120,
+      "tauxHeuresSupp": 20,
+      "chantierIds": [
+        "1"
+      ],
+      "statut": "actif",
+      "dateEmbauche": "2023-01-10",
+      "createdAt": "2023-01-10"
+    },
+    {
+      "id": "emp3",
+      "nom": "Hammami",
+      "prenom": "Youssef",
+      "poste": "Manoeuvre",
+      "typeContrat": "journalier",
+      "tauxJournalier": 50,
+      "chantierIds": [
+        "1",
+        "2"
+      ],
+      "statut": "actif",
+      "dateEmbauche": "2024-09-01",
+      "createdAt": "2024-09-01"
+    }
+  ],
+  "pointages": []
 }

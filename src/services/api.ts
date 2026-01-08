@@ -1,4 +1,4 @@
-import type { Chantier, Depense, Client, MOA, MOE, Entreprise, Categorie, CategorieTree, Devis, TransfertBudget, AppConfig, User, UserSession } from '../types';
+import type { Chantier, Depense, Client, MOA, MOE, Entreprise, Categorie, CategorieTree, Devis, TransfertBudget, AppConfig, User, UserSession, Employe, Pointage, PaiementEmploye } from '../types';
 import { hashPassword, verifyPassword, generateToken, AUTH_TOKEN_KEY } from '../utils/crypto';
 import { createCrudApi, createChantierFilteredCrudApi } from './crudFactory';
 
@@ -25,6 +25,9 @@ const categoriesApi = createCrudApi<Categorie>('categories', 'categorie');
 const devisApi = createChantierFilteredCrudApi<Devis>('devis', 'devis');
 const transfertsApi = createCrudApi<TransfertBudget>('transferts', 'transfert');
 const usersApi = createCrudApi<User>('users', 'utilisateur');
+const employesApi = createCrudApi<Employe>('employes', 'employe');
+const pointagesApi = createChantierFilteredCrudApi<Pointage>('pointages', 'pointage');
+const paiementsEmployeApi = createChantierFilteredCrudApi<PaiementEmploye>('paiements-employes', 'paiement');
 
 // ============ CHANTIERS ============
 
@@ -392,3 +395,87 @@ export async function createUser(userData: Omit<User, 'id'>): Promise<User> {
 
 export const updateUser = usersApi.update;
 export const deleteUser = usersApi.delete;
+
+// ============ EMPLOYES ============
+
+export const getEmployes = employesApi.getAll;
+export const getEmploye = employesApi.getById;
+export const createEmploye = employesApi.create;
+export const updateEmploye = employesApi.update;
+export const deleteEmploye = employesApi.delete;
+
+export async function getEmployesByChantier(chantierId: string): Promise<Employe[]> {
+  const employes = await getEmployes();
+  return employes.filter(e => e.chantierIds.includes(chantierId));
+}
+
+// ============ POINTAGES ============
+
+export async function getPointages(chantierId?: string): Promise<Pointage[]> {
+  return chantierId ? pointagesApi.getByChantier(chantierId) : pointagesApi.getAll();
+}
+export const getPointage = pointagesApi.getById;
+export const createPointage = pointagesApi.create;
+export const updatePointage = pointagesApi.update;
+export const deletePointage = pointagesApi.delete;
+
+export async function getPointagesByDate(date: string, chantierId?: string): Promise<Pointage[]> {
+  const pointages = await getPointages(chantierId);
+  return pointages.filter(p => p.date === date);
+}
+
+export async function getPointagesByEmploye(employeId: string, periode?: string): Promise<Pointage[]> {
+  const pointages = await pointagesApi.getAll(`employeId=${employeId}`);
+  if (periode) {
+    return pointages.filter(p => p.date.startsWith(periode));
+  }
+  return pointages;
+}
+
+// ============ PAIEMENTS EMPLOYES ============
+
+export async function getPaiementsEmploye(chantierId?: string): Promise<PaiementEmploye[]> {
+  return chantierId ? paiementsEmployeApi.getByChantier(chantierId) : paiementsEmployeApi.getAll();
+}
+export const getPaiementEmploye = paiementsEmployeApi.getById;
+export const createPaiementEmploye = paiementsEmployeApi.create;
+export const updatePaiementEmploye = paiementsEmployeApi.update;
+export const deletePaiementEmploye = paiementsEmployeApi.delete;
+
+export async function calculerPaiementEmploye(
+  employeId: string,
+  chantierId: string,
+  periode: string
+): Promise<Omit<PaiementEmploye, 'id'>> {
+  const [employe, pointages] = await Promise.all([
+    getEmploye(employeId),
+    getPointagesByEmploye(employeId, periode)
+  ]);
+
+  const pointagesChantier = pointages.filter(p => p.chantierId === chantierId);
+
+  let joursPresent = 0;
+  let heuresSupp = 0;
+
+  pointagesChantier.forEach(p => {
+    if (p.type === 'present') joursPresent += 1;
+    else if (p.type === 'demi_journee') joursPresent += 0.5;
+    heuresSupp += p.heuresSupp || 0;
+  });
+
+  const montantBase = joursPresent * employe.tauxJournalier;
+  const montantHeuresSupp = heuresSupp * (employe.tauxHeuresSupp || 0);
+
+  return {
+    employeId,
+    chantierId,
+    periode,
+    joursPresent,
+    heuresSupp,
+    montantBase,
+    montantHeuresSupp,
+    montantTotal: montantBase + montantHeuresSupp,
+    statut: 'en_attente',
+    createdAt: new Date().toISOString().split('T')[0]
+  };
+}

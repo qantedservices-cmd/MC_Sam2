@@ -16,6 +16,8 @@ import TransfertForm from './pages/TransfertForm';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import UsersManagement from './pages/UsersManagement';
+import PersonnelIndex from './pages/PersonnelIndex';
+import PointagePage from './pages/PointagePage';
 import { ShieldOff } from 'lucide-react';
 
 function UnauthorizedPage() {
@@ -66,6 +68,16 @@ function App() {
               <Route path="users" element={
                 <ProtectedRoute requiredPermission="canManageUsers">
                   <UsersManagement />
+                </ProtectedRoute>
+              } />
+              <Route path="personnel" element={
+                <ProtectedRoute requiredPermission="canSaisiePointage">
+                  <PersonnelIndex />
+                </ProtectedRoute>
+              } />
+              <Route path="personnel/pointage" element={
+                <ProtectedRoute requiredPermission="canSaisiePointage">
+                  <PointagePage />
                 </ProtectedRoute>
               } />
             </Route>
