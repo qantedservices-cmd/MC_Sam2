@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { Link, Outlet, useNavigate, useLocation } from 'react-router-dom';
-import { Home, PlusCircle, HardHat, Users, Upload, BarChart3, User, LogOut, ChevronDown, Shield, Menu, X } from 'lucide-react';
+import { PlusCircle, HardHat, Users, Upload, BarChart3, User, LogOut, ChevronDown, Shield, Menu, X } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { USER_ROLES } from '../types';
 import { PermissionGate } from './ProtectedRoute';
@@ -28,8 +28,7 @@ export default function Layout() {
   const handleLogout = () => { logout(); navigate('/login'); setMobileMenuOpen(false); };
 
   const navItems = [
-    { to: '/', icon: Home, label: 'Accueil', permission: null },
-    { to: '/dashboard', icon: BarChart3, label: 'Dashboard', permission: null },
+    { to: '/', icon: BarChart3, label: 'Dashboard', permission: null },
     { to: '/acteurs', icon: Users, label: 'Acteurs', permission: null },
     { to: '/import', icon: Upload, label: 'Import', permission: 'canImportData' as const },
     { to: '/users', icon: Shield, label: 'Utilisateurs', permission: 'canManageUsers' as const },

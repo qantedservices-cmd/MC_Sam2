@@ -2,8 +2,7 @@ import { createContext, useContext, useState, useEffect, useCallback, type React
 import type { UserSession, RolePermissions } from '../types';
 import { login as apiLogin } from '../services/api';
 import { hasPermission, canAccessChantier as checkChantierAccess, ROLE_PERMISSIONS } from '../utils/permissions';
-
-const AUTH_STORAGE_KEY = 'monchantier_user';
+import { AUTH_TOKEN_KEY, AUTH_USER_KEY, isTokenValid } from '../utils/crypto';
 
 interface AuthContextType {
   user: UserSession | null;
@@ -24,24 +23,33 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   // Charger la session depuis localStorage au demarrage
   useEffect(() => {
-    const storedUser = localStorage.getItem(AUTH_STORAGE_KEY);
-    if (storedUser) {
+    const token = localStorage.getItem(AUTH_TOKEN_KEY);
+    const storedUser = localStorage.getItem(AUTH_USER_KEY);
+
+    if (token && storedUser && isTokenValid(token)) {
       try {
         const parsedUser = JSON.parse(storedUser) as UserSession;
         setUser(parsedUser);
       } catch {
-        localStorage.removeItem(AUTH_STORAGE_KEY);
+        // Session invalide, nettoyer
+        localStorage.removeItem(AUTH_TOKEN_KEY);
+        localStorage.removeItem(AUTH_USER_KEY);
       }
+    } else {
+      // Token expiré ou invalide, nettoyer
+      localStorage.removeItem(AUTH_TOKEN_KEY);
+      localStorage.removeItem(AUTH_USER_KEY);
     }
     setLoading(false);
   }, []);
 
   const login = useCallback(async (email: string, password: string): Promise<boolean> => {
     try {
-      const session = await apiLogin(email, password);
-      if (session) {
-        setUser(session);
-        localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(session));
+      const result = await apiLogin(email, password);
+      if (result) {
+        setUser(result.session);
+        localStorage.setItem(AUTH_TOKEN_KEY, result.token);
+        localStorage.setItem(AUTH_USER_KEY, JSON.stringify(result.session));
         return true;
       }
       return false;
@@ -53,7 +61,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const logout = useCallback(() => {
     setUser(null);
-    localStorage.removeItem(AUTH_STORAGE_KEY);
+    localStorage.removeItem(AUTH_TOKEN_KEY);
+    localStorage.removeItem(AUTH_USER_KEY);
   }, []);
 
   const checkPermission = useCallback((permission: keyof RolePermissions): boolean => {

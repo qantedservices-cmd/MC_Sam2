@@ -11,7 +11,6 @@ import ActeursIndex from './pages/ActeursIndex';
 import ActeurForm from './pages/ActeurForm';
 import ActeurDetail from './pages/ActeurDetail';
 import ImportData from './pages/ImportData';
-import DashboardEnrichi from './pages/DashboardEnrichi';
 import DevisForm from './pages/DevisForm';
 import TransfertForm from './pages/TransfertForm';
 import LoginPage from './pages/LoginPage';
@@ -61,7 +60,7 @@ function App() {
                   <ImportData />
                 </ProtectedRoute>
               } />
-              <Route path="dashboard" element={<DashboardEnrichi />} />
+              <Route path="dashboard" element={<Navigate to="/" replace />} />
               <Route path="devis/nouveau" element={<DevisForm />} />
               <Route path="transferts/nouveau" element={<TransfertForm />} />
               <Route path="users" element={

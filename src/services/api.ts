@@ -1,361 +1,89 @@
 import type { Chantier, Depense, Client, MOA, MOE, Entreprise, Categorie, CategorieTree, Devis, TransfertBudget, AppConfig, User, UserSession } from '../types';
+import { hashPassword, verifyPassword, generateToken, AUTH_TOKEN_KEY } from '../utils/crypto';
+import { createCrudApi, createChantierFilteredCrudApi } from './crudFactory';
 
 const API_URL = 'http://localhost:3001';
 
+// Helper pour ajouter le token aux requetes (exporte pour utilisation future)
+export function getAuthHeaders(): HeadersInit {
+  const token = localStorage.getItem(AUTH_TOKEN_KEY);
+  return {
+    'Content-Type': 'application/json',
+    ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+  };
+}
+
+// ============ CRUD APIS VIA FACTORY ============
+
+const chantiersApi = createCrudApi<Chantier>('chantiers', 'chantier');
+const depensesApi = createChantierFilteredCrudApi<Depense>('depenses', 'depense');
+const clientsApi = createCrudApi<Client>('clients', 'client');
+const moasApi = createCrudApi<MOA>('moas', 'MOA');
+const moesApi = createCrudApi<MOE>('moes', 'MOE');
+const entreprisesApi = createCrudApi<Entreprise>('entreprises', 'entreprise');
+const categoriesApi = createCrudApi<Categorie>('categories', 'categorie');
+const devisApi = createChantierFilteredCrudApi<Devis>('devis', 'devis');
+const transfertsApi = createCrudApi<TransfertBudget>('transferts', 'transfert');
+const usersApi = createCrudApi<User>('users', 'utilisateur');
+
 // ============ CHANTIERS ============
 
-export async function getChantiers(): Promise<Chantier[]> {
-  const response = await fetch(`${API_URL}/chantiers`);
-  if (!response.ok) {
-    throw new Error('Erreur lors de la récupération des chantiers');
-  }
-  return response.json();
-}
-
-export async function getChantier(id: string): Promise<Chantier> {
-  const response = await fetch(`${API_URL}/chantiers/${id}`);
-  if (!response.ok) {
-    throw new Error('Chantier non trouvé');
-  }
-  return response.json();
-}
-
-export async function createChantier(chantier: Omit<Chantier, 'id'>): Promise<Chantier> {
-  const response = await fetch(`${API_URL}/chantiers`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(chantier),
-  });
-  if (!response.ok) {
-    throw new Error('Erreur lors de la création du chantier');
-  }
-  return response.json();
-}
-
-export async function updateChantier(id: string, chantier: Partial<Chantier>): Promise<Chantier> {
-  const response = await fetch(`${API_URL}/chantiers/${id}`, {
-    method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(chantier),
-  });
-  if (!response.ok) {
-    throw new Error('Erreur lors de la mise à jour du chantier');
-  }
-  return response.json();
-}
-
-export async function deleteChantier(id: string): Promise<void> {
-  const response = await fetch(`${API_URL}/chantiers/${id}`, {
-    method: 'DELETE',
-  });
-  if (!response.ok) {
-    throw new Error('Erreur lors de la suppression du chantier');
-  }
-}
+export const getChantiers = chantiersApi.getAll;
+export const getChantier = chantiersApi.getById;
+export const createChantier = chantiersApi.create;
+export const updateChantier = chantiersApi.update;
+export const deleteChantier = chantiersApi.delete;
 
 // ============ DEPENSES ============
 
 export async function getDepenses(chantierId?: string): Promise<Depense[]> {
-  const url = chantierId
-    ? `${API_URL}/depenses?chantierId=${chantierId}`
-    : `${API_URL}/depenses`;
-  const response = await fetch(url);
-  if (!response.ok) {
-    throw new Error('Erreur lors de la récupération des dépenses');
-  }
-  return response.json();
+  return chantierId ? depensesApi.getByChantier(chantierId) : depensesApi.getAll();
 }
-
-export async function getDepense(id: string): Promise<Depense> {
-  const response = await fetch(`${API_URL}/depenses/${id}`);
-  if (!response.ok) {
-    throw new Error('Dépense non trouvée');
-  }
-  return response.json();
-}
-
-export async function createDepense(depense: Omit<Depense, 'id'>): Promise<Depense> {
-  const response = await fetch(`${API_URL}/depenses`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(depense),
-  });
-  if (!response.ok) {
-    throw new Error('Erreur lors de la création de la dépense');
-  }
-  return response.json();
-}
-
-export async function updateDepense(id: string, depense: Partial<Depense>): Promise<Depense> {
-  const response = await fetch(`${API_URL}/depenses/${id}`, {
-    method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(depense),
-  });
-  if (!response.ok) {
-    throw new Error('Erreur lors de la mise à jour de la dépense');
-  }
-  return response.json();
-}
-
-export async function deleteDepense(id: string): Promise<void> {
-  const response = await fetch(`${API_URL}/depenses/${id}`, {
-    method: 'DELETE',
-  });
-  if (!response.ok) {
-    throw new Error('Erreur lors de la suppression de la dépense');
-  }
-}
-
-export async function deleteDepensesByChantier(chantierId: string): Promise<void> {
-  const depenses = await getDepenses(chantierId);
-  await Promise.all(depenses.map(d => deleteDepense(d.id)));
-}
+export const getDepense = depensesApi.getById;
+export const createDepense = depensesApi.create;
+export const updateDepense = depensesApi.update;
+export const deleteDepense = depensesApi.delete;
+export const deleteDepensesByChantier = depensesApi.deleteByChantier;
 
 // ============ CLIENTS ============
 
-export async function getClients(): Promise<Client[]> {
-  const response = await fetch(`${API_URL}/clients`);
-  if (!response.ok) {
-    throw new Error('Erreur lors de la récupération des clients');
-  }
-  return response.json();
-}
+export const getClients = clientsApi.getAll;
+export const getClient = clientsApi.getById;
+export const createClient = clientsApi.create;
+export const updateClient = clientsApi.update;
+export const deleteClient = clientsApi.delete;
 
-export async function getClient(id: string): Promise<Client> {
-  const response = await fetch(`${API_URL}/clients/${id}`);
-  if (!response.ok) {
-    throw new Error('Client non trouvé');
-  }
-  return response.json();
-}
+// ============ MOA (Maitre d'Ouvrage) ============
 
-export async function createClient(client: Omit<Client, 'id'>): Promise<Client> {
-  const response = await fetch(`${API_URL}/clients`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(client),
-  });
-  if (!response.ok) {
-    throw new Error('Erreur lors de la création du client');
-  }
-  return response.json();
-}
+export const getMoas = moasApi.getAll;
+export const getMoa = moasApi.getById;
+export const createMoa = moasApi.create;
+export const updateMoa = moasApi.update;
+export const deleteMoa = moasApi.delete;
 
-export async function updateClient(id: string, client: Partial<Client>): Promise<Client> {
-  const response = await fetch(`${API_URL}/clients/${id}`, {
-    method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(client),
-  });
-  if (!response.ok) {
-    throw new Error('Erreur lors de la mise à jour du client');
-  }
-  return response.json();
-}
+// ============ MOE (Maitre d'Oeuvre) ============
 
-export async function deleteClient(id: string): Promise<void> {
-  const response = await fetch(`${API_URL}/clients/${id}`, {
-    method: 'DELETE',
-  });
-  if (!response.ok) {
-    throw new Error('Erreur lors de la suppression du client');
-  }
-}
-
-// ============ MOA (Maître d'Ouvrage) ============
-
-export async function getMoas(): Promise<MOA[]> {
-  const response = await fetch(`${API_URL}/moas`);
-  if (!response.ok) {
-    throw new Error('Erreur lors de la récupération des MOA');
-  }
-  return response.json();
-}
-
-export async function getMoa(id: string): Promise<MOA> {
-  const response = await fetch(`${API_URL}/moas/${id}`);
-  if (!response.ok) {
-    throw new Error('MOA non trouvé');
-  }
-  return response.json();
-}
-
-export async function createMoa(moa: Omit<MOA, 'id'>): Promise<MOA> {
-  const response = await fetch(`${API_URL}/moas`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(moa),
-  });
-  if (!response.ok) {
-    throw new Error('Erreur lors de la création du MOA');
-  }
-  return response.json();
-}
-
-export async function updateMoa(id: string, moa: Partial<MOA>): Promise<MOA> {
-  const response = await fetch(`${API_URL}/moas/${id}`, {
-    method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(moa),
-  });
-  if (!response.ok) {
-    throw new Error('Erreur lors de la mise à jour du MOA');
-  }
-  return response.json();
-}
-
-export async function deleteMoa(id: string): Promise<void> {
-  const response = await fetch(`${API_URL}/moas/${id}`, {
-    method: 'DELETE',
-  });
-  if (!response.ok) {
-    throw new Error('Erreur lors de la suppression du MOA');
-  }
-}
-
-// ============ MOE (Maître d'Oeuvre) ============
-
-export async function getMoes(): Promise<MOE[]> {
-  const response = await fetch(`${API_URL}/moes`);
-  if (!response.ok) {
-    throw new Error('Erreur lors de la récupération des MOE');
-  }
-  return response.json();
-}
-
-export async function getMoe(id: string): Promise<MOE> {
-  const response = await fetch(`${API_URL}/moes/${id}`);
-  if (!response.ok) {
-    throw new Error('MOE non trouvé');
-  }
-  return response.json();
-}
-
-export async function createMoe(moe: Omit<MOE, 'id'>): Promise<MOE> {
-  const response = await fetch(`${API_URL}/moes`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(moe),
-  });
-  if (!response.ok) {
-    throw new Error('Erreur lors de la création du MOE');
-  }
-  return response.json();
-}
-
-export async function updateMoe(id: string, moe: Partial<MOE>): Promise<MOE> {
-  const response = await fetch(`${API_URL}/moes/${id}`, {
-    method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(moe),
-  });
-  if (!response.ok) {
-    throw new Error('Erreur lors de la mise à jour du MOE');
-  }
-  return response.json();
-}
-
-export async function deleteMoe(id: string): Promise<void> {
-  const response = await fetch(`${API_URL}/moes/${id}`, {
-    method: 'DELETE',
-  });
-  if (!response.ok) {
-    throw new Error('Erreur lors de la suppression du MOE');
-  }
-}
+export const getMoes = moesApi.getAll;
+export const getMoe = moesApi.getById;
+export const createMoe = moesApi.create;
+export const updateMoe = moesApi.update;
+export const deleteMoe = moesApi.delete;
 
 // ============ ENTREPRISES ============
 
-export async function getEntreprises(): Promise<Entreprise[]> {
-  const response = await fetch(`${API_URL}/entreprises`);
-  if (!response.ok) {
-    throw new Error('Erreur lors de la récupération des entreprises');
-  }
-  return response.json();
-}
-
-export async function getEntreprise(id: string): Promise<Entreprise> {
-  const response = await fetch(`${API_URL}/entreprises/${id}`);
-  if (!response.ok) {
-    throw new Error('Entreprise non trouvée');
-  }
-  return response.json();
-}
-
-export async function createEntreprise(entreprise: Omit<Entreprise, 'id'>): Promise<Entreprise> {
-  const response = await fetch(`${API_URL}/entreprises`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(entreprise),
-  });
-  if (!response.ok) {
-    throw new Error('Erreur lors de la création de l\'entreprise');
-  }
-  return response.json();
-}
-
-export async function updateEntreprise(id: string, entreprise: Partial<Entreprise>): Promise<Entreprise> {
-  const response = await fetch(`${API_URL}/entreprises/${id}`, {
-    method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(entreprise),
-  });
-  if (!response.ok) {
-    throw new Error('Erreur lors de la mise à jour de l\'entreprise');
-  }
-  return response.json();
-}
-
-export async function deleteEntreprise(id: string): Promise<void> {
-  const response = await fetch(`${API_URL}/entreprises/${id}`, {
-    method: 'DELETE',
-  });
-  if (!response.ok) {
-    throw new Error('Erreur lors de la suppression de l\'entreprise');
-  }
-}
+export const getEntreprises = entreprisesApi.getAll;
+export const getEntreprise = entreprisesApi.getById;
+export const createEntreprise = entreprisesApi.create;
+export const updateEntreprise = entreprisesApi.update;
+export const deleteEntreprise = entreprisesApi.delete;
 
 // ============ CATEGORIES ============
 
-export async function getCategories(): Promise<Categorie[]> {
-  const response = await fetch(`${API_URL}/categories`);
-  if (!response.ok) {
-    throw new Error('Erreur lors de la récupération des catégories');
-  }
-  return response.json();
-}
+export const getCategories = categoriesApi.getAll;
 
 export async function getCategoriesTree(): Promise<CategorieTree[]> {
   const categories = await getCategories();
-
-  // Build tree structure
   const rootCategories = categories.filter(c => c.parentId === null);
-
   return rootCategories.map(root => ({
     ...root,
     children: categories
@@ -367,14 +95,10 @@ export async function getCategoriesTree(): Promise<CategorieTree[]> {
 export function getCategoryLabel(categories: Categorie[], categorieId: string): string {
   const category = categories.find(c => c.id === categorieId);
   if (!category) return categorieId;
-
   if (category.parentId) {
     const parent = categories.find(c => c.id === category.parentId);
-    if (parent) {
-      return `${parent.nom} > ${category.nom}`;
-    }
+    if (parent) return `${parent.nom} > ${category.nom}`;
   }
-
   return category.nom;
 }
 
@@ -395,122 +119,26 @@ export async function getChantierActors(chantier: Chantier): Promise<{
           .then(results => results.filter((e): e is Entreprise => e !== null))
       : Promise.resolve([])
   ]);
-
   return { client, moa, moe, entreprises };
 }
 
 // ============ DEVIS ============
 
 export async function getDevis(chantierId?: string): Promise<Devis[]> {
-  const url = chantierId
-    ? `${API_URL}/devis?chantierId=${chantierId}`
-    : `${API_URL}/devis`;
-  const response = await fetch(url);
-  if (!response.ok) {
-    throw new Error('Erreur lors de la recuperation des devis');
-  }
-  return response.json();
+  return chantierId ? devisApi.getByChantier(chantierId) : devisApi.getAll();
 }
-
-export async function getDevisById(id: string): Promise<Devis> {
-  const response = await fetch(`${API_URL}/devis/${id}`);
-  if (!response.ok) {
-    throw new Error('Devis non trouve');
-  }
-  return response.json();
-}
-
-export async function createDevis(devis: Omit<Devis, 'id'>): Promise<Devis> {
-  const response = await fetch(`${API_URL}/devis`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(devis),
-  });
-  if (!response.ok) {
-    throw new Error('Erreur lors de la creation du devis');
-  }
-  return response.json();
-}
-
-export async function updateDevis(id: string, devis: Partial<Devis>): Promise<Devis> {
-  const response = await fetch(`${API_URL}/devis/${id}`, {
-    method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(devis),
-  });
-  if (!response.ok) {
-    throw new Error('Erreur lors de la mise a jour du devis');
-  }
-  return response.json();
-}
-
-export async function deleteDevis(id: string): Promise<void> {
-  const response = await fetch(`${API_URL}/devis/${id}`, {
-    method: 'DELETE',
-  });
-  if (!response.ok) {
-    throw new Error('Erreur lors de la suppression du devis');
-  }
-}
+export const getDevisById = devisApi.getById;
+export const createDevis = devisApi.create;
+export const updateDevis = devisApi.update;
+export const deleteDevis = devisApi.delete;
 
 // ============ TRANSFERTS BUDGET ============
 
-export async function getTransferts(): Promise<TransfertBudget[]> {
-  const response = await fetch(`${API_URL}/transferts`);
-  if (!response.ok) {
-    throw new Error('Erreur lors de la recuperation des transferts');
-  }
-  return response.json();
-}
-
-export async function getTransfert(id: string): Promise<TransfertBudget> {
-  const response = await fetch(`${API_URL}/transferts/${id}`);
-  if (!response.ok) {
-    throw new Error('Transfert non trouve');
-  }
-  return response.json();
-}
-
-export async function createTransfert(transfert: Omit<TransfertBudget, 'id'>): Promise<TransfertBudget> {
-  const response = await fetch(`${API_URL}/transferts`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(transfert),
-  });
-  if (!response.ok) {
-    throw new Error('Erreur lors de la creation du transfert');
-  }
-  return response.json();
-}
-
-export async function updateTransfert(id: string, transfert: Partial<TransfertBudget>): Promise<TransfertBudget> {
-  const response = await fetch(`${API_URL}/transferts/${id}`, {
-    method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(transfert),
-  });
-  if (!response.ok) {
-    throw new Error('Erreur lors de la mise a jour du transfert');
-  }
-  return response.json();
-}
-
-export async function deleteTransfert(id: string): Promise<void> {
-  const response = await fetch(`${API_URL}/transferts/${id}`, {
-    method: 'DELETE',
-  });
-  if (!response.ok) {
-    throw new Error('Erreur lors de la suppression du transfert');
-  }
-}
+export const getTransferts = transfertsApi.getAll;
+export const getTransfert = transfertsApi.getById;
+export const createTransfert = transfertsApi.create;
+export const updateTransfert = transfertsApi.update;
+export const deleteTransfert = transfertsApi.delete;
 
 // ============ CONFIGURATION ============
 
@@ -525,9 +153,7 @@ export async function getConfig(): Promise<AppConfig> {
 export async function updateConfig(config: Partial<AppConfig>): Promise<AppConfig> {
   const response = await fetch(`${API_URL}/config`, {
     method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(config),
   });
   if (!response.ok) {
@@ -604,7 +230,6 @@ export async function getDashboardStats(): Promise<DashboardStats> {
     getCategories()
   ]);
 
-  // Total depenses
   const totalDepenses = depenses.reduce((sum, d) => sum + d.montant, 0);
   const totalDevis = devis.reduce((sum, d) => sum + d.montant, 0);
   const totalTransferts = transferts.reduce((sum, t) => sum + (t.montantConverti || t.montant), 0);
@@ -636,7 +261,7 @@ export async function getDashboardStats(): Promise<DashboardStats> {
   // Depenses par mois
   const depensesParMoisMap: Record<string, number> = {};
   depenses.forEach(d => {
-    const mois = d.date.substring(0, 7); // YYYY-MM
+    const mois = d.date.substring(0, 7);
     depensesParMoisMap[mois] = (depensesParMoisMap[mois] || 0) + d.montant;
   });
   const depensesParMois = Object.entries(depensesParMoisMap)
@@ -655,26 +280,58 @@ export async function getDashboardStats(): Promise<DashboardStats> {
 
 // ============ AUTHENTIFICATION ============
 
-export async function login(email: string, password: string): Promise<UserSession | null> {
+export interface LoginResult {
+  session: UserSession;
+  token: string;
+}
+
+export async function login(email: string, password: string): Promise<LoginResult | null> {
   const response = await fetch(`${API_URL}/users?email=${encodeURIComponent(email)}`);
   if (!response.ok) {
     throw new Error('Erreur de connexion');
   }
   const users: User[] = await response.json();
-  const user = users.find(u => u.password === password && u.actif);
 
+  const user = users.find(u => u.actif);
   if (!user) {
     return null;
   }
 
-  // Return session without password
+  // Verifier le mot de passe (supporte hash et plaintext pour migration)
+  const isHashedPassword = user.password.length === 64;
+  let passwordValid = false;
+
+  if (isHashedPassword) {
+    passwordValid = await verifyPassword(password, user.password);
+  } else {
+    passwordValid = user.password === password;
+    if (passwordValid) {
+      const hashedPassword = await hashPassword(password);
+      await fetch(`${API_URL}/users/${user.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: hashedPassword })
+      });
+    }
+  }
+
+  if (!passwordValid) {
+    return null;
+  }
+
+  const token = generateToken(user.id);
+  localStorage.setItem(AUTH_TOKEN_KEY, token);
+
   return {
-    id: user.id,
-    email: user.email,
-    nom: user.nom,
-    prenom: user.prenom,
-    role: user.role,
-    chantierIds: user.chantierIds
+    session: {
+      id: user.id,
+      email: user.email,
+      nom: user.nom,
+      prenom: user.prenom,
+      role: user.role,
+      chantierIds: user.chantierIds
+    },
+    token
   };
 }
 
@@ -684,15 +341,19 @@ export async function register(userData: {
   nom: string;
   prenom: string;
 }): Promise<User> {
-  // Check if email already exists
   const existing = await fetch(`${API_URL}/users?email=${encodeURIComponent(userData.email)}`);
   const existingUsers: User[] = await existing.json();
   if (existingUsers.length > 0) {
     throw new Error('Cet email est deja utilise');
   }
 
+  const hashedPassword = await hashPassword(userData.password);
+
   const newUser: Omit<User, 'id'> = {
-    ...userData,
+    email: userData.email,
+    password: hashedPassword,
+    nom: userData.nom,
+    prenom: userData.prenom,
     role: 'lecteur',
     chantierIds: [],
     actif: true,
@@ -711,61 +372,17 @@ export async function register(userData: {
   return response.json();
 }
 
-export async function getUsers(): Promise<User[]> {
-  const response = await fetch(`${API_URL}/users`);
-  if (!response.ok) {
-    throw new Error('Erreur lors de la recuperation des utilisateurs');
-  }
-  return response.json();
-}
-
-export async function getUser(id: string): Promise<User> {
-  const response = await fetch(`${API_URL}/users/${id}`);
-  if (!response.ok) {
-    throw new Error('Utilisateur non trouve');
-  }
-  return response.json();
-}
+export const getUsers = usersApi.getAll;
+export const getUser = usersApi.getById;
 
 export async function createUser(userData: Omit<User, 'id'>): Promise<User> {
-  // Check if email already exists
   const existing = await fetch(`${API_URL}/users?email=${encodeURIComponent(userData.email)}`);
   const existingUsers: User[] = await existing.json();
   if (existingUsers.length > 0) {
     throw new Error('Cet email est deja utilise');
   }
-
-  const response = await fetch(`${API_URL}/users`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(userData)
-  });
-
-  if (!response.ok) {
-    throw new Error('Erreur lors de la creation de l\'utilisateur');
-  }
-  return response.json();
+  return usersApi.create(userData);
 }
 
-export async function updateUser(id: string, userData: Partial<User>): Promise<User> {
-  const response = await fetch(`${API_URL}/users/${id}`, {
-    method: 'PATCH',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(userData)
-  });
-
-  if (!response.ok) {
-    throw new Error('Erreur lors de la mise a jour de l\'utilisateur');
-  }
-  return response.json();
-}
-
-export async function deleteUser(id: string): Promise<void> {
-  const response = await fetch(`${API_URL}/users/${id}`, {
-    method: 'DELETE'
-  });
-
-  if (!response.ok) {
-    throw new Error('Erreur lors de la suppression de l\'utilisateur');
-  }
-}
+export const updateUser = usersApi.update;
+export const deleteUser = usersApi.delete;

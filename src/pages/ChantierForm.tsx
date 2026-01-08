@@ -9,7 +9,6 @@ import { DEVISES } from '../types';
 import { useToast } from '../contexts/ToastContext';
 import Loading from '../components/Loading';
 import ActorSelector from '../components/ActorSelector';
-import ActorSelectorMultiple from '../components/ActorSelectorMultiple';
 import { ArrowLeft, Save, Loader2 } from 'lucide-react';
 
 export default function ChantierForm() {
@@ -268,8 +267,9 @@ export default function ChantierForm() {
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Entreprises
                 </label>
-                <ActorSelectorMultiple
-                  entreprises={entreprises}
+                <ActorSelector
+                  multiple
+                  actors={entreprises}
                   value={formData.entrepriseIds}
                   onChange={entrepriseIds => setFormData({ ...formData, entrepriseIds })}
                   placeholder="Selectionner des entreprises"

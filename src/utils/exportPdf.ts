@@ -3,33 +3,13 @@ import autoTable from 'jspdf-autotable';
 import type { Chantier, Depense, Categorie, Client, MOA, MOE, Entreprise } from '../types';
 import { STATUTS_CHANTIER, ACTOR_TYPE_LABELS, SPECIALITES_ENTREPRISE } from '../types';
 import { getCategoryLabel } from '../services/api';
+import { formatMontant, formatDate } from './format';
 
 interface ChantierActors {
   client: Client | null;
   moa: MOA | null;
   moe: MOE | null;
   entreprises: Entreprise[];
-}
-
-/**
- * Formate un montant pour le PDF
- */
-function formatMontant(montant: number): string {
-  return new Intl.NumberFormat('fr-FR', {
-    style: 'currency',
-    currency: 'EUR'
-  }).format(montant);
-}
-
-/**
- * Formate une date pour le PDF
- */
-function formatDate(dateStr: string): string {
-  return new Date(dateStr).toLocaleDateString('fr-FR', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric'
-  });
 }
 
 /**
