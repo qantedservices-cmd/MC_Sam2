@@ -328,6 +328,8 @@ export async function login(email: string, password: string): Promise<LoginResul
       email: user.email,
       nom: user.nom,
       prenom: user.prenom,
+      fonction: user.fonction,
+      telephone: user.telephone,
       role: user.role,
       chantierIds: user.chantierIds
     },
@@ -340,6 +342,8 @@ export async function register(userData: {
   password: string;
   nom: string;
   prenom: string;
+  telephone?: string;
+  fonction?: string;
 }): Promise<User> {
   const existing = await fetch(`${API_URL}/users?email=${encodeURIComponent(userData.email)}`);
   const existingUsers: User[] = await existing.json();
@@ -354,7 +358,9 @@ export async function register(userData: {
     password: hashedPassword,
     nom: userData.nom,
     prenom: userData.prenom,
-    role: 'lecteur',
+    telephone: userData.telephone,
+    fonction: userData.fonction,
+    role: 'client',
     chantierIds: [],
     actif: true,
     createdAt: new Date().toISOString().split('T')[0]

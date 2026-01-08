@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, Navigate, Link } from 'react-router-dom';
-import { UserPlus, Mail, Lock, User, Loader2, AlertCircle, CheckCircle } from 'lucide-react';
+import { UserPlus, Mail, Lock, User, Loader2, AlertCircle, CheckCircle, Phone, Briefcase } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { register } from '../services/api';
 
@@ -12,6 +12,8 @@ export default function RegisterPage() {
     nom: '',
     prenom: '',
     email: '',
+    telephone: '',
+    fonction: '',
     password: '',
     confirmPassword: ''
   });
@@ -58,7 +60,9 @@ export default function RegisterPage() {
         email: formData.email,
         password: formData.password,
         nom: formData.nom,
-        prenom: formData.prenom
+        prenom: formData.prenom,
+        telephone: formData.telephone || undefined,
+        fonction: formData.fonction || undefined
       });
 
       setSuccess(true);
@@ -172,6 +176,45 @@ export default function RegisterPage() {
               </div>
             </div>
 
+            {/* Telephone et Fonction */}
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label htmlFor="telephone" className="block text-sm font-medium text-gray-700 mb-1">
+                  Telephone <span className="text-gray-400">(optionnel)</span>
+                </label>
+                <div className="relative">
+                  <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <input
+                    type="tel"
+                    id="telephone"
+                    name="telephone"
+                    value={formData.telephone}
+                    onChange={handleChange}
+                    className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                    placeholder="+216..."
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label htmlFor="fonction" className="block text-sm font-medium text-gray-700 mb-1">
+                  Fonction <span className="text-gray-400">(optionnel)</span>
+                </label>
+                <div className="relative">
+                  <Briefcase className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <input
+                    type="text"
+                    id="fonction"
+                    name="fonction"
+                    value={formData.fonction}
+                    onChange={handleChange}
+                    className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                    placeholder="Ex: Chef de projet"
+                  />
+                </div>
+              </div>
+            </div>
+
             {/* Password */}
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
@@ -218,7 +261,7 @@ export default function RegisterPage() {
 
           {/* Info role */}
           <p className="mt-4 text-xs text-gray-500">
-            Votre compte sera cree avec le role "Lecteur". Un administrateur pourra modifier vos droits d'acces.
+            Votre compte sera cree avec le role "Client". Un administrateur pourra modifier vos droits d'acces.
           </p>
 
           {/* Submit */}

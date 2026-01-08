@@ -221,13 +221,21 @@ export const CATEGORIES_DEPENSE_LEGACY: Record<CategorieDepenseLegacy, string> =
 } as const;
 
 // ============ AUTHENTIFICATION ============
-export type UserRole = 'admin' | 'gestionnaire' | 'utilisateur' | 'lecteur';
+export type UserRole =
+  | 'admin'           // Admin general - acces total
+  | 'entrepreneur'    // Proprietaire/gerant - multi-chantiers, couts internes
+  | 'client_gestionnaire' // Client avec droits gestion sur son chantier
+  | 'architecte'      // MOE/Architecte - lecture chantiers assignes
+  | 'collaborateur'   // Employe terrain - saisie pointage/production
+  | 'client';         // Client lecture seule
 
 export const USER_ROLES: Record<UserRole, string> = {
   admin: 'Administrateur',
-  gestionnaire: 'Gestionnaire',
-  utilisateur: 'Utilisateur',
-  lecteur: 'Lecteur'
+  entrepreneur: 'Entrepreneur',
+  client_gestionnaire: 'Client Gestionnaire',
+  architecte: 'Architecte / MOE',
+  collaborateur: 'Collaborateur',
+  client: 'Client'
 } as const;
 
 export interface User {
@@ -236,11 +244,13 @@ export interface User {
   password: string;
   nom: string;
   prenom: string;
+  fonction?: string;      // Poste/fonction dans l'entreprise
+  telephone?: string;     // Numero de telephone
   role: UserRole;
-  chantierIds: string[];
+  chantierIds: string[];  // Chantiers accessibles (vide = tous pour admin/entrepreneur)
   actif: boolean;
   createdAt: string;
-  createdBy?: string;
+  createdBy?: string;     // ID de l'utilisateur qui a cree ce compte
 }
 
 export interface UserSession {
@@ -248,16 +258,33 @@ export interface UserSession {
   email: string;
   nom: string;
   prenom: string;
+  fonction?: string;
+  telephone?: string;
   role: UserRole;
   chantierIds: string[];
 }
 
 export interface RolePermissions {
-  canViewAllChantiers: boolean;
-  canCreateChantier: boolean;
-  canEditChantier: boolean;
-  canDeleteChantier: boolean;
-  canCreateDepense: boolean;
-  canImportData: boolean;
-  canManageUsers: boolean;
+  // Chantiers
+  canViewAllChantiers: boolean;   // Voir tous les chantiers
+  canCreateChantier: boolean;     // Creer un chantier
+  canEditChantier: boolean;       // Modifier un chantier
+  canDeleteChantier: boolean;     // Supprimer un chantier
+
+  // Finances
+  canCreateDepense: boolean;      // Creer des depenses
+  canViewCoutsInternes: boolean;  // Voir couts internes (salaires, marges)
+  canViewFacturation: boolean;    // Voir la facturation
+  canCreateFacture: boolean;      // Creer des factures
+  canValiderFacture: boolean;     // Valider/refuser factures (client)
+
+  // Production
+  canSaisiePointage: boolean;     // Saisir pointage personnel
+  canSaisieProduction: boolean;   // Saisir production/metre
+  canValiderPV: boolean;          // Valider PV avancement
+
+  // Administration
+  canImportData: boolean;         // Importer des donnees
+  canManageUsers: boolean;        // Gerer les utilisateurs
+  canManageChantierUsers: boolean; // Gerer les users de son chantier (limite 15)
 }

@@ -62,7 +62,7 @@ export default function UsersManagement() {
         password: '',
         nom: '',
         prenom: '',
-        role: 'lecteur',
+        role: 'client',
         chantierIds: [],
         actif: true
       });
@@ -208,8 +208,10 @@ export default function UsersManagement() {
                 <td className="px-4 py-3">
                   <span className={`inline-flex px-2 py-1 text-xs font-medium rounded ${
                     user.role === 'admin' ? 'bg-purple-100 text-purple-700' :
-                    user.role === 'gestionnaire' ? 'bg-blue-100 text-blue-700' :
-                    user.role === 'utilisateur' ? 'bg-green-100 text-green-700' :
+                    user.role === 'entrepreneur' ? 'bg-blue-100 text-blue-700' :
+                    user.role === 'client_gestionnaire' ? 'bg-orange-100 text-orange-700' :
+                    user.role === 'architecte' ? 'bg-teal-100 text-teal-700' :
+                    user.role === 'collaborateur' ? 'bg-green-100 text-green-700' :
                     'bg-gray-100 text-gray-700'
                   }`}>
                     {USER_ROLES[user.role]}
@@ -293,8 +295,10 @@ export default function UsersManagement() {
                 <div className="flex items-center gap-2">
                   <span className={`inline-flex px-2 py-1 text-xs font-medium rounded ${
                     user.role === 'admin' ? 'bg-purple-100 text-purple-700' :
-                    user.role === 'gestionnaire' ? 'bg-blue-100 text-blue-700' :
-                    user.role === 'utilisateur' ? 'bg-green-100 text-green-700' :
+                    user.role === 'entrepreneur' ? 'bg-blue-100 text-blue-700' :
+                    user.role === 'client_gestionnaire' ? 'bg-orange-100 text-orange-700' :
+                    user.role === 'architecte' ? 'bg-teal-100 text-teal-700' :
+                    user.role === 'collaborateur' ? 'bg-green-100 text-green-700' :
                     'bg-gray-100 text-gray-700'
                   }`}>
                     {USER_ROLES[user.role]}
