@@ -2,7 +2,7 @@ import type { Chantier, Depense, Client, MOA, MOE, Entreprise, Categorie, Catego
 import { hashPassword, verifyPassword, generateToken, AUTH_TOKEN_KEY } from '../utils/crypto';
 import { createCrudApi, createChantierFilteredCrudApi } from './crudFactory';
 
-const API_URL = 'http://localhost:3001';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 
 // Helper pour ajouter le token aux requetes (exporte pour utilisation future)
 export function getAuthHeaders(): HeadersInit {
