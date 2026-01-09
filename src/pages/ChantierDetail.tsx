@@ -8,7 +8,7 @@ import { useToast } from '../contexts/ToastContext';
 import Loading from '../components/Loading';
 import ErrorMessage from '../components/ErrorMessage';
 import ChantierActorsSection from '../components/ChantierActorsSection';
-import { ArrowLeft, Edit, Trash2, PlusCircle, Loader2, AlertTriangle, FileDown, Users, ListTodo, Package, Receipt } from 'lucide-react';
+import { ArrowLeft, Edit, Trash2, PlusCircle, Loader2, AlertTriangle, FileDown, Users, ListTodo, Package, Receipt, ClipboardCheck } from 'lucide-react';
 import { exportChantierPdf } from '../utils/exportPdf';
 
 export default function ChantierDetail() {
@@ -159,6 +159,13 @@ export default function ChantierDetail() {
           >
             <Receipt className="w-4 h-4" />
             Facturation
+          </Link>
+          <Link
+            to={`/chantiers/${id}/pv-avancement`}
+            className="flex items-center gap-1 px-4 py-2 bg-teal-100 text-teal-700 rounded-lg hover:bg-teal-200 transition-colors"
+          >
+            <ClipboardCheck className="w-4 h-4" />
+            PV Avancement
           </Link>
           <button
             onClick={() => exportChantierPdf(chantier, depenses, categories, actors)}
