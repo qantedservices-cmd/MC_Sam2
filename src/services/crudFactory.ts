@@ -2,7 +2,7 @@
  * Factory CRUD generique pour reduire la duplication de code API
  */
 
-const API_URL = 'http://localhost:3001';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 
 export interface CrudApi<T, CreateT = Omit<T, 'id'>> {
   getAll: (filter?: string) => Promise<T[]>;
