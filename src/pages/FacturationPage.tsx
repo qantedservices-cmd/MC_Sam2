@@ -2,18 +2,19 @@ import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import {
   ArrowLeft, Plus, FileText, Loader2, Send, CheckCircle,
-  XCircle, Eye, Trash2, Receipt
+  XCircle, Eye, Trash2, Receipt, Download
 } from 'lucide-react';
 import {
   getFacturations, getChantier, getLotsTravaux, createFacturation,
   updateFacturation, deleteFacturation, genererNumeroFacture,
-  calculerSituationFinanciere
+  calculerSituationFinanciere, getClient
 } from '../services/api';
-import type { Facturation, Chantier, LotTravaux, StatutFacturation, LigneFacturation } from '../types';
+import type { Facturation, Chantier, LotTravaux, StatutFacturation, LigneFacturation, Client } from '../types';
 import { STATUTS_FACTURATION, UNITES_METRAGE } from '../types';
 import { useToast } from '../contexts/ToastContext';
 import { formatMontant } from '../utils/format';
 import { useAuth } from '../contexts/AuthContext';
+import { exportFacturePdf } from '../utils/exportPdf';
 
 const STATUT_COLORS: Record<StatutFacturation, string> = {
   brouillon: 'bg-gray-100 text-gray-700',
@@ -32,6 +33,7 @@ export default function FacturationPage() {
   const [chantier, setChantier] = useState<Chantier | null>(null);
   const [factures, setFactures] = useState<Facturation[]>([]);
   const [lots, setLots] = useState<LotTravaux[]>([]);
+  const [client, setClient] = useState<Client | null>(null);
   const [situation, setSituation] = useState<{
     budgetPrevu: number;
     montantFacture: number;
@@ -72,6 +74,16 @@ export default function FacturationPage() {
       setFactures(facturesData.sort((a, b) => b.date.localeCompare(a.date)));
       setLots(lotsData.filter(l => l.actif));
       setSituation(situationData);
+
+      // Charger le client si disponible
+      if (chantierData.clientId) {
+        try {
+          const clientData = await getClient(chantierData.clientId);
+          setClient(clientData);
+        } catch {
+          setClient(null);
+        }
+      }
     } catch {
       showError('Erreur lors du chargement');
     } finally {
@@ -557,6 +569,13 @@ export default function FacturationPage() {
               )}
 
               <div className="flex items-center justify-end gap-3 pt-4 border-t">
+                <button
+                  onClick={() => chantier && exportFacturePdf(selectedFacture, chantier, lots, client)}
+                  className="flex items-center gap-2 px-4 py-2 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors"
+                >
+                  <Download className="w-4 h-4" />
+                  PDF
+                </button>
                 <button
                   onClick={() => setSelectedFacture(null)}
                   className="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"

@@ -1,7 +1,7 @@
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
-import type { Chantier, Depense, Categorie, Client, MOA, MOE, Entreprise } from '../types';
-import { STATUTS_CHANTIER, ACTOR_TYPE_LABELS, SPECIALITES_ENTREPRISE } from '../types';
+import type { Chantier, Depense, Categorie, Client, MOA, MOE, Entreprise, Facturation, LotTravaux } from '../types';
+import { STATUTS_CHANTIER, ACTOR_TYPE_LABELS, SPECIALITES_ENTREPRISE, STATUTS_FACTURATION, UNITES_METRAGE } from '../types';
 import { getCategoryLabel } from '../services/api';
 import { formatMontant, formatDate } from './format';
 
@@ -294,5 +294,157 @@ export function exportChantierPdf(
 
   // Télécharger le PDF
   const fileName = `chantier-${chantier.nom.toLowerCase().replace(/\s+/g, '-')}.pdf`;
+  doc.save(fileName);
+}
+
+/**
+ * Exporte une facture en PDF
+ */
+export function exportFacturePdf(
+  facture: Facturation,
+  chantier: Chantier,
+  _lots: LotTravaux[],
+  client?: Client | null
+): void {
+  const doc = new jsPDF();
+  const pageWidth = doc.internal.pageSize.getWidth();
+
+  // En-tête entreprise (gauche)
+  doc.setFontSize(20);
+  doc.setFont('helvetica', 'bold');
+  doc.text('MonChantier', 14, 20);
+
+  doc.setFontSize(10);
+  doc.setFont('helvetica', 'normal');
+  doc.text('Gestion de chantiers BTP', 14, 27);
+
+  // FACTURE (droite)
+  doc.setFontSize(24);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(59, 130, 246);
+  doc.text('FACTURE', pageWidth - 14, 20, { align: 'right' });
+
+  doc.setFontSize(12);
+  doc.setTextColor(0, 0, 0);
+  doc.text(`N° ${facture.numero}`, pageWidth - 14, 28, { align: 'right' });
+
+  // Statut
+  const statutLabel = STATUTS_FACTURATION[facture.statut];
+  const statutColor = facture.statut === 'paye' ? [34, 197, 94] :
+                      facture.statut === 'valide' ? [59, 130, 246] :
+                      facture.statut === 'refuse' ? [239, 68, 68] : [107, 114, 128];
+  doc.setTextColor(statutColor[0], statutColor[1], statutColor[2]);
+  doc.text(statutLabel.toUpperCase(), pageWidth - 14, 35, { align: 'right' });
+  doc.setTextColor(0, 0, 0);
+
+  // Ligne séparatrice
+  doc.setDrawColor(200, 200, 200);
+  doc.line(14, 42, pageWidth - 14, 42);
+
+  // Informations client (gauche)
+  doc.setFontSize(11);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Client', 14, 52);
+
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(10);
+  if (client) {
+    doc.text(client.nom, 14, 59);
+    if (client.adresse) doc.text(client.adresse, 14, 65);
+    if (client.email) doc.text(client.email, 14, 71);
+    if (client.telephone) doc.text(client.telephone, 14, 77);
+  } else {
+    doc.text('Client non renseigne', 14, 59);
+  }
+
+  // Informations facture (droite)
+  doc.setFont('helvetica', 'bold');
+  doc.text('Details', pageWidth - 80, 52);
+
+  doc.setFont('helvetica', 'normal');
+  doc.text(`Date: ${formatDate(facture.date)}`, pageWidth - 80, 59);
+  doc.text(`Periode: ${formatDate(facture.periodeDebut)} - ${formatDate(facture.periodeFin)}`, pageWidth - 80, 65);
+  doc.text(`Chantier: ${chantier.nom}`, pageWidth - 80, 71);
+
+  // Tableau des lignes de facture
+  doc.setFontSize(12);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Details des travaux', 14, 95);
+
+  const lignesData = facture.lignes.map(ligne => {
+    return [
+      ligne.lotNom || 'Lot inconnu',
+      `${ligne.quantiteAFacturer} ${UNITES_METRAGE[ligne.unite] || ''}`,
+      formatMontant(ligne.prixUnitaire),
+      formatMontant(ligne.montant)
+    ];
+  });
+
+  autoTable(doc, {
+    startY: 100,
+    head: [['Designation', 'Quantite', 'Prix unitaire', 'Montant HT']],
+    body: lignesData,
+    styles: { fontSize: 9, cellPadding: 4 },
+    headStyles: { fillColor: [59, 130, 246], textColor: 255 },
+    columnStyles: {
+      0: { cellWidth: 80 },
+      1: { cellWidth: 30, halign: 'center' },
+      2: { cellWidth: 35, halign: 'right' },
+      3: { cellWidth: 35, halign: 'right' }
+    }
+  });
+
+  // Totaux
+  const lastY = (doc as jsPDF & { lastAutoTable?: { finalY: number } }).lastAutoTable?.finalY || 150;
+
+  const totauxStartX = pageWidth - 80;
+  let currentY = lastY + 10;
+
+  doc.setFontSize(10);
+  doc.setFont('helvetica', 'normal');
+
+  // Montant HT
+  doc.text('Total HT:', totauxStartX, currentY);
+  doc.text(formatMontant(facture.montantHT), pageWidth - 14, currentY, { align: 'right' });
+  currentY += 7;
+
+  // TVA
+  doc.text(`TVA (${facture.tauxTva}%):`, totauxStartX, currentY);
+  doc.text(formatMontant(facture.tva), pageWidth - 14, currentY, { align: 'right' });
+  currentY += 7;
+
+  // Ligne séparatrice
+  doc.setDrawColor(59, 130, 246);
+  doc.setLineWidth(0.5);
+  doc.line(totauxStartX, currentY, pageWidth - 14, currentY);
+  currentY += 7;
+
+  // Total TTC
+  doc.setFontSize(12);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Total TTC:', totauxStartX, currentY);
+  doc.setTextColor(59, 130, 246);
+  doc.text(formatMontant(facture.montantTTC), pageWidth - 14, currentY, { align: 'right' });
+  doc.setTextColor(0, 0, 0);
+
+  // Commentaire si present
+  if (facture.commentaire) {
+    currentY += 20;
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Commentaire:', 14, currentY);
+    doc.setFont('helvetica', 'normal');
+    doc.text(facture.commentaire, 14, currentY + 6);
+  }
+
+  // Pied de page
+  const pageHeight = doc.internal.pageSize.getHeight();
+  doc.setFontSize(8);
+  doc.setFont('helvetica', 'italic');
+  doc.setTextColor(128, 128, 128);
+  doc.text('Document genere par MonChantier - Application de gestion BTP', pageWidth / 2, pageHeight - 10, { align: 'center' });
+
+  // Télécharger
+  const fileName = `facture-${facture.numero.replace(/\//g, '-')}.pdf`;
   doc.save(fileName);
 }
