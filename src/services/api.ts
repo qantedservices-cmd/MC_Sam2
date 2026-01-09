@@ -313,16 +313,30 @@ export async function login(email: string, password: string): Promise<LoginResul
   let passwordValid = false;
 
   if (isHashedPassword) {
-    passwordValid = await verifyPassword(password, user.password);
+    try {
+      passwordValid = await verifyPassword(password, user.password);
+    } catch {
+      // crypto.subtle non disponible (HTTP non-secure), comparaison impossible
+      console.warn('Crypto API non disponible - utilisez HTTPS');
+      passwordValid = false;
+    }
   } else {
     passwordValid = user.password === password;
     if (passwordValid) {
-      const hashedPassword = await hashPassword(password);
-      await fetch(`${API_URL}/users/${user.id}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password: hashedPassword })
-      });
+      // Migration vers hash (seulement si crypto disponible)
+      try {
+        if (crypto.subtle) {
+          const hashedPassword = await hashPassword(password);
+          await fetch(`${API_URL}/users/${user.id}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ password: hashedPassword })
+          });
+        }
+      } catch {
+        // Ignorer l'erreur de hash, le login fonctionne quand même
+        console.warn('Migration hash ignorée - crypto non disponible');
+      }
     }
   }
 
