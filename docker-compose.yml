@@ -1,0 +1,26 @@
+services:
+  frontend:
+    build:
+      context: .
+      args:
+        VITE_API_URL: http://72.61.105.112:3001
+    ports:
+      - "8080:80"
+    depends_on:
+      - api
+
+  api:
+    image: node:20-alpine
+    working_dir: /app
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./data:/app
+    command: sh -c "cp -n /seed/db.json /app/db.json 2>/dev/null || true && npm install -g json-server && json-server --host 0.0.0.0 --watch /app/db.json --port 3001"
+    configs:
+      - source: db_seed
+        target: /seed/db.json
+
+configs:
+  db_seed:
+    file: ./db.json
