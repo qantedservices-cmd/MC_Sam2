@@ -26,6 +26,7 @@ import ProductionPage from './pages/ProductionPage';
 import LotsPage from './pages/LotsPage';
 import FacturationPage from './pages/FacturationPage';
 import PVAvancementPage from './pages/PVAvancementPage';
+import PaiementsClientPage from './pages/PaiementsClientPage';
 import { ShieldOff } from 'lucide-react';
 
 function UnauthorizedPage() {
@@ -84,6 +85,11 @@ function App() {
               <Route path="chantiers/:id/pv-avancement" element={
                 <ProtectedRoute requiredPermission="canSaisieProduction">
                   <PVAvancementPage />
+                </ProtectedRoute>
+              } />
+              <Route path="chantiers/:id/paiements" element={
+                <ProtectedRoute requiredPermission="canViewFacturation">
+                  <PaiementsClientPage />
                 </ProtectedRoute>
               } />
               <Route path="acteurs" element={<ActeursIndex />} />
