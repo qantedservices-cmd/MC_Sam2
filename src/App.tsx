@@ -23,6 +23,8 @@ import MaterielIndex from './pages/MaterielIndex';
 import UtilisationMaterielPage from './pages/UtilisationMaterielPage';
 import TachesPage from './pages/TachesPage';
 import ProductionPage from './pages/ProductionPage';
+import LotsPage from './pages/LotsPage';
+import FacturationPage from './pages/FacturationPage';
 import { ShieldOff } from 'lucide-react';
 
 function UnauthorizedPage() {
@@ -66,6 +68,16 @@ function App() {
               <Route path="chantiers/:id/production" element={
                 <ProtectedRoute requiredPermission="canSaisieProduction">
                   <ProductionPage />
+                </ProtectedRoute>
+              } />
+              <Route path="chantiers/:id/lots" element={
+                <ProtectedRoute requiredPermission="canCreateDepense">
+                  <LotsPage />
+                </ProtectedRoute>
+              } />
+              <Route path="chantiers/:id/facturation" element={
+                <ProtectedRoute requiredPermission="canViewFacturation">
+                  <FacturationPage />
                 </ProtectedRoute>
               } />
               <Route path="acteurs" element={<ActeursIndex />} />

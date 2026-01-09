@@ -4772,5 +4772,9 @@
   "materiels": [],
   "utilisations-materiel": [],
   "taches": [],
-  "productions": []
+  "productions": [],
+  "lots-travaux": [],
+  "facturations": [],
+  "pv-avancements": [],
+  "paiements-client": []
 }

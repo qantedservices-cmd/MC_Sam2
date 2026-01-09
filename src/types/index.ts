@@ -473,3 +473,164 @@ export interface Production {
   valide: boolean;
   createdAt: string;
 }
+
+// ============ MODULE LOTS DE TRAVAUX ============
+
+export type UniteMetrage = 'm2' | 'm3' | 'ml' | 'unite' | 'kg' | 'tonne' | 'forfait';
+
+export const UNITES_METRAGE: Record<UniteMetrage, string> = {
+  m2: 'm²',
+  m3: 'm³',
+  ml: 'ml',
+  unite: 'unité',
+  kg: 'kg',
+  tonne: 'tonne',
+  forfait: 'forfait'
+} as const;
+
+export interface LotTravaux {
+  id: string;
+  chantierId: string;
+  nom: string;
+  description?: string;
+  unite: UniteMetrage;
+  quantitePrevue: number;
+  prixUnitaire: number;
+  montantPrevu: number;           // quantitePrevue * prixUnitaire
+  ordre: number;
+  actif: boolean;
+  createdAt: string;
+}
+
+// Lots suggérés par défaut
+export const LOTS_DEFAUT = [
+  { nom: 'Terrassement', unite: 'm3' as UniteMetrage },
+  { nom: 'Fondations', unite: 'm3' as UniteMetrage },
+  { nom: 'Dalle', unite: 'm2' as UniteMetrage },
+  { nom: 'Poteaux', unite: 'unite' as UniteMetrage },
+  { nom: 'Poutres', unite: 'ml' as UniteMetrage },
+  { nom: 'Murs/Gros oeuvre', unite: 'm2' as UniteMetrage },
+  { nom: 'Toiture', unite: 'm2' as UniteMetrage },
+  { nom: 'Cloisons', unite: 'm2' as UniteMetrage },
+  { nom: 'Enduit', unite: 'm2' as UniteMetrage },
+  { nom: 'Carrelage', unite: 'm2' as UniteMetrage },
+  { nom: 'Electricite', unite: 'forfait' as UniteMetrage },
+  { nom: 'Plomberie', unite: 'forfait' as UniteMetrage },
+  { nom: 'Peinture', unite: 'm2' as UniteMetrage },
+  { nom: 'Menuiserie', unite: 'unite' as UniteMetrage },
+  { nom: 'Cloture', unite: 'ml' as UniteMetrage },
+  { nom: 'Travaux supplementaires', unite: 'forfait' as UniteMetrage }
+] as const;
+
+// ============ MODULE FACTURATION ============
+
+export type StatutFacturation = 'brouillon' | 'soumis' | 'valide' | 'refuse' | 'paye';
+
+export const STATUTS_FACTURATION: Record<StatutFacturation, string> = {
+  brouillon: 'Brouillon',
+  soumis: 'Soumis',
+  valide: 'Validé',
+  refuse: 'Refusé',
+  paye: 'Payé'
+} as const;
+
+export interface LigneFacturation {
+  lotId: string;
+  lotNom: string;
+  unite: UniteMetrage;
+  quantiteRealisee: number;       // Production cumulée
+  quantiteFacturee: number;       // Déjà facturé avant
+  quantiteAFacturer: number;      // Cette facture
+  prixUnitaire: number;
+  montant: number;
+}
+
+export interface Facturation {
+  id: string;
+  chantierId: string;
+  numero: string;                 // FAC-2026-001
+  date: string;
+  periodeDebut: string;
+  periodeFin: string;
+  lignes: LigneFacturation[];
+  montantHT: number;
+  tva: number;
+  tauxTva: number;                // Ex: 19
+  montantTTC: number;
+  statut: StatutFacturation;
+  soumisLe?: string;
+  valideLe?: string;
+  valideParId?: string;
+  refuseLe?: string;
+  motifRefus?: string;
+  commentaire?: string;
+  createdAt: string;
+  createdBy?: string;
+}
+
+// ============ MODULE PV AVANCEMENT ============
+
+export type StatutPV = 'brouillon' | 'soumis' | 'valide' | 'refuse';
+
+export const STATUTS_PV: Record<StatutPV, string> = {
+  brouillon: 'Brouillon',
+  soumis: 'Soumis',
+  valide: 'Validé',
+  refuse: 'Refusé'
+} as const;
+
+export interface LotAvancement {
+  lotId: string;
+  lotNom: string;
+  unite: UniteMetrage;
+  quantitePrevue: number;
+  quantiteRealisee: number;
+  pourcentage: number;
+  montant: number;
+}
+
+export interface PVAvancement {
+  id: string;
+  chantierId: string;
+  numero: number;                 // PV n°1, n°2...
+  date: string;
+  periodeDebut: string;
+  periodeFin: string;
+  lots: LotAvancement[];
+  avancementGlobal: number;       // Pourcentage global
+  montantCumule: number;          // Total réalisé
+  photosUrls: string[];
+  statut: StatutPV;
+  soumisLe?: string;
+  valideLe?: string;
+  valideParId?: string;
+  refuseLe?: string;
+  motifRefus?: string;
+  commentaire?: string;
+  createdAt: string;
+  createdBy?: string;
+}
+
+// ============ PAIEMENT CLIENT ============
+
+export type ModePaiement = 'virement' | 'cheque' | 'especes' | 'autre';
+
+export const MODES_PAIEMENT: Record<ModePaiement, string> = {
+  virement: 'Virement',
+  cheque: 'Chèque',
+  especes: 'Espèces',
+  autre: 'Autre'
+} as const;
+
+export interface PaiementClient {
+  id: string;
+  chantierId: string;
+  facturationId?: string;         // Lié à une facture
+  date: string;
+  montant: number;
+  modePaiement: ModePaiement;
+  reference?: string;
+  commentaire?: string;
+  createdAt: string;
+  createdBy?: string;
+}
