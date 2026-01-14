@@ -145,10 +145,14 @@ export default function Dashboard() {
     return formatMontant(converted, displayCurrency);
   }, [displayCurrency, rates]);
 
-  // Overview stats (simple view)
+  // Overview stats (simple view) - converted to DNT for multi-currency support
   const overviewStats = useMemo(() => {
-    const budgetTotal = chantiers.reduce((sum, c) => sum + c.budgetPrevisionnel, 0);
-    const depensesTotal = depenses.reduce((sum, d) => sum + d.montant, 0);
+    const budgetTotal = chantiers.reduce((sum, c) => {
+      return sum + convertToDNT(c.budgetPrevisionnel, c.devise || 'DNT', rates);
+    }, 0);
+    const depensesTotal = depenses.reduce((sum, d) => {
+      return sum + getAmountInDNT(d.montant, d.chantierId);
+    }, 0);
     return {
       budgetTotal,
       depensesTotal,
@@ -157,7 +161,7 @@ export default function Dashboard() {
       chantiersTermines: chantiers.filter(c => c.statut === 'termine').length,
       chantiersSuspendus: chantiers.filter(c => c.statut === 'suspendu').length
     };
-  }, [chantiers, depenses]);
+  }, [chantiers, depenses, rates, getAmountInDNT]);
 
   // Compute filtered stats (all converted to DNT)
   const filteredStats = useMemo(() => {
@@ -395,6 +399,19 @@ export default function Dashboard() {
 
           {viewMode === 'overview' && (
             <>
+              {/* Currency selector */}
+              <div className="flex items-center gap-2 bg-gray-100 rounded-lg px-3 py-1">
+                <span className="text-sm text-gray-600 hidden sm:inline">Devise:</span>
+                <select
+                  value={displayCurrency}
+                  onChange={(e) => setDisplayCurrency(e.target.value as DeviseType)}
+                  className="bg-transparent border-none text-sm font-medium focus:outline-none cursor-pointer"
+                >
+                  <option value="DNT">DNT</option>
+                  <option value="EUR">EUR</option>
+                  <option value="USD">USD</option>
+                </select>
+              </div>
               <button
                 onClick={() => exportAllChantiersPdf(chantiers, depenses, categories)}
                 className="flex items-center gap-1 px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm"
@@ -424,7 +441,7 @@ export default function Dashboard() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-gray-500 text-sm">Budget Total</p>
-                  <p className="text-xl sm:text-2xl font-bold text-blue-600">{formatMontant(overviewStats.budgetTotal)}</p>
+                  <p className="text-xl sm:text-2xl font-bold text-blue-600">{formatInDisplayCurrency(overviewStats.budgetTotal)}</p>
                 </div>
                 <div className="bg-blue-100 p-3 rounded-full">
                   <Wallet className="w-6 h-6 text-blue-600" />
@@ -435,7 +452,7 @@ export default function Dashboard() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-gray-500 text-sm">Depenses Totales</p>
-                  <p className="text-xl sm:text-2xl font-bold text-red-600">{formatMontant(overviewStats.depensesTotal)}</p>
+                  <p className="text-xl sm:text-2xl font-bold text-red-600">{formatInDisplayCurrency(overviewStats.depensesTotal)}</p>
                 </div>
                 <div className="bg-red-100 p-3 rounded-full">
                   <TrendingDown className="w-6 h-6 text-red-600" />
@@ -447,7 +464,7 @@ export default function Dashboard() {
                 <div>
                   <p className="text-gray-500 text-sm">Reste</p>
                   <p className={`text-xl sm:text-2xl font-bold ${overviewStats.resteTotal >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                    {formatMontant(overviewStats.resteTotal)}
+                    {formatInDisplayCurrency(overviewStats.resteTotal)}
                   </p>
                 </div>
                 <div className={`${overviewStats.resteTotal >= 0 ? 'bg-green-100' : 'bg-red-100'} p-3 rounded-full`}>
