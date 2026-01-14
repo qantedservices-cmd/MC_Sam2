@@ -396,15 +396,17 @@ export default function ChantierDetail() {
         <div className="mb-6">
           <h3 className="text-sm font-medium text-gray-600 mb-2">Photo de presentation</h3>
           {photos.find(p => p.type === 'presentation') || chantier.photoPresentationUrl ? (
-            <div className="relative group w-full max-w-md">
-              <img
-                src={photos.find(p => p.type === 'presentation')?.url || chantier.photoPresentationUrl}
-                alt="Presentation du chantier"
-                className="w-full h-48 object-cover rounded-lg shadow"
-                onError={(e) => {
-                  (e.target as HTMLImageElement).src = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="200"><rect fill="%23e5e7eb" width="400" height="200"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%239ca3af" font-size="14">Image non disponible</text></svg>';
-                }}
-              />
+            <div className="relative group w-full max-w-2xl">
+              <div className="bg-gray-100 rounded-lg shadow overflow-hidden">
+                <img
+                  src={photos.find(p => p.type === 'presentation')?.url || chantier.photoPresentationUrl}
+                  alt="Presentation du chantier"
+                  className="w-full max-h-96 object-contain mx-auto"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="200"><rect fill="%23e5e7eb" width="400" height="200"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%239ca3af" font-size="14">Image non disponible</text></svg>';
+                  }}
+                />
+              </div>
               {photos.find(p => p.type === 'presentation') && (
                 <button
                   onClick={() => handleDeletePhoto(photos.find(p => p.type === 'presentation')!)}
