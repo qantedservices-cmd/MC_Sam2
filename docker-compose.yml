@@ -8,6 +8,9 @@ services:
       - "8080:80"
     depends_on:
       - api
+      - upload
+    volumes:
+      - uploads:/usr/share/nginx/html/uploads:ro
 
   api:
     image: node:20-alpine
@@ -20,6 +23,19 @@ services:
     configs:
       - source: db_seed
         target: /seed/db.json
+
+  upload:
+    image: node:20-alpine
+    working_dir: /app
+    expose:
+      - "3002"
+    volumes:
+      - ./upload-server:/app
+      - uploads:/uploads
+    command: sh -c "npm install && npm start"
+
+volumes:
+  uploads:
 
 configs:
   db_seed:

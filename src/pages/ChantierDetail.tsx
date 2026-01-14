@@ -8,7 +8,7 @@ import { useToast } from '../contexts/ToastContext';
 import Loading from '../components/Loading';
 import ErrorMessage from '../components/ErrorMessage';
 import ChantierActorsSection from '../components/ChantierActorsSection';
-import { ArrowLeft, Edit, Trash2, PlusCircle, Loader2, AlertTriangle, FileDown, Users, ListTodo, Package, Receipt, ClipboardCheck, Banknote, TrendingUp, Camera, Plus, Image as ImageIcon, X } from 'lucide-react';
+import { ArrowLeft, Edit, Trash2, PlusCircle, Loader2, AlertTriangle, FileDown, Users, ListTodo, Package, Receipt, ClipboardCheck, Banknote, TrendingUp, Camera, Plus, Image as ImageIcon, X, Upload } from 'lucide-react';
 import { exportChantierPdf } from '../utils/exportPdf';
 
 export default function ChantierDetail() {
@@ -36,6 +36,9 @@ export default function ChantierDetail() {
   const [newPhotoPhase, setNewPhotoPhase] = useState('');
   const [newPhotoComment, setNewPhotoComment] = useState('');
   const [savingPhoto, setSavingPhoto] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string>('');
+  const [uploading, setUploading] = useState(false);
 
   const loadData = async () => {
     if (!id) return;
@@ -92,25 +95,64 @@ export default function ChantierDetail() {
     }
   };
 
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setSelectedFile(file);
+      // Create preview URL
+      const url = URL.createObjectURL(file);
+      setPreviewUrl(url);
+      setNewPhotoUrl(''); // Clear URL if file selected
+    }
+  };
+
+  const uploadFile = async (file: File): Promise<string> => {
+    const formData = new FormData();
+    formData.append('image', file);
+
+    const response = await fetch('/upload', {
+      method: 'POST',
+      body: formData
+    });
+
+    if (!response.ok) {
+      throw new Error('Erreur lors de l\'upload');
+    }
+
+    const data = await response.json();
+    return data.url;
+  };
+
   const handleAddPhoto = async () => {
-    if (!id || !newPhotoUrl.trim()) {
-      showError('URL de photo requise');
+    if (!id) return;
+
+    // Check if we have either a file or URL
+    if (!selectedFile && !newPhotoUrl.trim()) {
+      showError('Selectionnez une image ou entrez une URL');
       return;
     }
 
     setSavingPhoto(true);
+    setUploading(true);
     try {
+      let imageUrl = newPhotoUrl.trim();
+
+      // Upload file if selected
+      if (selectedFile) {
+        imageUrl = await uploadFile(selectedFile);
+      }
+
       const photosPhase = photos.filter(p => p.type === 'phase');
 
       if (photoType === 'presentation') {
         // Pour la presentation, on met a jour le chantier aussi
-        await updateChantier(id, { photoPresentationUrl: newPhotoUrl.trim() });
+        await updateChantier(id, { photoPresentationUrl: imageUrl });
 
         // Et on cree la photo dans la collection
         await createPhotoChantier({
           chantierId: id,
           type: 'presentation',
-          url: newPhotoUrl.trim(),
+          url: imageUrl,
           titre: 'Photo de presentation',
           commentaire: newPhotoComment.trim() || undefined,
           ordre: 0,
@@ -121,7 +163,7 @@ export default function ChantierDetail() {
         await createPhotoChantier({
           chantierId: id,
           type: 'phase',
-          url: newPhotoUrl.trim(),
+          url: imageUrl,
           titre: newPhotoPhase.trim() || 'Phase',
           phase: newPhotoPhase.trim() || undefined,
           commentaire: newPhotoComment.trim() || undefined,
@@ -135,11 +177,14 @@ export default function ChantierDetail() {
       setNewPhotoUrl('');
       setNewPhotoPhase('');
       setNewPhotoComment('');
+      setSelectedFile(null);
+      setPreviewUrl('');
       loadData();
     } catch (err) {
       showError('Erreur lors de l\'ajout de la photo');
     } finally {
       setSavingPhoto(false);
+      setUploading(false);
     }
   };
 
@@ -453,14 +498,48 @@ export default function ChantierDetail() {
             </h3>
 
             <div className="space-y-4">
+              {/* Upload fichier */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">URL de l'image *</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Selectionner une image</label>
+                <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-amber-400 hover:bg-amber-50 transition-colors">
+                  <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                    <Upload className="w-8 h-8 text-gray-400 mb-2" />
+                    <p className="text-sm text-gray-500">
+                      {selectedFile ? selectedFile.name : 'Cliquez ou glissez une image'}
+                    </p>
+                    <p className="text-xs text-gray-400 mt-1">PNG, JPG, GIF jusqu'a 10MB</p>
+                  </div>
+                  <input
+                    type="file"
+                    className="hidden"
+                    accept="image/*"
+                    onChange={handleFileSelect}
+                  />
+                </label>
+              </div>
+
+              {/* Ou URL */}
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-gray-300"></div>
+                </div>
+                <div className="relative flex justify-center text-sm">
+                  <span className="px-2 bg-white text-gray-500">ou entrez une URL</span>
+                </div>
+              </div>
+
+              <div>
                 <input
                   type="url"
                   value={newPhotoUrl}
-                  onChange={(e) => setNewPhotoUrl(e.target.value)}
+                  onChange={(e) => {
+                    setNewPhotoUrl(e.target.value);
+                    setSelectedFile(null);
+                    setPreviewUrl('');
+                  }}
                   className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500"
                   placeholder="https://exemple.com/photo.jpg"
+                  disabled={!!selectedFile}
                 />
               </div>
 
@@ -488,11 +567,12 @@ export default function ChantierDetail() {
                 />
               </div>
 
-              {newPhotoUrl && (
+              {/* Apercu */}
+              {(previewUrl || newPhotoUrl) && (
                 <div>
                   <p className="text-sm text-gray-600 mb-1">Apercu:</p>
                   <img
-                    src={newPhotoUrl}
+                    src={previewUrl || newPhotoUrl}
                     alt="Apercu"
                     className="w-full h-32 object-cover rounded-lg border"
                     onError={(e) => {
@@ -510,6 +590,8 @@ export default function ChantierDetail() {
                   setNewPhotoUrl('');
                   setNewPhotoPhase('');
                   setNewPhotoComment('');
+                  setSelectedFile(null);
+                  setPreviewUrl('');
                 }}
                 className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
               >
@@ -517,11 +599,20 @@ export default function ChantierDetail() {
               </button>
               <button
                 onClick={handleAddPhoto}
-                disabled={savingPhoto || !newPhotoUrl.trim()}
+                disabled={savingPhoto || (!selectedFile && !newPhotoUrl.trim())}
                 className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-amber-500 text-white rounded-lg hover:bg-amber-600 disabled:bg-amber-300"
               >
-                {savingPhoto ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
-                Ajouter
+                {savingPhoto ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    {uploading ? 'Upload...' : 'Enregistrement...'}
+                  </>
+                ) : (
+                  <>
+                    <Upload className="w-4 h-4" />
+                    Ajouter
+                  </>
+                )}
               </button>
             </div>
           </div>
