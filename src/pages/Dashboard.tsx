@@ -155,41 +155,53 @@ export default function Dashboard() {
     return map;
   }, [depenses]);
 
-  // Apply filters to data (barre de filtres + filtrage croise)
-  const filteredDepenses = useMemo(() => {
+  // Donnees filtrees par la barre de filtres UNIQUEMENT (pour les graphiques)
+  const barFilteredDepenses = useMemo(() => {
     return depenses.filter(d => {
-      // Filtres de la barre
       if (filters.chantierIds.length > 0 && !filters.chantierIds.includes(d.chantierId)) return false;
       if (filters.categorieIds.length > 0 && !filters.categorieIds.includes(d.categorieId)) return false;
       if (filters.dateDebut && d.date < filters.dateDebut) return false;
       if (filters.dateFin && d.date > filters.dateFin) return false;
-      // Filtrage croise (selection graphiques)
-      if (crossFilter.chantierIds.length > 0 && !crossFilter.chantierIds.includes(d.chantierId)) return false;
-      if (crossFilter.categorieIds.length > 0 && !crossFilter.categorieIds.includes(d.categorieId)) return false;
       return true;
     });
-  }, [depenses, filters, crossFilter]);
+  }, [depenses, filters]);
 
-  const filteredDevis = useMemo(() => {
+  const barFilteredDevis = useMemo(() => {
     return devis.filter(d => {
       if (filters.chantierIds.length > 0 && !filters.chantierIds.includes(d.chantierId)) return false;
       if (filters.categorieIds.length > 0 && !filters.categorieIds.includes(d.categorieId)) return false;
       if (filters.dateDebut && d.date < filters.dateDebut) return false;
       if (filters.dateFin && d.date > filters.dateFin) return false;
-      // Filtrage croise
-      if (crossFilter.chantierIds.length > 0 && !crossFilter.chantierIds.includes(d.chantierId)) return false;
-      if (crossFilter.categorieIds.length > 0 && !crossFilter.categorieIds.includes(d.categorieId)) return false;
       return true;
     });
-  }, [devis, filters, crossFilter]);
+  }, [devis, filters]);
 
-  const filteredTransferts = useMemo(() => {
+  const barFilteredTransferts = useMemo(() => {
     return transferts.filter(t => {
       if (filters.dateDebut && t.date < filters.dateDebut) return false;
       if (filters.dateFin && t.date > filters.dateFin) return false;
       return true;
     });
   }, [transferts, filters]);
+
+  // Donnees filtrees par barre + crossFilter (pour le tableau des operations)
+  const filteredDepenses = useMemo(() => {
+    return barFilteredDepenses.filter(d => {
+      if (crossFilter.chantierIds.length > 0 && !crossFilter.chantierIds.includes(d.chantierId)) return false;
+      if (crossFilter.categorieIds.length > 0 && !crossFilter.categorieIds.includes(d.categorieId)) return false;
+      return true;
+    });
+  }, [barFilteredDepenses, crossFilter]);
+
+  const filteredDevis = useMemo(() => {
+    return barFilteredDevis.filter(d => {
+      if (crossFilter.chantierIds.length > 0 && !crossFilter.chantierIds.includes(d.chantierId)) return false;
+      if (crossFilter.categorieIds.length > 0 && !crossFilter.categorieIds.includes(d.categorieId)) return false;
+      return true;
+    });
+  }, [barFilteredDevis, crossFilter]);
+
+  const filteredTransferts = barFilteredTransferts;
 
   // Helper to get amount in DNT (memoized)
   const getAmountInDNT = useCallback((montant: number, chantierId: string): number => {
@@ -224,6 +236,7 @@ export default function Dashboard() {
 
   // Compute filtered stats (all converted to DNT)
   const filteredStats = useMemo(() => {
+    // Totaux bases sur les donnees filtrees par crossFilter (pour KPIs)
     const totalDepenses = filteredDepenses.reduce((sum, d) => {
       return sum + getAmountInDNT(d.montant, d.chantierId);
     }, 0);
@@ -234,9 +247,10 @@ export default function Dashboard() {
       return sum + (t.montantConverti || convertToDNT(t.montant, t.devise, rates));
     }, 0);
 
+    // Graphiques bases sur barFilteredDepenses (sans crossFilter) pour toujours afficher tous les elements
     // Depenses par chantier (en DNT)
     const parChantierMap: Record<string, number> = {};
-    filteredDepenses.forEach(d => {
+    barFilteredDepenses.forEach(d => {
       const amountDNT = getAmountInDNT(d.montant, d.chantierId);
       parChantierMap[d.chantierId] = (parChantierMap[d.chantierId] || 0) + amountDNT;
     });
@@ -248,7 +262,7 @@ export default function Dashboard() {
 
     // Depenses par categorie (en DNT)
     const parCategorieMap: Record<string, number> = {};
-    filteredDepenses.forEach(d => {
+    barFilteredDepenses.forEach(d => {
       const amountDNT = getAmountInDNT(d.montant, d.chantierId);
       parCategorieMap[d.categorieId] = (parCategorieMap[d.categorieId] || 0) + amountDNT;
     });
@@ -258,7 +272,7 @@ export default function Dashboard() {
       value
     }));
 
-    // Evolution par mois (en DNT)
+    // Evolution par mois (en DNT) - utilise les donnees filtrees par crossFilter
     const parMoisMap: Record<string, { depenses: number; cumul: number }> = {};
     let cumul = 0;
     const sortedDepenses = [...filteredDepenses].sort((a, b) => a.date.localeCompare(b.date));
@@ -290,7 +304,7 @@ export default function Dashboard() {
       evolutionMois
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filteredDepenses, filteredDevis, filteredTransferts, chantiers, categories, rates]);
+  }, [filteredDepenses, filteredDevis, filteredTransferts, barFilteredDepenses, chantiers, categories, rates]);
 
   // Unified data for table
   const tableData = useMemo(() => {
