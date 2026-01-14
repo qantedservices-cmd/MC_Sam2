@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { ToastProvider } from './contexts/ToastContext';
 import { AuthProvider } from './contexts/AuthContext';
+import { CurrencyProvider } from './contexts/CurrencyContext';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import Layout from './components/Layout';
 import Dashboard from './pages/Dashboard';
@@ -55,7 +56,9 @@ function App() {
 
             <Route path="/" element={
               <ProtectedRoute>
-                <Layout />
+                <CurrencyProvider>
+                  <Layout />
+                </CurrencyProvider>
               </ProtectedRoute>
             }>
               <Route index element={<Dashboard />} />

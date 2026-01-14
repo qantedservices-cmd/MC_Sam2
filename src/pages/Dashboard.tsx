@@ -6,11 +6,11 @@ import {
 } from 'lucide-react';
 import {
   getChantiers, getDepenses, getDevis, getTransferts,
-  getCategories, getConfig
+  getCategories
 } from '../services/api';
-import type { Chantier, Depense, Devis, TransfertBudget, Categorie, AppConfig, DeviseType } from '../types';
+import type { Chantier, Depense, Devis, TransfertBudget, Categorie } from '../types';
 import { formatMontant, convertToDNT, convertFromDNT } from '../utils/format';
-import ExchangeRateSettings from '../components/ExchangeRateSettings';
+import { useCurrency } from '../contexts/CurrencyContext';
 import KPICard from '../components/charts/KPICard';
 import ChartDepensesParChantier from '../components/charts/ChartDepensesParChantier';
 import ChartDepensesParLot from '../components/charts/ChartDepensesParLot';
@@ -37,6 +37,7 @@ interface UnifiedEntry {
 }
 
 export default function Dashboard() {
+  const { displayCurrency, rates } = useCurrency();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [chantiers, setChantiers] = useState<Chantier[]>([]);
@@ -44,8 +45,6 @@ export default function Dashboard() {
   const [devis, setDevis] = useState<Devis[]>([]);
   const [transferts, setTransferts] = useState<TransfertBudget[]>([]);
   const [categories, setCategories] = useState<Categorie[]>([]);
-  const [config, setConfig] = useState<AppConfig | null>(null);
-  const [displayCurrency, setDisplayCurrency] = useState<DeviseType>('DNT');
   const [viewMode, setViewMode] = useState<ViewMode>('overview');
   const [chantierViewMode, setChantierViewMode] = useState<ChantierViewMode>('grid');
 
@@ -123,16 +122,13 @@ export default function Dashboard() {
     setLoading(true);
     setError(null);
     try {
-      const [chantiersData, depensesData, devisData, transfertsData, categoriesData, configData] = await Promise.all([
+      const [chantiersData, depensesData, devisData, transfertsData, categoriesData] = await Promise.all([
         getChantiers(),
         getDepenses(),
         getDevis(),
         getTransferts(),
-        getCategories(),
-        getConfig()
+        getCategories()
       ]);
-      setConfig(configData);
-      setDisplayCurrency(configData.deviseAffichage);
       setChantiers(chantiersData);
       setDepenses(depensesData);
       setDevis(devisData);
@@ -194,12 +190,6 @@ export default function Dashboard() {
       return true;
     });
   }, [transferts, filters]);
-
-  // Get exchange rates from config
-  const rates = useMemo(() =>
-    config?.tauxChange || { EUR: 3.35, USD: 3.10, DNT: 1 },
-    [config]
-  );
 
   // Helper to get amount in DNT (memoized)
   const getAmountInDNT = useCallback((montant: number, chantierId: string): number => {
@@ -431,23 +421,6 @@ export default function Dashboard() {
         <div className="flex items-center gap-3">
           {viewMode === 'analytics' && (
             <>
-              {/* Currency selector */}
-              <div className="flex items-center gap-2 bg-gray-100 rounded-lg px-3 py-1">
-                <span className="text-sm text-gray-600 hidden sm:inline">Afficher en:</span>
-                <select
-                  value={displayCurrency}
-                  onChange={(e) => setDisplayCurrency(e.target.value as DeviseType)}
-                  className="bg-transparent border-none text-sm font-medium focus:outline-none cursor-pointer"
-                >
-                  <option value="DNT">DNT</option>
-                  <option value="EUR">EUR</option>
-                  <option value="USD">USD</option>
-                </select>
-              </div>
-
-              {/* Exchange rate settings */}
-              <ExchangeRateSettings onUpdate={setConfig} />
-
               {/* Action buttons */}
               <Link
                 to="/devis/nouveau"
@@ -468,19 +441,6 @@ export default function Dashboard() {
 
           {viewMode === 'overview' && (
             <>
-              {/* Currency selector */}
-              <div className="flex items-center gap-2 bg-gray-100 rounded-lg px-3 py-1">
-                <span className="text-sm text-gray-600 hidden sm:inline">Devise:</span>
-                <select
-                  value={displayCurrency}
-                  onChange={(e) => setDisplayCurrency(e.target.value as DeviseType)}
-                  className="bg-transparent border-none text-sm font-medium focus:outline-none cursor-pointer"
-                >
-                  <option value="DNT">DNT</option>
-                  <option value="EUR">EUR</option>
-                  <option value="USD">USD</option>
-                </select>
-              </div>
               <button
                 onClick={() => exportAllChantiersPdf(chantiers, depenses, categories)}
                 className="flex items-center gap-1 px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm"
