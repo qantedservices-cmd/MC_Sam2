@@ -4776,5 +4776,7 @@
   "lots-travaux": [],
   "facturations": [],
   "pv-avancements": [],
-  "paiements-client": []
+  "paiements-client": [],
+  "photos-chantier": [],
+  "etats-avancement": []
 }

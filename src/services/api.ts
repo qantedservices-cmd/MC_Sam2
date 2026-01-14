@@ -1,4 +1,4 @@
-import type { Chantier, Depense, Client, MOA, MOE, Entreprise, Categorie, CategorieTree, Devis, TransfertBudget, AppConfig, User, UserSession, Employe, Pointage, PaiementEmploye, Materiel, UtilisationMateriel, Tache, Production, LotTravaux, Facturation, PVAvancement, PaiementClient } from '../types';
+import type { Chantier, Depense, Client, MOA, MOE, Entreprise, Categorie, CategorieTree, Devis, TransfertBudget, AppConfig, User, UserSession, Employe, Pointage, PaiementEmploye, Materiel, UtilisationMateriel, Tache, Production, LotTravaux, Facturation, PVAvancement, PaiementClient, PhotoChantier, EtatAvancement } from '../types';
 import { hashPassword, verifyPassword, generateToken, AUTH_TOKEN_KEY } from '../utils/crypto';
 import { createCrudApi, createChantierFilteredCrudApi } from './crudFactory';
 
@@ -36,6 +36,8 @@ const lotsTravauxApi = createChantierFilteredCrudApi<LotTravaux>('lots-travaux',
 const facturationsApi = createChantierFilteredCrudApi<Facturation>('facturations', 'facturation');
 const pvAvancementsApi = createChantierFilteredCrudApi<PVAvancement>('pv-avancements', 'PV');
 const paiementsClientApi = createChantierFilteredCrudApi<PaiementClient>('paiements-client', 'paiement');
+const photosChantierApi = createChantierFilteredCrudApi<PhotoChantier>('photos-chantier', 'photo');
+const etatsAvancementApi = createChantierFilteredCrudApi<EtatAvancement>('etats-avancement', 'etat');
 
 // ============ CHANTIERS ============
 
@@ -781,4 +783,65 @@ export async function calculerSituationFinanciere(chantierId: string): Promise<{
     resteAPayer: montantFacture - montantPaye,
     montantFacturable: totalHT
   };
+}
+
+// ============ PHOTOS CHANTIER ============
+
+export async function getPhotosChantier(chantierId?: string): Promise<PhotoChantier[]> {
+  const photos = chantierId ? await photosChantierApi.getByChantier(chantierId) : await photosChantierApi.getAll();
+  return photos.sort((a, b) => a.ordre - b.ordre);
+}
+export const getPhotoChantier = photosChantierApi.getById;
+export const createPhotoChantier = photosChantierApi.create;
+export const updatePhotoChantier = photosChantierApi.update;
+export const deletePhotoChantier = photosChantierApi.delete;
+
+export async function getPhotosByType(chantierId: string, type: PhotoChantier['type']): Promise<PhotoChantier[]> {
+  const photos = await getPhotosChantier(chantierId);
+  return photos.filter(p => p.type === type);
+}
+
+export async function getPhotoPresentationChantier(chantierId: string): Promise<PhotoChantier | null> {
+  const photos = await getPhotosByType(chantierId, 'presentation');
+  return photos[0] || null;
+}
+
+// ============ ETATS D'AVANCEMENT ============
+
+export async function getEtatsAvancement(chantierId?: string): Promise<EtatAvancement[]> {
+  const etats = chantierId ? await etatsAvancementApi.getByChantier(chantierId) : await etatsAvancementApi.getAll();
+  return etats.sort((a, b) => b.numero - a.numero); // Plus récent en premier
+}
+export const getEtatAvancement = etatsAvancementApi.getById;
+export const createEtatAvancement = etatsAvancementApi.create;
+export const updateEtatAvancement = etatsAvancementApi.update;
+export const deleteEtatAvancement = etatsAvancementApi.delete;
+
+export async function genererNumeroEtatAvancement(chantierId: string): Promise<number> {
+  const etats = await getEtatsAvancement(chantierId);
+  return etats.length + 1;
+}
+
+export async function calculerBilanProduction(chantierId: string): Promise<EtatAvancement['bilanProduction']> {
+  const lots = await getLotsActifs(chantierId);
+  const factures = await getFacturations(chantierId);
+
+  // Calculer quantités réalisées par lot via les factures validées
+  const quantitesRealisees: Record<string, number> = {};
+  factures.filter(f => f.statut !== 'brouillon' && f.statut !== 'refuse').forEach(f => {
+    f.lignes.forEach(l => {
+      quantitesRealisees[l.lotId] = (quantitesRealisees[l.lotId] || 0) + l.quantiteAFacturer;
+    });
+  });
+
+  return lots.map(lot => ({
+    lotId: lot.id,
+    lotNom: lot.nom,
+    quantitePrevue: lot.quantitePrevue,
+    quantiteRealisee: quantitesRealisees[lot.id] || 0,
+    pourcentage: lot.quantitePrevue > 0
+      ? Math.min(100, ((quantitesRealisees[lot.id] || 0) / lot.quantitePrevue) * 100)
+      : 0,
+    unite: lot.unite
+  }));
 }

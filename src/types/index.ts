@@ -85,6 +85,8 @@ export interface Chantier {
   moaId?: string | null;
   moeId?: string | null;
   entrepriseIds?: string[];
+  // Photos
+  photoPresentationUrl?: string;  // Photo principale du chantier
 }
 
 export type StatutChantier = Chantier['statut'];
@@ -632,6 +634,80 @@ export interface PaiementClient {
   modePaiement: ModePaiement;
   reference?: string;
   commentaire?: string;
+  createdAt: string;
+  createdBy?: string;
+}
+
+// ============ PHOTOS CHANTIER ============
+
+export type TypePhotoChantier = 'presentation' | 'phase' | 'avancement';
+
+export const TYPES_PHOTO_CHANTIER: Record<TypePhotoChantier, string> = {
+  presentation: 'Photo de présentation',
+  phase: 'Photo de phase',
+  avancement: 'Photo d\'avancement'
+} as const;
+
+export interface PhotoChantier {
+  id: string;
+  chantierId: string;
+  type: TypePhotoChantier;
+  url: string;
+  titre?: string;
+  commentaire?: string;
+  phase?: string;                 // Nom de la phase (pour type 'phase')
+  ordre: number;                  // Ordre d'affichage
+  createdAt: string;
+  createdBy?: string;
+}
+
+// ============ ETAT D'AVANCEMENT ============
+
+export type StatutEtatAvancement = 'brouillon' | 'valide';
+
+export const STATUTS_ETAT_AVANCEMENT: Record<StatutEtatAvancement, string> = {
+  brouillon: 'Brouillon',
+  valide: 'Validé'
+} as const;
+
+export interface BilanProduction {
+  lotId: string;
+  lotNom: string;
+  quantitePrevue: number;
+  quantiteRealisee: number;
+  pourcentage: number;
+  unite: string;
+}
+
+export interface EtatAvancement {
+  id: string;
+  chantierId: string;
+  numero: number;                 // Etat n°1, n°2...
+  titre: string;                  // Ex: "Avancement semaine 3"
+  date: string;
+  periodeDebut: string;
+  periodeFin: string;
+
+  // Rapport photos
+  photosUrls: string[];
+  photosCommentaires?: Record<string, string>; // URL -> commentaire
+
+  // Bilan production
+  bilanProduction: BilanProduction[];
+  avancementGlobal: number;       // Pourcentage global
+
+  // Facturation liée
+  facturationIds: string[];       // IDs des factures liées
+  montantFacture: number;         // Total facturé pour cet état
+
+  // Commentaires
+  commentaireGeneral?: string;
+  observations?: string;
+  problemesRencontres?: string;
+
+  statut: StatutEtatAvancement;
+  valideLe?: string;
+  valideParId?: string;
   createdAt: string;
   createdBy?: string;
 }

@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { getChantier, getDepenses, deleteChantier, deleteDepense, deleteDepensesByChantier, getCategories, getCategoryLabel, getChantierActors } from '../services/api';
-import type { Chantier, Depense, Categorie, Client, MOA, MOE, Entreprise } from '../types';
+import { getChantier, getDepenses, deleteChantier, deleteDepense, deleteDepensesByChantier, getCategories, getCategoryLabel, getChantierActors, getPhotosChantier, createPhotoChantier, deletePhotoChantier, updateChantier } from '../services/api';
+import type { Chantier, Depense, Categorie, Client, MOA, MOE, Entreprise, PhotoChantier } from '../types';
 import { STATUTS_CHANTIER } from '../types';
 import { formatMontant, formatDate } from '../utils/format';
 import { useToast } from '../contexts/ToastContext';
 import Loading from '../components/Loading';
 import ErrorMessage from '../components/ErrorMessage';
 import ChantierActorsSection from '../components/ChantierActorsSection';
-import { ArrowLeft, Edit, Trash2, PlusCircle, Loader2, AlertTriangle, FileDown, Users, ListTodo, Package, Receipt, ClipboardCheck, Banknote } from 'lucide-react';
+import { ArrowLeft, Edit, Trash2, PlusCircle, Loader2, AlertTriangle, FileDown, Users, ListTodo, Package, Receipt, ClipboardCheck, Banknote, TrendingUp, Camera, Plus, Image as ImageIcon, X } from 'lucide-react';
 import { exportChantierPdf } from '../utils/exportPdf';
 
 export default function ChantierDetail() {
@@ -29,6 +29,13 @@ export default function ChantierDetail() {
   const [error, setError] = useState<string | null>(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [photos, setPhotos] = useState<PhotoChantier[]>([]);
+  const [showPhotoModal, setShowPhotoModal] = useState(false);
+  const [photoType, setPhotoType] = useState<'presentation' | 'phase'>('presentation');
+  const [newPhotoUrl, setNewPhotoUrl] = useState('');
+  const [newPhotoPhase, setNewPhotoPhase] = useState('');
+  const [newPhotoComment, setNewPhotoComment] = useState('');
+  const [savingPhoto, setSavingPhoto] = useState(false);
 
   const loadData = async () => {
     if (!id) return;
@@ -36,14 +43,16 @@ export default function ChantierDetail() {
     setError(null);
 
     try {
-      const [chantierData, depensesData, categoriesData] = await Promise.all([
+      const [chantierData, depensesData, categoriesData, photosData] = await Promise.all([
         getChantier(id),
         getDepenses(id),
-        getCategories()
+        getCategories(),
+        getPhotosChantier(id)
       ]);
       setChantier(chantierData);
       setDepenses(depensesData);
       setCategories(categoriesData);
+      setPhotos(photosData);
 
       // Load actors
       const actorsData = await getChantierActors(chantierData);
@@ -80,6 +89,71 @@ export default function ChantierDetail() {
       showSuccess('Dépense supprimée');
     } catch (err) {
       showError('Erreur lors de la suppression de la dépense');
+    }
+  };
+
+  const handleAddPhoto = async () => {
+    if (!id || !newPhotoUrl.trim()) {
+      showError('URL de photo requise');
+      return;
+    }
+
+    setSavingPhoto(true);
+    try {
+      const photosPhase = photos.filter(p => p.type === 'phase');
+
+      if (photoType === 'presentation') {
+        // Pour la presentation, on met a jour le chantier aussi
+        await updateChantier(id, { photoPresentationUrl: newPhotoUrl.trim() });
+
+        // Et on cree la photo dans la collection
+        await createPhotoChantier({
+          chantierId: id,
+          type: 'presentation',
+          url: newPhotoUrl.trim(),
+          titre: 'Photo de presentation',
+          commentaire: newPhotoComment.trim() || undefined,
+          ordre: 0,
+          createdAt: new Date().toISOString()
+        });
+      } else {
+        // Photo de phase
+        await createPhotoChantier({
+          chantierId: id,
+          type: 'phase',
+          url: newPhotoUrl.trim(),
+          titre: newPhotoPhase.trim() || 'Phase',
+          phase: newPhotoPhase.trim() || undefined,
+          commentaire: newPhotoComment.trim() || undefined,
+          ordre: photosPhase.length + 1,
+          createdAt: new Date().toISOString()
+        });
+      }
+
+      showSuccess('Photo ajoutee');
+      setShowPhotoModal(false);
+      setNewPhotoUrl('');
+      setNewPhotoPhase('');
+      setNewPhotoComment('');
+      loadData();
+    } catch (err) {
+      showError('Erreur lors de l\'ajout de la photo');
+    } finally {
+      setSavingPhoto(false);
+    }
+  };
+
+  const handleDeletePhoto = async (photo: PhotoChantier) => {
+    if (!confirm('Supprimer cette photo ?')) return;
+    try {
+      await deletePhotoChantier(photo.id);
+      if (photo.type === 'presentation' && chantier) {
+        await updateChantier(chantier.id, { photoPresentationUrl: undefined });
+      }
+      showSuccess('Photo supprimee');
+      loadData();
+    } catch (err) {
+      showError('Erreur lors de la suppression');
     }
   };
 
@@ -168,6 +242,13 @@ export default function ChantierDetail() {
             PV Avancement
           </Link>
           <Link
+            to={`/chantiers/${id}/etats-avancement`}
+            className="flex items-center gap-1 px-4 py-2 bg-amber-100 text-amber-700 rounded-lg hover:bg-amber-200 transition-colors"
+          >
+            <TrendingUp className="w-4 h-4" />
+            Etats Avancement
+          </Link>
+          <Link
             to={`/chantiers/${id}/paiements`}
             className="flex items-center gap-1 px-4 py-2 bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition-colors"
           >
@@ -246,6 +327,206 @@ export default function ChantierDetail() {
           entreprises={actors.entreprises}
         />
       </div>
+
+      {/* Section Photos */}
+      <div className="bg-white rounded-lg shadow p-6 mb-6">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-2">
+            <Camera className="w-5 h-5 text-gray-600" />
+            <h2 className="text-lg font-bold text-gray-800">Photos du chantier</h2>
+          </div>
+          <button
+            onClick={() => {
+              setPhotoType('presentation');
+              setShowPhotoModal(true);
+            }}
+            className="flex items-center gap-1 px-3 py-1.5 text-sm bg-amber-100 text-amber-700 rounded-lg hover:bg-amber-200"
+          >
+            <Plus className="w-4 h-4" />
+            Ajouter
+          </button>
+        </div>
+
+        {/* Photo de presentation */}
+        <div className="mb-6">
+          <h3 className="text-sm font-medium text-gray-600 mb-2">Photo de presentation</h3>
+          {photos.find(p => p.type === 'presentation') || chantier.photoPresentationUrl ? (
+            <div className="relative group w-full max-w-md">
+              <img
+                src={photos.find(p => p.type === 'presentation')?.url || chantier.photoPresentationUrl}
+                alt="Presentation du chantier"
+                className="w-full h-48 object-cover rounded-lg shadow"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="200"><rect fill="%23e5e7eb" width="400" height="200"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%239ca3af" font-size="14">Image non disponible</text></svg>';
+                }}
+              />
+              {photos.find(p => p.type === 'presentation') && (
+                <button
+                  onClick={() => handleDeletePhoto(photos.find(p => p.type === 'presentation')!)}
+                  className="absolute top-2 right-2 p-1.5 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                  title="Supprimer"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              )}
+              {photos.find(p => p.type === 'presentation')?.commentaire && (
+                <p className="mt-2 text-sm text-gray-600 italic">
+                  {photos.find(p => p.type === 'presentation')?.commentaire}
+                </p>
+              )}
+            </div>
+          ) : (
+            <div
+              onClick={() => {
+                setPhotoType('presentation');
+                setShowPhotoModal(true);
+              }}
+              className="w-full max-w-md h-32 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center cursor-pointer hover:border-amber-400 hover:bg-amber-50 transition-colors"
+            >
+              <div className="text-center text-gray-500">
+                <ImageIcon className="w-8 h-8 mx-auto mb-1" />
+                <p className="text-sm">Cliquez pour ajouter</p>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Photos de phase */}
+        <div>
+          <div className="flex items-center justify-between mb-2">
+            <h3 className="text-sm font-medium text-gray-600">Photos de phase</h3>
+            <button
+              onClick={() => {
+                setPhotoType('phase');
+                setShowPhotoModal(true);
+              }}
+              className="text-sm text-amber-600 hover:text-amber-700"
+            >
+              + Ajouter une phase
+            </button>
+          </div>
+          {photos.filter(p => p.type === 'phase').length === 0 ? (
+            <p className="text-sm text-gray-500">Aucune photo de phase</p>
+          ) : (
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+              {photos
+                .filter(p => p.type === 'phase')
+                .sort((a, b) => a.ordre - b.ordre)
+                .map(photo => (
+                  <div key={photo.id} className="relative group">
+                    <img
+                      src={photo.url}
+                      alt={photo.phase || 'Phase'}
+                      className="w-full h-28 object-cover rounded-lg"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="120"><rect fill="%23e5e7eb" width="200" height="120"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%239ca3af" font-size="12">?</text></svg>';
+                      }}
+                    />
+                    <button
+                      onClick={() => handleDeletePhoto(photo)}
+                      className="absolute top-1 right-1 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                      title="Supprimer"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                    <div className="mt-1">
+                      {photo.phase && (
+                        <p className="text-xs font-medium text-gray-700 truncate">{photo.phase}</p>
+                      )}
+                      {photo.commentaire && (
+                        <p className="text-xs text-gray-500 truncate">{photo.commentaire}</p>
+                      )}
+                    </div>
+                  </div>
+                ))}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Modal ajout photo */}
+      {showPhotoModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-lg shadow-xl p-6 max-w-md w-full">
+            <h3 className="text-lg font-bold text-gray-800 mb-4">
+              {photoType === 'presentation' ? 'Photo de presentation' : 'Photo de phase'}
+            </h3>
+
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">URL de l'image *</label>
+                <input
+                  type="url"
+                  value={newPhotoUrl}
+                  onChange={(e) => setNewPhotoUrl(e.target.value)}
+                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500"
+                  placeholder="https://exemple.com/photo.jpg"
+                />
+              </div>
+
+              {photoType === 'phase' && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Nom de la phase</label>
+                  <input
+                    type="text"
+                    value={newPhotoPhase}
+                    onChange={(e) => setNewPhotoPhase(e.target.value)}
+                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500"
+                    placeholder="Ex: Fondations, Gros oeuvre..."
+                  />
+                </div>
+              )}
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Commentaire</label>
+                <textarea
+                  value={newPhotoComment}
+                  onChange={(e) => setNewPhotoComment(e.target.value)}
+                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-amber-500"
+                  rows={2}
+                  placeholder="Description optionnelle..."
+                />
+              </div>
+
+              {newPhotoUrl && (
+                <div>
+                  <p className="text-sm text-gray-600 mb-1">Apercu:</p>
+                  <img
+                    src={newPhotoUrl}
+                    alt="Apercu"
+                    className="w-full h-32 object-cover rounded-lg border"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="100"><rect fill="%23fef3c7" width="200" height="100"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%23d97706" font-size="12">URL invalide</text></svg>';
+                    }}
+                  />
+                </div>
+              )}
+            </div>
+
+            <div className="flex gap-3 mt-6">
+              <button
+                onClick={() => {
+                  setShowPhotoModal(false);
+                  setNewPhotoUrl('');
+                  setNewPhotoPhase('');
+                  setNewPhotoComment('');
+                }}
+                className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+              >
+                Annuler
+              </button>
+              <button
+                onClick={handleAddPhoto}
+                disabled={savingPhoto || !newPhotoUrl.trim()}
+                className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-amber-500 text-white rounded-lg hover:bg-amber-600 disabled:bg-amber-300"
+              >
+                {savingPhoto ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
+                Ajouter
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Liste des depenses */}
       <div className="bg-white rounded-lg shadow p-6">

@@ -28,6 +28,7 @@ import LotsPage from './pages/LotsPage';
 import FacturationPage from './pages/FacturationPage';
 import PVAvancementPage from './pages/PVAvancementPage';
 import PaiementsClientPage from './pages/PaiementsClientPage';
+import EtatsAvancementPage from './pages/EtatsAvancementPage';
 import ChantiersIndex from './pages/ChantiersIndex';
 import { ShieldOff } from 'lucide-react';
 
@@ -95,6 +96,11 @@ function App() {
               <Route path="chantiers/:id/paiements" element={
                 <ProtectedRoute requiredPermission="canViewFacturation">
                   <PaiementsClientPage />
+                </ProtectedRoute>
+              } />
+              <Route path="chantiers/:id/etats-avancement" element={
+                <ProtectedRoute requiredPermission="canSaisieProduction">
+                  <EtatsAvancementPage />
                 </ProtectedRoute>
               } />
               <Route path="acteurs" element={<ActeursIndex />} />
