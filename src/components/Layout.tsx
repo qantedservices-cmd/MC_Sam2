@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { Link, Outlet, useNavigate, useLocation } from 'react-router-dom';
-import { PlusCircle, HardHat, Users, Upload, BarChart3, User, LogOut, ChevronDown, Shield, Menu, X, UserCheck, Package } from 'lucide-react';
+import { PlusCircle, HardHat, Users, Upload, BarChart3, User, LogOut, ChevronDown, Shield, Menu, X, UserCheck, Package, Building2 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { USER_ROLES } from '../types';
 import { PermissionGate } from './ProtectedRoute';
@@ -29,6 +29,7 @@ export default function Layout() {
 
   const navItems = [
     { to: '/', icon: BarChart3, label: 'Dashboard', permission: null },
+    { to: '/chantiers', icon: Building2, label: 'Chantiers', permission: null },
     { to: '/acteurs', icon: Users, label: 'Acteurs', permission: null },
     { to: '/personnel', icon: UserCheck, label: 'Personnel', permission: 'canSaisiePointage' as const },
     { to: '/materiel', icon: Package, label: 'Materiel', permission: 'canSaisiePointage' as const },

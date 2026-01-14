@@ -12,6 +12,8 @@ interface ChartData {
 interface ChartDepensesParLotProps {
   data: ChartData[];
   height?: number;
+  selectedIds?: string[];
+  onSelect?: (categorieId: string, ctrlKey: boolean) => void;
 }
 
 const COLORS = [
@@ -27,11 +29,17 @@ const COLORS = [
   '#6366F1', // indigo
 ];
 
+const SELECTED_OPACITY = 1;
+const UNSELECTED_OPACITY = 0.3;
+
 export default function ChartDepensesParLot({
   data,
-  height = 300
+  height = 300,
+  selectedIds = [],
+  onSelect
 }: ChartDepensesParLotProps) {
   const total = data.reduce((sum, item) => sum + item.value, 0);
+  const hasSelection = selectedIds.length > 0;
 
   const renderCustomLabel = (props: PieLabelRenderProps) => {
     const cx = Number(props.cx) || 0;
@@ -62,10 +70,18 @@ export default function ChartDepensesParLot({
     );
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handlePieClick = (data: any, _index: number, e: React.MouseEvent) => {
+    if (onSelect && data?.categorieId) {
+      onSelect(data.categorieId, e.ctrlKey || e.metaKey);
+    }
+  };
+
   return (
     <div className="bg-white rounded-lg shadow p-4">
       <h3 className="text-lg font-semibold text-gray-800 mb-4">
         Repartition par Lot
+        {onSelect && <span className="text-xs font-normal text-gray-400 ml-2">(Clic pour filtrer)</span>}
       </h3>
       <ResponsiveContainer width="100%" height={height}>
         <PieChart>
@@ -79,15 +95,22 @@ export default function ChartDepensesParLot({
             innerRadius={40}
             dataKey="value"
             paddingAngle={2}
+            onClick={handlePieClick}
+            style={{ cursor: onSelect ? 'pointer' : 'default' }}
           >
-            {data.map((_, index) => (
-              <Cell
-                key={`cell-${index}`}
-                fill={COLORS[index % COLORS.length]}
-                stroke="white"
-                strokeWidth={2}
-              />
-            ))}
+            {data.map((entry, index) => {
+              const isSelected = selectedIds.includes(entry.categorieId);
+              const opacity = hasSelection ? (isSelected ? SELECTED_OPACITY : UNSELECTED_OPACITY) : SELECTED_OPACITY;
+              return (
+                <Cell
+                  key={`cell-${index}`}
+                  fill={COLORS[index % COLORS.length]}
+                  fillOpacity={opacity}
+                  stroke={isSelected ? '#000' : 'white'}
+                  strokeWidth={isSelected ? 3 : 2}
+                />
+              );
+            })}
           </Pie>
           <Tooltip
             formatter={(value) => [

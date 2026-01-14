@@ -27,6 +27,7 @@ import LotsPage from './pages/LotsPage';
 import FacturationPage from './pages/FacturationPage';
 import PVAvancementPage from './pages/PVAvancementPage';
 import PaiementsClientPage from './pages/PaiementsClientPage';
+import ChantiersIndex from './pages/ChantiersIndex';
 import { ShieldOff } from 'lucide-react';
 
 function UnauthorizedPage() {
@@ -58,6 +59,7 @@ function App() {
               </ProtectedRoute>
             }>
               <Route index element={<Dashboard />} />
+              <Route path="chantiers" element={<ChantiersIndex />} />
               <Route path="chantiers/nouveau" element={<ChantierForm />} />
               <Route path="chantiers/:id" element={<ChantierDetail />} />
               <Route path="chantiers/:id/modifier" element={<ChantierForm />} />

@@ -1,9 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { createDepense } from '../services/api';
+import { createDepense, getChantier } from '../services/api';
 import { useToast } from '../contexts/ToastContext';
 import HierarchicalCategorySelect from '../components/HierarchicalCategorySelect';
 import { ArrowLeft, Save, Loader2 } from 'lucide-react';
+import type { DeviseType } from '../types';
+import { DEVISES } from '../types';
 
 export default function DepenseForm() {
   const { id: chantierId } = useParams<{ id: string }>();
@@ -13,11 +15,27 @@ export default function DepenseForm() {
   const [formData, setFormData] = useState({
     description: '',
     montant: 0,
+    devise: 'DNT' as DeviseType,
     date: new Date().toISOString().split('T')[0],
     categorieId: ''
   });
   const [loading, setLoading] = useState(false);
+  const [loadingChantier, setLoadingChantier] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  // Charger la devise par défaut du chantier
+  useEffect(() => {
+    if (chantierId) {
+      getChantier(chantierId)
+        .then(chantier => {
+          setFormData(prev => ({ ...prev, devise: chantier.devise || 'DNT' }));
+        })
+        .catch(() => {})
+        .finally(() => setLoadingChantier(false));
+    } else {
+      setLoadingChantier(false);
+    }
+  }, [chantierId]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -81,20 +99,37 @@ export default function DepenseForm() {
             />
           </div>
 
-          <div>
-            <label htmlFor="montant" className="block text-sm font-medium text-gray-700 mb-1">
-              Montant (€) *
-            </label>
-            <input
-              type="number"
-              id="montant"
-              required
-              min="0.01"
-              step="0.01"
-              value={formData.montant}
-              onChange={e => setFormData({ ...formData, montant: parseFloat(e.target.value) || 0 })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            />
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label htmlFor="montant" className="block text-sm font-medium text-gray-700 mb-1">
+                Montant *
+              </label>
+              <input
+                type="number"
+                id="montant"
+                required
+                min="0.01"
+                step="0.01"
+                value={formData.montant}
+                onChange={e => setFormData({ ...formData, montant: parseFloat(e.target.value) || 0 })}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              />
+            </div>
+            <div>
+              <label htmlFor="devise" className="block text-sm font-medium text-gray-700 mb-1">
+                Devise *
+              </label>
+              <select
+                id="devise"
+                value={formData.devise}
+                onChange={e => setFormData({ ...formData, devise: e.target.value as DeviseType })}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              >
+                {Object.entries(DEVISES).map(([code, label]) => (
+                  <option key={code} value={code}>{code} - {label}</option>
+                ))}
+              </select>
+            </div>
           </div>
 
           <div>
@@ -132,15 +167,15 @@ export default function DepenseForm() {
             </button>
             <button
               type="submit"
-              disabled={loading}
+              disabled={loading || loadingChantier}
               className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
             >
-              {loading ? (
+              {(loading || loadingChantier) ? (
                 <Loader2 className="w-5 h-5 animate-spin" />
               ) : (
                 <Save className="w-5 h-5" />
               )}
-              {loading ? 'Enregistrement...' : 'Enregistrer'}
+              {loading ? 'Enregistrement...' : loadingChantier ? 'Chargement...' : 'Enregistrer'}
             </button>
           </div>
         </form>

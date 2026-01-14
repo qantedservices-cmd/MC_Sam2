@@ -110,6 +110,7 @@ export interface Depense {
   chantierId: string;
   description: string;
   montant: number;
+  devise?: DeviseType;  // Devise de la dépense (défaut: devise du chantier)
   date: string;
   categorieId: string;
   // Nouveaux champs pour import Forms

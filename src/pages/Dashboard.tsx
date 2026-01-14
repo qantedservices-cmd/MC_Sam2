@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Wallet, FileText, ArrowRightLeft, TrendingUp, TrendingDown, Loader2, Plus,
-  Building2, PlusCircle, LayoutGrid, List, FileDown, BarChart2, Home
+  Building2, PlusCircle, LayoutGrid, List, FileDown, BarChart2, Home, RotateCcw
 } from 'lucide-react';
 import {
   getChantiers, getDepenses, getDevis, getTransferts,
@@ -57,6 +57,68 @@ export default function Dashboard() {
     type: 'all'
   });
 
+  // Etat pour le filtrage croise dans Analytics (selection via clic sur graphiques)
+  const [crossFilter, setCrossFilter] = useState<{
+    chantierIds: string[];
+    categorieIds: string[];
+  }>({
+    chantierIds: [],
+    categorieIds: []
+  });
+
+  const hasCrossFilter = crossFilter.chantierIds.length > 0 || crossFilter.categorieIds.length > 0;
+
+  // Gestionnaire de selection croisee pour chantiers
+  const handleChantierSelect = useCallback((chantierId: string, ctrlKey: boolean) => {
+    setCrossFilter(prev => {
+      if (ctrlKey) {
+        // Multi-selection avec CTRL
+        const isSelected = prev.chantierIds.includes(chantierId);
+        return {
+          ...prev,
+          chantierIds: isSelected
+            ? prev.chantierIds.filter(id => id !== chantierId)
+            : [...prev.chantierIds, chantierId]
+        };
+      } else {
+        // Selection simple (toggle)
+        const isOnlySelected = prev.chantierIds.length === 1 && prev.chantierIds[0] === chantierId;
+        return {
+          ...prev,
+          chantierIds: isOnlySelected ? [] : [chantierId]
+        };
+      }
+    });
+  }, []);
+
+  // Gestionnaire de selection croisee pour categories
+  const handleCategorieSelect = useCallback((categorieId: string, ctrlKey: boolean) => {
+    setCrossFilter(prev => {
+      if (ctrlKey) {
+        // Multi-selection avec CTRL
+        const isSelected = prev.categorieIds.includes(categorieId);
+        return {
+          ...prev,
+          categorieIds: isSelected
+            ? prev.categorieIds.filter(id => id !== categorieId)
+            : [...prev.categorieIds, categorieId]
+        };
+      } else {
+        // Selection simple (toggle)
+        const isOnlySelected = prev.categorieIds.length === 1 && prev.categorieIds[0] === categorieId;
+        return {
+          ...prev,
+          categorieIds: isOnlySelected ? [] : [categorieId]
+        };
+      }
+    });
+  }, []);
+
+  // Reinitialiser le filtrage croise
+  const resetCrossFilter = useCallback(() => {
+    setCrossFilter({ chantierIds: [], categorieIds: [] });
+  }, []);
+
   const loadData = useCallback(async () => {
     setLoading(true);
     setError(null);
@@ -97,16 +159,20 @@ export default function Dashboard() {
     return map;
   }, [depenses]);
 
-  // Apply filters to data
+  // Apply filters to data (barre de filtres + filtrage croise)
   const filteredDepenses = useMemo(() => {
     return depenses.filter(d => {
+      // Filtres de la barre
       if (filters.chantierIds.length > 0 && !filters.chantierIds.includes(d.chantierId)) return false;
       if (filters.categorieIds.length > 0 && !filters.categorieIds.includes(d.categorieId)) return false;
       if (filters.dateDebut && d.date < filters.dateDebut) return false;
       if (filters.dateFin && d.date > filters.dateFin) return false;
+      // Filtrage croise (selection graphiques)
+      if (crossFilter.chantierIds.length > 0 && !crossFilter.chantierIds.includes(d.chantierId)) return false;
+      if (crossFilter.categorieIds.length > 0 && !crossFilter.categorieIds.includes(d.categorieId)) return false;
       return true;
     });
-  }, [depenses, filters]);
+  }, [depenses, filters, crossFilter]);
 
   const filteredDevis = useMemo(() => {
     return devis.filter(d => {
@@ -114,9 +180,12 @@ export default function Dashboard() {
       if (filters.categorieIds.length > 0 && !filters.categorieIds.includes(d.categorieId)) return false;
       if (filters.dateDebut && d.date < filters.dateDebut) return false;
       if (filters.dateFin && d.date > filters.dateFin) return false;
+      // Filtrage croise
+      if (crossFilter.chantierIds.length > 0 && !crossFilter.chantierIds.includes(d.chantierId)) return false;
+      if (crossFilter.categorieIds.length > 0 && !crossFilter.categorieIds.includes(d.categorieId)) return false;
       return true;
     });
-  }, [devis, filters]);
+  }, [devis, filters, crossFilter]);
 
   const filteredTransferts = useMemo(() => {
     return transferts.filter(t => {
@@ -593,15 +662,37 @@ export default function Dashboard() {
             />
           </div>
 
+          {/* Bouton reinitialisation filtrage croise */}
+          {hasCrossFilter && (
+            <div className="flex items-center justify-between bg-blue-50 border border-blue-200 rounded-lg px-4 py-2">
+              <span className="text-sm text-blue-700">
+                Filtrage actif : {crossFilter.chantierIds.length > 0 && `${crossFilter.chantierIds.length} chantier(s)`}
+                {crossFilter.chantierIds.length > 0 && crossFilter.categorieIds.length > 0 && ', '}
+                {crossFilter.categorieIds.length > 0 && `${crossFilter.categorieIds.length} categorie(s)`}
+              </span>
+              <button
+                onClick={resetCrossFilter}
+                className="flex items-center gap-1 px-3 py-1 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                <RotateCcw className="w-4 h-4" />
+                Reinitialiser
+              </button>
+            </div>
+          )}
+
           {/* Charts Row */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
             <ChartDepensesParChantier
               data={filteredStats.depensesParChantier}
               height={280}
+              selectedIds={crossFilter.chantierIds}
+              onSelect={handleChantierSelect}
             />
             <ChartDepensesParLot
               data={filteredStats.depensesParCategorie}
               height={280}
+              selectedIds={crossFilter.categorieIds}
+              onSelect={handleCategorieSelect}
             />
           </div>
 
