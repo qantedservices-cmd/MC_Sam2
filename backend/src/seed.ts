@@ -134,24 +134,19 @@ async function seed() {
       }
     }
 
-    // 7. Users
-    if (db.users?.length) {
-      console.log(`👥 Migrating ${db.users.length} users...`);
-      for (const user of db.users) {
-        const { chantierIds, ...userData } = user;
-        await prisma.user.upsert({
-          where: { id: user.id },
-          update: userData,
-          create: userData
-        });
-      }
-    }
+    // 7. Users (skip - we already created admin user with hashed password)
+    // The db.json users have plaintext passwords which won't work with bcrypt
+    console.log(`👥 Skipping users from db.json (admin already created)...`);
 
     // 8. Employes
     if (db.employes?.length) {
       console.log(`👷 Migrating ${db.employes.length} employes...`);
       for (const emp of db.employes) {
         const { chantierIds, ...empData } = emp;
+        // Convert dates
+        if (empData.dateEmbauche) empData.dateEmbauche = parseDate(empData.dateEmbauche);
+        if (empData.dateFin) empData.dateFin = parseDate(empData.dateFin);
+        if (empData.createdAt) empData.createdAt = parseDate(empData.createdAt);
         await prisma.employe.upsert({
           where: { id: emp.id },
           update: empData,
