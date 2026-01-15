@@ -62,10 +62,15 @@ async function seed() {
     // 1. Config
     if (db.config) {
       console.log('⚙️ Migrating config...');
+      const configData = {
+        deviseAffichage: db.config.deviseAffichage || 'DNT',
+        tauxChange: db.config.tauxChange || { EUR: 3.35, USD: 3.10, DNT: 1 },
+        lastUpdated: parseDate(db.config.lastUpdated)
+      };
       await prisma.config.upsert({
         where: { id: 'config' },
-        update: db.config,
-        create: { id: 'config', ...db.config }
+        update: configData,
+        create: { id: 'config', ...configData }
       });
     }
 
