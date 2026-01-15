@@ -1,5 +1,5 @@
 import type { Chantier, Depense, Client, MOA, MOE, Entreprise, Categorie, CategorieTree, Devis, TransfertBudget, AppConfig, User, UserSession, Employe, Pointage, PaiementEmploye, Materiel, UtilisationMateriel, Tache, Production, LotTravaux, Facturation, PVAvancement, PaiementClient, PhotoChantier, EtatAvancement } from '../types';
-import { hashPassword, verifyPassword, generateToken, AUTH_TOKEN_KEY } from '../utils/crypto';
+import { AUTH_TOKEN_KEY } from '../utils/crypto';
 import { createCrudApi, createChantierFilteredCrudApi } from './crudFactory';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
@@ -299,69 +299,21 @@ export interface LoginResult {
 }
 
 export async function login(email: string, password: string): Promise<LoginResult | null> {
-  const response = await fetch(`${API_URL}/users?email=${encodeURIComponent(email)}`);
+  const response = await fetch(`${API_URL}/auth/login`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, password })
+  });
+
   if (!response.ok) {
+    if (response.status === 401) {
+      return null; // Identifiants invalides
+    }
     throw new Error('Erreur de connexion');
   }
-  const users: User[] = await response.json();
 
-  const user = users.find(u => u.actif);
-  if (!user) {
-    return null;
-  }
-
-  // Verifier le mot de passe (supporte hash et plaintext pour migration)
-  const isHashedPassword = user.password.length === 64;
-  let passwordValid = false;
-
-  if (isHashedPassword) {
-    try {
-      passwordValid = await verifyPassword(password, user.password);
-    } catch {
-      // crypto.subtle non disponible (HTTP non-secure), comparaison impossible
-      console.warn('Crypto API non disponible - utilisez HTTPS');
-      passwordValid = false;
-    }
-  } else {
-    passwordValid = user.password === password;
-    if (passwordValid) {
-      // Migration vers hash (seulement si crypto disponible)
-      try {
-        if (crypto.subtle) {
-          const hashedPassword = await hashPassword(password);
-          await fetch(`${API_URL}/users/${user.id}`, {
-            method: 'PATCH',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ password: hashedPassword })
-          });
-        }
-      } catch {
-        // Ignorer l'erreur de hash, le login fonctionne quand même
-        console.warn('Migration hash ignorée - crypto non disponible');
-      }
-    }
-  }
-
-  if (!passwordValid) {
-    return null;
-  }
-
-  const token = generateToken(user.id);
-  localStorage.setItem(AUTH_TOKEN_KEY, token);
-
-  return {
-    session: {
-      id: user.id,
-      email: user.email,
-      nom: user.nom,
-      prenom: user.prenom,
-      fonction: user.fonction,
-      telephone: user.telephone,
-      role: user.role,
-      chantierIds: user.chantierIds
-    },
-    token
-  };
+  const result = await response.json();
+  return result;
 }
 
 export async function register(userData: {
@@ -372,35 +324,15 @@ export async function register(userData: {
   telephone?: string;
   fonction?: string;
 }): Promise<User> {
-  const existing = await fetch(`${API_URL}/users?email=${encodeURIComponent(userData.email)}`);
-  const existingUsers: User[] = await existing.json();
-  if (existingUsers.length > 0) {
-    throw new Error('Cet email est deja utilise');
-  }
-
-  const hashedPassword = await hashPassword(userData.password);
-
-  const newUser: Omit<User, 'id'> = {
-    email: userData.email,
-    password: hashedPassword,
-    nom: userData.nom,
-    prenom: userData.prenom,
-    telephone: userData.telephone,
-    fonction: userData.fonction,
-    role: 'client',
-    chantierIds: [],
-    actif: true,
-    createdAt: new Date().toISOString().split('T')[0]
-  };
-
-  const response = await fetch(`${API_URL}/users`, {
+  const response = await fetch(`${API_URL}/auth/register`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(newUser)
+    body: JSON.stringify(userData)
   });
 
   if (!response.ok) {
-    throw new Error('Erreur lors de la creation du compte');
+    const error = await response.json().catch(() => ({ error: 'Erreur lors de la creation du compte' }));
+    throw new Error(error.error || 'Erreur lors de la creation du compte');
   }
   return response.json();
 }
