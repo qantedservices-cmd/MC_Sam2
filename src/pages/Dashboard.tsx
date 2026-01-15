@@ -11,6 +11,7 @@ import {
 import type { Chantier, Depense, Devis, TransfertBudget, Categorie } from '../types';
 import { formatMontant, convertToDNT, convertFromDNT } from '../utils/format';
 import { useCurrency } from '../contexts/CurrencyContext';
+import { useAuth } from '../contexts/AuthContext';
 import KPICard from '../components/charts/KPICard';
 import ChartDepensesParChantier from '../components/charts/ChartDepensesParChantier';
 import ChartDepensesParLot from '../components/charts/ChartDepensesParLot';
@@ -38,6 +39,7 @@ interface UnifiedEntry {
 
 export default function Dashboard() {
   const { displayCurrency, rates } = useCurrency();
+  const { user, hasPermission, canAccessChantier } = useAuth();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [chantiers, setChantiers] = useState<Chantier[]>([]);
@@ -145,36 +147,59 @@ export default function Dashboard() {
     loadData();
   }, [loadData]);
 
-  // Pre-compute depenses by chantier for performance
+  // Filter chantiers based on user permissions
+  const accessibleChantiers = useMemo(() => {
+    if (!user) return [];
+    // Admin and entrepreneur can see all chantiers
+    if (hasPermission('canViewAllChantiers')) {
+      return chantiers;
+    }
+    // Other roles only see their assigned chantiers
+    return chantiers.filter(c => canAccessChantier(c.id));
+  }, [chantiers, user, hasPermission, canAccessChantier]);
+
+  // Filter depenses to only include accessible chantiers
+  const accessibleDepenses = useMemo(() => {
+    const accessibleIds = new Set(accessibleChantiers.map(c => c.id));
+    return depenses.filter(d => accessibleIds.has(d.chantierId));
+  }, [depenses, accessibleChantiers]);
+
+  // Filter devis to only include accessible chantiers
+  const accessibleDevis = useMemo(() => {
+    const accessibleIds = new Set(accessibleChantiers.map(c => c.id));
+    return devis.filter(d => accessibleIds.has(d.chantierId));
+  }, [devis, accessibleChantiers]);
+
+  // Pre-compute depenses by chantier for performance (using accessible data)
   const depensesByChantier = useMemo(() => {
     const map: Record<string, Depense[]> = {};
-    depenses.forEach(d => {
+    accessibleDepenses.forEach(d => {
       if (!map[d.chantierId]) map[d.chantierId] = [];
       map[d.chantierId].push(d);
     });
     return map;
-  }, [depenses]);
+  }, [accessibleDepenses]);
 
   // Donnees filtrees par la barre de filtres UNIQUEMENT (pour les graphiques)
   const barFilteredDepenses = useMemo(() => {
-    return depenses.filter(d => {
+    return accessibleDepenses.filter(d => {
       if (filters.chantierIds.length > 0 && !filters.chantierIds.includes(d.chantierId)) return false;
       if (filters.categorieIds.length > 0 && !filters.categorieIds.includes(d.categorieId)) return false;
       if (filters.dateDebut && d.date < filters.dateDebut) return false;
       if (filters.dateFin && d.date > filters.dateFin) return false;
       return true;
     });
-  }, [depenses, filters]);
+  }, [accessibleDepenses, filters]);
 
   const barFilteredDevis = useMemo(() => {
-    return devis.filter(d => {
+    return accessibleDevis.filter(d => {
       if (filters.chantierIds.length > 0 && !filters.chantierIds.includes(d.chantierId)) return false;
       if (filters.categorieIds.length > 0 && !filters.categorieIds.includes(d.categorieId)) return false;
       if (filters.dateDebut && d.date < filters.dateDebut) return false;
       if (filters.dateFin && d.date > filters.dateFin) return false;
       return true;
     });
-  }, [devis, filters]);
+  }, [accessibleDevis, filters]);
 
   const barFilteredTransferts = useMemo(() => {
     return transferts.filter(t => {
@@ -218,21 +243,21 @@ export default function Dashboard() {
 
   // Overview stats (simple view) - converted to DNT for multi-currency support
   const overviewStats = useMemo(() => {
-    const budgetTotal = chantiers.reduce((sum, c) => {
+    const budgetTotal = accessibleChantiers.reduce((sum, c) => {
       return sum + convertToDNT(c.budgetPrevisionnel, c.devise || 'DNT', rates);
     }, 0);
-    const depensesTotal = depenses.reduce((sum, d) => {
+    const depensesTotal = accessibleDepenses.reduce((sum, d) => {
       return sum + getAmountInDNT(d.montant, d.chantierId);
     }, 0);
     return {
       budgetTotal,
       depensesTotal,
       resteTotal: budgetTotal - depensesTotal,
-      chantiersEnCours: chantiers.filter(c => c.statut === 'en_cours').length,
-      chantiersTermines: chantiers.filter(c => c.statut === 'termine').length,
-      chantiersSuspendus: chantiers.filter(c => c.statut === 'suspendu').length
+      chantiersEnCours: accessibleChantiers.filter(c => c.statut === 'en_cours').length,
+      chantiersTermines: accessibleChantiers.filter(c => c.statut === 'termine').length,
+      chantiersSuspendus: accessibleChantiers.filter(c => c.statut === 'suspendu').length
     };
-  }, [chantiers, depenses, rates, getAmountInDNT]);
+  }, [accessibleChantiers, accessibleDepenses, rates, getAmountInDNT]);
 
   // Compute filtered stats (all converted to DNT)
   const filteredStats = useMemo(() => {
@@ -256,7 +281,7 @@ export default function Dashboard() {
     });
     const depensesParChantier = Object.entries(parChantierMap).map(([id, value]) => ({
       chantierId: id,
-      name: chantiers.find(c => c.id === id)?.nom || id,
+      name: accessibleChantiers.find(c => c.id === id)?.nom || id,
       value
     }));
 
@@ -382,8 +407,8 @@ export default function Dashboard() {
     );
   }
 
-  // Empty state - no chantiers
-  if (chantiers.length === 0) {
+  // Empty state - no accessible chantiers
+  if (accessibleChantiers.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-20">
         <Building2 className="w-20 h-20 text-gray-300 mb-4" />
@@ -456,7 +481,7 @@ export default function Dashboard() {
           {viewMode === 'overview' && (
             <>
               <button
-                onClick={() => exportAllChantiersPdf(chantiers, depenses, categories)}
+                onClick={() => exportAllChantiersPdf(accessibleChantiers, accessibleDepenses, categories)}
                 className="flex items-center gap-1 px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm"
                 title="Exporter tous les chantiers en PDF"
               >
@@ -537,7 +562,7 @@ export default function Dashboard() {
 
           {/* Chantiers list */}
           <div className="flex items-center justify-between mb-2">
-            <h2 className="text-lg font-bold text-gray-800">Chantiers ({chantiers.length})</h2>
+            <h2 className="text-lg font-bold text-gray-800">Chantiers ({accessibleChantiers.length})</h2>
             <div className="flex bg-gray-100 rounded-lg p-1">
               <button
                 onClick={() => setChantierViewMode('grid')}
@@ -563,7 +588,7 @@ export default function Dashboard() {
           {/* Grid view */}
           {chantierViewMode === 'grid' && (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-              {chantiers.map(chantier => (
+              {accessibleChantiers.map(chantier => (
                 <ChantierCard
                   key={chantier.id}
                   chantier={chantier}
@@ -577,7 +602,7 @@ export default function Dashboard() {
           {/* List view */}
           {chantierViewMode === 'list' && (
             <div className="space-y-3">
-              {chantiers.map(chantier => (
+              {accessibleChantiers.map(chantier => (
                 <ChantierListItem
                   key={chantier.id}
                   chantier={chantier}
@@ -594,7 +619,7 @@ export default function Dashboard() {
         <>
           {/* Filter Bar */}
           <FilterBar
-            chantiers={chantiers}
+            chantiers={accessibleChantiers}
             categories={categories}
             filters={filters}
             onFilterChange={setFilters}

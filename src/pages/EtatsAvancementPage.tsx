@@ -2,8 +2,9 @@ import { useState, useEffect, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import {
   ArrowLeft, Plus, FileText, Loader2, CheckCircle, Trash2,
-  TrendingUp, Camera, FileCheck, MessageSquare, ChevronDown, ChevronUp
+  TrendingUp, Camera, FileCheck, MessageSquare, ChevronDown, ChevronUp, ZoomIn
 } from 'lucide-react';
+import ImageLightbox from '../components/ImageLightbox';
 import {
   getEtatsAvancement, getChantier, getLotsTravaux, getFacturations,
   createEtatAvancement, updateEtatAvancement, deleteEtatAvancement,
@@ -49,6 +50,11 @@ export default function EtatsAvancementPage() {
 
   // Modal detail / expanded
   const [expandedId, setExpandedId] = useState<string | null>(null);
+
+  // Lightbox state
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxImages, setLightboxImages] = useState<{ url: string; caption?: string }[]>([]);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
 
   const canCreate = hasPermission('canSaisieProduction');
   const canValidate = hasPermission('canValiderPV');
@@ -368,17 +374,32 @@ export default function EtatsAvancementPage() {
                         ) : (
                           <div className="grid grid-cols-2 gap-2">
                             {etat.photosUrls.map((url, i) => (
-                              <div key={i} className="relative group">
+                              <div
+                                key={i}
+                                className="relative group cursor-pointer overflow-hidden rounded-lg"
+                                onClick={() => {
+                                  const images = etat.photosUrls.map((u, idx) => ({
+                                    url: u,
+                                    caption: etat.photosCommentaires?.[u] || `Photo ${idx + 1}`
+                                  }));
+                                  setLightboxImages(images);
+                                  setLightboxIndex(i);
+                                  setLightboxOpen(true);
+                                }}
+                              >
                                 <img
                                   src={url}
                                   alt={`Photo ${i + 1}`}
-                                  className="w-full h-32 object-cover rounded-lg"
+                                  className="w-full h-32 object-cover transition-transform group-hover:scale-105"
                                   onError={(e) => {
                                     (e.target as HTMLImageElement).src = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect fill="%23ccc" width="100" height="100"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%23666">Image</text></svg>';
                                   }}
                                 />
+                                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
+                                  <ZoomIn className="w-6 h-6 text-white opacity-0 group-hover:opacity-80 transition-opacity drop-shadow-lg" />
+                                </div>
                                 {etat.photosCommentaires?.[url] && (
-                                  <div className="absolute bottom-0 left-0 right-0 bg-black/60 text-white text-xs p-1 rounded-b-lg truncate">
+                                  <div className="absolute bottom-0 left-0 right-0 bg-black/60 text-white text-xs p-1 truncate">
                                     {etat.photosCommentaires[url]}
                                   </div>
                                 )}
@@ -704,6 +725,14 @@ export default function EtatsAvancementPage() {
           </div>
         </div>
       )}
+
+      {/* Image Lightbox */}
+      <ImageLightbox
+        images={lightboxImages}
+        initialIndex={lightboxIndex}
+        isOpen={lightboxOpen}
+        onClose={() => setLightboxOpen(false)}
+      />
     </div>
   );
 }

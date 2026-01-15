@@ -8,8 +8,9 @@ import { useToast } from '../contexts/ToastContext';
 import Loading from '../components/Loading';
 import ErrorMessage from '../components/ErrorMessage';
 import ChantierActorsSection from '../components/ChantierActorsSection';
-import { ArrowLeft, Edit, Trash2, PlusCircle, Loader2, AlertTriangle, FileDown, Users, ListTodo, Package, Receipt, ClipboardCheck, Banknote, TrendingUp, Camera, Plus, Image as ImageIcon, X, Upload } from 'lucide-react';
+import { ArrowLeft, Edit, Trash2, PlusCircle, Loader2, AlertTriangle, FileDown, Users, ListTodo, Package, Receipt, ClipboardCheck, Banknote, TrendingUp, Camera, Plus, Image as ImageIcon, X, Upload, ZoomIn } from 'lucide-react';
 import { exportChantierPdf } from '../utils/exportPdf';
+import ImageLightbox from '../components/ImageLightbox';
 
 export default function ChantierDetail() {
   const { id } = useParams<{ id: string }>();
@@ -39,6 +40,10 @@ export default function ChantierDetail() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string>('');
   const [uploading, setUploading] = useState(false);
+
+  // Lightbox state
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
 
   const loadData = async () => {
     if (!id) return;
@@ -200,6 +205,29 @@ export default function ChantierDetail() {
     } catch (err) {
       showError('Erreur lors de la suppression');
     }
+  };
+
+  // Helper to get all photos for lightbox
+  const getAllPhotosForLightbox = () => {
+    const result: { url: string; caption?: string }[] = [];
+
+    // Photo de presentation d'abord
+    const presentationPhoto = photos.find(p => p.type === 'presentation');
+    if (presentationPhoto) {
+      result.push({ url: presentationPhoto.url, caption: presentationPhoto.commentaire || 'Photo de presentation' });
+    } else if (chantier?.photoPresentationUrl) {
+      result.push({ url: chantier.photoPresentationUrl, caption: 'Photo de presentation' });
+    }
+
+    // Photos de phase
+    photos
+      .filter(p => p.type === 'phase')
+      .sort((a, b) => a.ordre - b.ordre)
+      .forEach(p => {
+        result.push({ url: p.url, caption: p.phase || p.commentaire || `Phase ${p.ordre}` });
+      });
+
+    return result;
   };
 
   // Get category style based on categorieId
@@ -397,20 +425,31 @@ export default function ChantierDetail() {
           <h3 className="text-sm font-medium text-gray-600 mb-2">Photo de presentation</h3>
           {photos.find(p => p.type === 'presentation') || chantier.photoPresentationUrl ? (
             <div className="relative group w-full max-w-2xl">
-              <div className="bg-gray-100 rounded-lg shadow overflow-hidden">
+              <div
+                className="bg-gray-100 rounded-lg shadow overflow-hidden cursor-pointer"
+                onClick={() => {
+                  const allPhotos = getAllPhotosForLightbox();
+                  const presentationIdx = allPhotos.findIndex(p => p.url === (photos.find(ph => ph.type === 'presentation')?.url || chantier.photoPresentationUrl));
+                  setLightboxIndex(presentationIdx >= 0 ? presentationIdx : 0);
+                  setLightboxOpen(true);
+                }}
+              >
                 <img
                   src={photos.find(p => p.type === 'presentation')?.url || chantier.photoPresentationUrl}
                   alt="Presentation du chantier"
-                  className="w-full max-h-96 object-contain mx-auto"
+                  className="w-full max-h-96 object-contain mx-auto transition-transform hover:scale-[1.02]"
                   onError={(e) => {
                     (e.target as HTMLImageElement).src = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="200"><rect fill="%23e5e7eb" width="400" height="200"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%239ca3af" font-size="14">Image non disponible</text></svg>';
                   }}
                 />
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center">
+                  <ZoomIn className="w-10 h-10 text-white opacity-0 group-hover:opacity-80 transition-opacity drop-shadow-lg" />
+                </div>
               </div>
               {photos.find(p => p.type === 'presentation') && (
                 <button
-                  onClick={() => handleDeletePhoto(photos.find(p => p.type === 'presentation')!)}
-                  className="absolute top-2 right-2 p-1.5 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                  onClick={(e) => { e.stopPropagation(); handleDeletePhoto(photos.find(p => p.type === 'presentation')!); }}
+                  className="absolute top-2 right-2 p-1.5 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity z-10"
                   title="Supprimer"
                 >
                   <X className="w-4 h-4" />
@@ -459,19 +498,32 @@ export default function ChantierDetail() {
               {photos
                 .filter(p => p.type === 'phase')
                 .sort((a, b) => a.ordre - b.ordre)
-                .map(photo => (
+                .map((photo, index) => (
                   <div key={photo.id} className="relative group">
-                    <img
-                      src={photo.url}
-                      alt={photo.phase || 'Phase'}
-                      className="w-full h-28 object-cover rounded-lg"
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).src = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="120"><rect fill="%23e5e7eb" width="200" height="120"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%239ca3af" font-size="12">?</text></svg>';
+                    <div
+                      className="cursor-pointer overflow-hidden rounded-lg"
+                      onClick={() => {
+                        const allPhotos = getAllPhotosForLightbox();
+                        const photoIdx = allPhotos.findIndex(p => p.url === photo.url);
+                        setLightboxIndex(photoIdx >= 0 ? photoIdx : index + 1);
+                        setLightboxOpen(true);
                       }}
-                    />
+                    >
+                      <img
+                        src={photo.url}
+                        alt={photo.phase || 'Phase'}
+                        className="w-full h-32 object-cover transition-transform group-hover:scale-105"
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).src = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="120"><rect fill="%23e5e7eb" width="200" height="120"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%239ca3af" font-size="12">?</text></svg>';
+                        }}
+                      />
+                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center rounded-lg">
+                        <ZoomIn className="w-6 h-6 text-white opacity-0 group-hover:opacity-80 transition-opacity drop-shadow-lg" />
+                      </div>
+                    </div>
                     <button
-                      onClick={() => handleDeletePhoto(photo)}
-                      className="absolute top-1 right-1 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                      onClick={(e) => { e.stopPropagation(); handleDeletePhoto(photo); }}
+                      className="absolute top-1 right-1 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity z-10"
                       title="Supprimer"
                     >
                       <X className="w-3 h-3" />
@@ -698,6 +750,14 @@ export default function ChantierDetail() {
           </div>
         </div>
       )}
+
+      {/* Image Lightbox */}
+      <ImageLightbox
+        images={getAllPhotosForLightbox()}
+        initialIndex={lightboxIndex}
+        isOpen={lightboxOpen}
+        onClose={() => setLightboxOpen(false)}
+      />
     </div>
   );
 }
