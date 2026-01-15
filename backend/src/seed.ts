@@ -176,6 +176,7 @@ async function seed() {
         // Convert dates
         if (chantierData.dateDebut) chantierData.dateDebut = parseDate(chantierData.dateDebut);
         if (chantierData.dateFin) chantierData.dateFin = parseDate(chantierData.dateFin);
+        if (chantierData.dateCreation) chantierData.dateCreation = parseDate(chantierData.dateCreation);
         if (chantierData.createdAt) chantierData.createdAt = parseDate(chantierData.createdAt);
         if (chantierData.updatedAt) chantierData.updatedAt = parseDate(chantierData.updatedAt);
 
@@ -248,8 +249,11 @@ async function seed() {
       console.log(`📋 Migrating ${db.devis.length} devis...`);
       for (const d of db.devis) {
         const devisData = { ...d };
+        if (devisData.date) devisData.date = parseDate(devisData.date);
         if (devisData.dateCreation) devisData.dateCreation = parseDate(devisData.dateCreation);
         if (devisData.dateValidite) devisData.dateValidite = parseDate(devisData.dateValidite);
+        if (devisData.createdAt) devisData.createdAt = parseDate(devisData.createdAt);
+        if (devisData.updatedAt) devisData.updatedAt = parseDate(devisData.updatedAt);
         await prisma.devis.upsert({
           where: { id: d.id },
           update: devisData,
