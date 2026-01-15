@@ -234,7 +234,7 @@ async function seed() {
       console.log(`💰 Migrating ${db.depenses.length} depenses...`);
       for (const dep of db.depenses) {
         // Remove fields not in Prisma schema
-        const { payeur, beneficiaire, photosUrls, validated, ...depData } = dep;
+        const { payeur, beneficiaire, photosUrls, validated, commentaire, ...depData } = dep;
         if (depData.date) depData.date = parseDate(depData.date);
         if (depData.createdAt) depData.createdAt = parseDate(depData.createdAt);
         await prisma.depense.upsert({
