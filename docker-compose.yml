@@ -12,17 +12,38 @@ services:
     volumes:
       - uploads:/usr/share/nginx/html/uploads:ro
 
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: monchantier
+      POSTGRES_PASSWORD: monchantier_pwd
+      POSTGRES_DB: monchantier
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    expose:
+      - "5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U monchantier"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
   api:
-    image: node:20-alpine
-    working_dir: /app
+    build:
+      context: ./backend
     expose:
       - "3001"
+    environment:
+      DATABASE_URL: postgresql://monchantier:monchantier_pwd@db:5432/monchantier
+      PORT: 3001
+      JWT_SECRET: monchantier_jwt_secret_change_in_prod
+      DB_JSON_PATH: /data/db.json
     volumes:
-      - ./data:/app
-    command: sh -c "cp -n /seed/db.json /app/db.json 2>/dev/null || true && npm install -g json-server && json-server --host 0.0.0.0 --watch /app/db.json --port 3001"
-    configs:
-      - source: db_seed
-        target: /seed/db.json
+      - ./data:/data:ro
+    depends_on:
+      db:
+        condition: service_healthy
+    command: sh -c "npx prisma db push && npm start"
 
   upload:
     image: node:20-alpine
@@ -36,7 +57,4 @@ services:
 
 volumes:
   uploads:
-
-configs:
-  db_seed:
-    file: ./db.json
+  postgres_data:

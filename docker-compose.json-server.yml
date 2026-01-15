@@ -1,0 +1,45 @@
+# Backup of original docker-compose.yml using JSON Server
+# Use with: docker-compose -f docker-compose.json-server.yml up
+
+services:
+  frontend:
+    build:
+      context: .
+      args:
+        VITE_API_URL: /api
+    ports:
+      - "8080:80"
+    depends_on:
+      - api
+      - upload
+    volumes:
+      - uploads:/usr/share/nginx/html/uploads:ro
+
+  api:
+    image: node:20-alpine
+    working_dir: /app
+    expose:
+      - "3001"
+    volumes:
+      - ./data:/app
+    command: sh -c "cp -n /seed/db.json /app/db.json 2>/dev/null || true && npm install -g json-server && json-server --host 0.0.0.0 --watch /app/db.json --port 3001"
+    configs:
+      - source: db_seed
+        target: /seed/db.json
+
+  upload:
+    image: node:20-alpine
+    working_dir: /app
+    expose:
+      - "3002"
+    volumes:
+      - ./upload-server:/app
+      - uploads:/uploads
+    command: sh -c "npm install && npm start"
+
+volumes:
+  uploads:
+
+configs:
+  db_seed:
+    file: ./db.json

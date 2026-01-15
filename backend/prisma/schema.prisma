@@ -1,0 +1,469 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============ ACTEURS ============
+
+model Client {
+  id        String   @id @default(cuid())
+  nom       String
+  adresse   String   @default("")
+  email     String   @default("")
+  telephone String   @default("")
+  contacts  Json     @default("[]")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  chantiers Chantier[]
+}
+
+model Moa {
+  id        String   @id @default(cuid())
+  nom       String
+  adresse   String   @default("")
+  email     String   @default("")
+  telephone String   @default("")
+  contacts  Json     @default("[]")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  chantiers Chantier[]
+}
+
+model Moe {
+  id        String   @id @default(cuid())
+  nom       String
+  adresse   String   @default("")
+  email     String   @default("")
+  telephone String   @default("")
+  contacts  Json     @default("[]")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  chantiers Chantier[]
+}
+
+model Entreprise {
+  id          String   @id @default(cuid())
+  nom         String
+  adresse     String   @default("")
+  email       String   @default("")
+  telephone   String   @default("")
+  siret       String   @default("")
+  specialites Json     @default("[]")
+  contacts    Json     @default("[]")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  chantiers ChantierEntreprise[]
+}
+
+// ============ CHANTIERS ============
+
+model Chantier {
+  id                   String   @id @default(cuid())
+  nom                  String
+  adresse              String   @default("")
+  budgetPrevisionnel   Float    @default(0)
+  statut               String   @default("en_cours") // en_cours, termine, suspendu
+  devise               String   @default("DNT")
+  photoPresentationUrl String?
+  dateCreation         DateTime @default(now())
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  // Relations acteurs
+  clientId String?
+  client   Client? @relation(fields: [clientId], references: [id])
+  moaId    String?
+  moa      Moa?    @relation(fields: [moaId], references: [id])
+  moeId    String?
+  moe      Moe?    @relation(fields: [moeId], references: [id])
+
+  entreprises         ChantierEntreprise[]
+  depenses            Depense[]
+  devis               Devis[]
+  categories          Categorie[]
+  employes            ChantierEmploye[]
+  pointages           Pointage[]
+  paiementsEmploye    PaiementEmploye[]
+  utilisationsMateriel UtilisationMateriel[]
+  taches              Tache[]
+  productions         Production[]
+  lotsTravaux         LotTravaux[]
+  facturations        Facturation[]
+  pvAvancements       PVAvancement[]
+  paiementsClient     PaiementClient[]
+  photosChantier      PhotoChantier[]
+  etatsAvancement     EtatAvancement[]
+  userChantiers       UserChantier[]
+}
+
+model ChantierEntreprise {
+  chantierId   String
+  chantier     Chantier   @relation(fields: [chantierId], references: [id], onDelete: Cascade)
+  entrepriseId String
+  entreprise   Entreprise @relation(fields: [entrepriseId], references: [id], onDelete: Cascade)
+
+  @@id([chantierId, entrepriseId])
+}
+
+// ============ CATEGORIES ============
+
+model Categorie {
+  id        String   @id @default(cuid())
+  nom       String
+  parentId  String?
+  chantierId String?
+  chantier  Chantier? @relation(fields: [chantierId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  depenses Depense[]
+}
+
+// ============ FINANCES ============
+
+model Depense {
+  id          String   @id @default(cuid())
+  chantierId  String
+  chantier    Chantier @relation(fields: [chantierId], references: [id], onDelete: Cascade)
+  categorieId String
+  categorie   Categorie @relation(fields: [categorieId], references: [id])
+  description String
+  montant     Float
+  devise      String   @default("DNT")
+  date        DateTime
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Devis {
+  id           String   @id @default(cuid())
+  chantierId   String
+  chantier     Chantier @relation(fields: [chantierId], references: [id], onDelete: Cascade)
+  fournisseur  String
+  description  String
+  montant      Float
+  devise       String   @default("DNT")
+  statut       String   @default("en_attente") // en_attente, accepte, refuse
+  date         DateTime
+  dateValidite DateTime?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model TransfertBudget {
+  id              String   @id @default(cuid())
+  source          String
+  destination     String
+  montant         Float
+  devise          String   @default("DNT")
+  tauxChange      Float?
+  montantConverti Float?
+  commentaire     String?
+  date            DateTime
+  createdAt       DateTime @default(now())
+}
+
+// ============ UTILISATEURS ============
+
+model User {
+  id          String   @id @default(cuid())
+  email       String   @unique
+  password    String
+  nom         String
+  prenom      String
+  fonction    String?
+  telephone   String?
+  role        String   @default("client") // admin, entrepreneur, client_gestionnaire, architecte, collaborateur, client
+  actif       Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  createdBy   String?
+
+  chantiers UserChantier[]
+}
+
+model UserChantier {
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  chantierId String
+  chantier   Chantier @relation(fields: [chantierId], references: [id], onDelete: Cascade)
+
+  @@id([userId, chantierId])
+}
+
+// ============ PERSONNEL ============
+
+model Employe {
+  id            String   @id @default(cuid())
+  nom           String
+  prenom        String
+  telephone     String?
+  poste         String
+  typeContrat   String   @default("journalier") // cdi, cdd, interim, journalier
+  tauxJournalier Float
+  tauxHeuresSupp Float?
+  statut        String   @default("actif") // actif, inactif, conge
+  dateEmbauche  DateTime
+  dateFin       DateTime?
+  notes         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  createdBy     String?
+
+  chantiers        ChantierEmploye[]
+  pointages        Pointage[]
+  paiementsEmploye PaiementEmploye[]
+  utilisationsMateriel UtilisationMateriel[]
+}
+
+model ChantierEmploye {
+  employeId  String
+  employe    Employe  @relation(fields: [employeId], references: [id], onDelete: Cascade)
+  chantierId String
+  chantier   Chantier @relation(fields: [chantierId], references: [id], onDelete: Cascade)
+
+  @@id([employeId, chantierId])
+}
+
+model Pointage {
+  id         String   @id @default(cuid())
+  employeId  String
+  employe    Employe  @relation(fields: [employeId], references: [id], onDelete: Cascade)
+  chantierId String
+  chantier   Chantier @relation(fields: [chantierId], references: [id], onDelete: Cascade)
+  date       DateTime
+  type       String   @default("present") // present, absent, demi_journee, conge, maladie
+  heuresSupp Float?
+  notes      String?
+  createdAt  DateTime @default(now())
+  createdBy  String?
+}
+
+model PaiementEmploye {
+  id               String   @id @default(cuid())
+  employeId        String
+  employe          Employe  @relation(fields: [employeId], references: [id], onDelete: Cascade)
+  chantierId       String
+  chantier         Chantier @relation(fields: [chantierId], references: [id], onDelete: Cascade)
+  periode          String   // YYYY-MM
+  joursPresent     Float
+  heuresSupp       Float
+  montantBase      Float
+  montantHeuresSupp Float
+  montantTotal     Float
+  statut           String   @default("en_attente") // en_attente, paye, partiel
+  datePaiement     DateTime?
+  notes            String?
+  createdAt        DateTime @default(now())
+}
+
+// ============ MATERIEL ============
+
+model Materiel {
+  id              String   @id @default(cuid())
+  nom             String
+  type            String   @default("autre") // vehicule_utilitaire, camion, betonniere, grue, echafaudage, outillage, autre
+  proprietaire    String   @default("entreprise") // entreprise, location
+  coutJournalier  Float?
+  immatriculation String?
+  description     String?
+  actif           Boolean  @default(true)
+  createdAt       DateTime @default(now())
+
+  utilisations UtilisationMateriel[]
+}
+
+model UtilisationMateriel {
+  id              String   @id @default(cuid())
+  materielId      String
+  materiel        Materiel @relation(fields: [materielId], references: [id], onDelete: Cascade)
+  chantierId      String
+  chantier        Chantier @relation(fields: [chantierId], references: [id], onDelete: Cascade)
+  employeId       String?
+  employe         Employe? @relation(fields: [employeId], references: [id])
+  date            DateTime
+  typeDeplacement String?  // vehicule_perso, vehicule_entreprise, location
+  kilometrage     Float?
+  fraisKm         Float?
+  coutLocation    Float?
+  dureeHeures     Float?
+  notes           String?
+  createdAt       DateTime @default(now())
+  createdBy       String?
+}
+
+// ============ PRODUCTION ============
+
+model Tache {
+  id             String   @id @default(cuid())
+  chantierId     String
+  chantier       Chantier @relation(fields: [chantierId], references: [id], onDelete: Cascade)
+  titre          String
+  description    String?
+  categorieId    String?
+  ordre          Int      @default(0)
+  statut         String   @default("a_faire") // a_faire, en_cours, termine
+  dateDebut      DateTime?
+  dateFin        DateTime?
+  quantitePrevue Float?
+  unite          String?
+  prixUnitaire   Float?
+  createdAt      DateTime @default(now())
+
+  productions Production[]
+}
+
+model Production {
+  id               String   @id @default(cuid())
+  tacheId          String
+  tache            Tache    @relation(fields: [tacheId], references: [id], onDelete: Cascade)
+  chantierId       String
+  chantier         Chantier @relation(fields: [chantierId], references: [id], onDelete: Cascade)
+  date             DateTime
+  quantiteRealisee Float
+  notes            String?
+  photosUrls       Json     @default("[]")
+  saisieParId      String?
+  valide           Boolean  @default(false)
+  createdAt        DateTime @default(now())
+}
+
+// ============ LOTS DE TRAVAUX ============
+
+model LotTravaux {
+  id             String   @id @default(cuid())
+  chantierId     String
+  chantier       Chantier @relation(fields: [chantierId], references: [id], onDelete: Cascade)
+  nom            String
+  description    String?
+  unite          String   @default("m2") // m2, m3, ml, unite, kg, tonne, forfait
+  quantitePrevue Float
+  prixUnitaire   Float
+  montantPrevu   Float
+  ordre          Int      @default(0)
+  actif          Boolean  @default(true)
+  createdAt      DateTime @default(now())
+}
+
+// ============ FACTURATION ============
+
+model Facturation {
+  id           String   @id @default(cuid())
+  chantierId   String
+  chantier     Chantier @relation(fields: [chantierId], references: [id], onDelete: Cascade)
+  numero       String
+  date         DateTime
+  periodeDebut DateTime
+  periodeFin   DateTime
+  lignes       Json     @default("[]")
+  montantHT    Float
+  tva          Float
+  tauxTva      Float    @default(19)
+  montantTTC   Float
+  statut       String   @default("brouillon") // brouillon, soumis, valide, refuse, paye
+  soumisLe     DateTime?
+  valideLe     DateTime?
+  valideParId  String?
+  refuseLe     DateTime?
+  motifRefus   String?
+  commentaire  String?
+  createdAt    DateTime @default(now())
+  createdBy    String?
+
+  paiements PaiementClient[]
+}
+
+model PVAvancement {
+  id              String   @id @default(cuid())
+  chantierId      String
+  chantier        Chantier @relation(fields: [chantierId], references: [id], onDelete: Cascade)
+  numero          Int
+  date            DateTime
+  periodeDebut    DateTime
+  periodeFin      DateTime
+  lots            Json     @default("[]")
+  avancementGlobal Float
+  montantCumule   Float
+  photosUrls      Json     @default("[]")
+  statut          String   @default("brouillon") // brouillon, soumis, valide, refuse
+  soumisLe        DateTime?
+  valideLe        DateTime?
+  valideParId     String?
+  refuseLe        DateTime?
+  motifRefus      String?
+  commentaire     String?
+  createdAt       DateTime @default(now())
+  createdBy       String?
+}
+
+model PaiementClient {
+  id             String       @id @default(cuid())
+  chantierId     String
+  chantier       Chantier     @relation(fields: [chantierId], references: [id], onDelete: Cascade)
+  facturationId  String?
+  facturation    Facturation? @relation(fields: [facturationId], references: [id])
+  date           DateTime
+  montant        Float
+  modePaiement   String       @default("virement") // virement, cheque, especes, autre
+  reference      String?
+  commentaire    String?
+  createdAt      DateTime     @default(now())
+  createdBy      String?
+}
+
+// ============ PHOTOS & ETATS AVANCEMENT ============
+
+model PhotoChantier {
+  id          String   @id @default(cuid())
+  chantierId  String
+  chantier    Chantier @relation(fields: [chantierId], references: [id], onDelete: Cascade)
+  type        String   @default("phase") // presentation, phase, avancement
+  url         String
+  titre       String?
+  commentaire String?
+  phase       String?
+  ordre       Int      @default(0)
+  createdAt   DateTime @default(now())
+  createdBy   String?
+}
+
+model EtatAvancement {
+  id                  String   @id @default(cuid())
+  chantierId          String
+  chantier            Chantier @relation(fields: [chantierId], references: [id], onDelete: Cascade)
+  numero              Int
+  titre               String
+  date                DateTime
+  periodeDebut        DateTime
+  periodeFin          DateTime
+  photosUrls          Json     @default("[]")
+  photosCommentaires  Json?
+  bilanProduction     Json     @default("[]")
+  avancementGlobal    Float
+  facturationIds      Json     @default("[]")
+  montantFacture      Float
+  commentaireGeneral  String?
+  observations        String?
+  problemesRencontres String?
+  statut              String   @default("brouillon") // brouillon, valide
+  valideLe            DateTime?
+  valideParId         String?
+  createdAt           DateTime @default(now())
+  createdBy           String?
+}
+
+// ============ CONFIG ============
+
+model Config {
+  id              String   @id @default("config")
+  deviseAffichage String   @default("DNT")
+  tauxChange      Json     @default("{\"EUR\": 3.35, \"USD\": 3.10, \"DNT\": 1}")
+  lastUpdated     DateTime @default(now())
+}

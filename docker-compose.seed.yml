@@ -1,0 +1,18 @@
+# Use this to seed the database from db.json
+# Run: docker-compose -f docker-compose.yml -f docker-compose.seed.yml run --rm api-seed
+
+services:
+  api-seed:
+    build:
+      context: ./backend
+    environment:
+      DATABASE_URL: postgresql://monchantier:monchantier_pwd@db:5432/monchantier
+      DB_JSON_PATH: /data/db.json
+    volumes:
+      - ./data:/data:ro
+    depends_on:
+      db:
+        condition: service_healthy
+    command: sh -c "npx prisma db push && npx tsx src/seed.ts"
+    profiles:
+      - seed

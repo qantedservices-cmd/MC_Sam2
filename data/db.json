@@ -1,0 +1,4782 @@
+{
+  "chantiers": [
+    {
+      "id": "1",
+      "nom": "Rénovation Appartement Dupont",
+      "adresse": "15 rue des Lilas, 75011 Paris",
+      "budgetPrevisionnel": 45000,
+      "statut": "en_cours",
+      "dateCreation": "2025-01-10",
+      "devise": "EUR",
+      "clientId": "c1",
+      "moaId": null,
+      "moeId": "moe1",
+      "entrepriseIds": [
+        "e1"
+      ]
+    },
+    {
+      "id": "2",
+      "nom": "Construction Garage Martin",
+      "adresse": "8 avenue du Parc, 92100 Boulogne",
+      "budgetPrevisionnel": 28000,
+      "statut": "en_cours",
+      "dateCreation": "2025-02-15",
+      "devise": "EUR",
+      "clientId": "c2",
+      "moaId": null,
+      "moeId": null,
+      "entrepriseIds": [
+        "e2"
+      ]
+    },
+    {
+      "id": "3",
+      "nom": "Extension Maison Bernard",
+      "adresse": "42 chemin des Vignes, 78000 Versailles",
+      "budgetPrevisionnel": 85000,
+      "statut": "suspendu",
+      "dateCreation": "2024-11-20",
+      "devise": "EUR",
+      "clientId": "c3",
+      "moaId": "moa1",
+      "moeId": "moe1",
+      "entrepriseIds": []
+    },
+    {
+      "id": "4",
+      "nom": "Ravalement Façade Immeuble RST",
+      "adresse": "120 boulevard Haussmann, 75008 Paris",
+      "budgetPrevisionnel": 62000,
+      "statut": "termine",
+      "dateCreation": "2024-09-05",
+      "devise": "EUR",
+      "clientId": "c4",
+      "moaId": "moa2",
+      "moeId": "moe2",
+      "entrepriseIds": [
+        "e1",
+        "e3"
+      ]
+    },
+    {
+      "id": "samir_maison",
+      "nom": "Samir Maison",
+      "adresse": "Djerba, Tunisie",
+      "budgetPrevisionnel": 300000,
+      "statut": "termine",
+      "dateCreation": "2021-05-01",
+      "devise": "DNT",
+      "clientId": "b4e4",
+      "moaId": "5eed",
+      "moeId": "7374",
+      "entrepriseIds": [
+        "e24c"
+      ]
+    },
+    {
+      "id": "commun_garages",
+      "nom": "Commun Garages",
+      "adresse": "Djerba, Tunisie",
+      "budgetPrevisionnel": 80000,
+      "statut": "en_cours",
+      "dateCreation": "2021-05-01",
+      "devise": "DNT",
+      "clientId": null,
+      "moaId": null,
+      "moeId": null,
+      "entrepriseIds": []
+    },
+    {
+      "id": "wissem_housh",
+      "nom": "Wissem Housh",
+      "adresse": "Djerba, Tunisie",
+      "budgetPrevisionnel": 60000,
+      "statut": "en_cours",
+      "dateCreation": "2021-05-01",
+      "devise": "DNT",
+      "clientId": null,
+      "moaId": null,
+      "moeId": null,
+      "entrepriseIds": []
+    },
+    {
+      "id": "commun_autre",
+      "nom": "Commun Autre",
+      "adresse": "Djerba, Tunisie",
+      "budgetPrevisionnel": 50000,
+      "statut": "en_cours",
+      "dateCreation": "2021-05-01",
+      "devise": "DNT",
+      "clientId": null,
+      "moaId": null,
+      "moeId": null,
+      "entrepriseIds": []
+    },
+    {
+      "id": "samir_autre",
+      "nom": "Samir Autre",
+      "adresse": "Djerba, Tunisie",
+      "budgetPrevisionnel": 15000,
+      "statut": "en_cours",
+      "dateCreation": "2021-05-01",
+      "devise": "DNT",
+      "clientId": null,
+      "moaId": null,
+      "moeId": null,
+      "entrepriseIds": []
+    },
+    {
+      "id": "wissem_autre",
+      "nom": "Wissem Autre",
+      "adresse": "Djerba, Tunisie",
+      "budgetPrevisionnel": 10000,
+      "statut": "en_cours",
+      "dateCreation": "2021-05-01",
+      "devise": "DNT",
+      "clientId": null,
+      "moaId": null,
+      "moeId": null,
+      "entrepriseIds": []
+    },
+    {
+      "id": "anis_samiha",
+      "nom": "Anis & Samiha",
+      "adresse": "Djerba, Tunisie",
+      "budgetPrevisionnel": 5000,
+      "statut": "en_cours",
+      "dateCreation": "2021-05-01",
+      "devise": "DNT",
+      "clientId": null,
+      "moaId": null,
+      "moeId": null,
+      "entrepriseIds": []
+    }
+  ],
+  "depenses": [
+    {
+      "id": "1",
+      "chantierId": "1",
+      "description": "Achat carrelage salle de bain",
+      "montant": 1850,
+      "date": "2025-01-15",
+      "categorieId": "travaux_carrelage"
+    },
+    {
+      "id": "2",
+      "chantierId": "1",
+      "description": "Main d'oeuvre plomberie",
+      "montant": 3200,
+      "date": "2025-01-18",
+      "categorieId": "main_oeuvre"
+    },
+    {
+      "id": "3",
+      "chantierId": "1",
+      "description": "Électricien - mise aux normes",
+      "montant": 4500,
+      "date": "2025-01-25",
+      "categorieId": "sous_traitance"
+    },
+    {
+      "id": "4",
+      "chantierId": "1",
+      "description": "Location échafaudage",
+      "montant": 450,
+      "date": "2025-02-01",
+      "categorieId": "location"
+    },
+    {
+      "id": "5",
+      "chantierId": "1",
+      "description": "Peinture et enduits",
+      "montant": 2100,
+      "date": "2025-02-10",
+      "categorieId": "travaux_peinture"
+    },
+    {
+      "id": "6",
+      "chantierId": "2",
+      "description": "Fondations béton",
+      "montant": 5500,
+      "date": "2025-02-20",
+      "categorieId": "travaux_maconnerie"
+    },
+    {
+      "id": "7",
+      "chantierId": "2",
+      "description": "Main d'oeuvre maçonnerie",
+      "montant": 8000,
+      "date": "2025-02-25",
+      "categorieId": "main_oeuvre"
+    },
+    {
+      "id": "8",
+      "chantierId": "2",
+      "description": "Location mini-pelle",
+      "montant": 680,
+      "date": "2025-02-18",
+      "categorieId": "location"
+    },
+    {
+      "id": "9",
+      "chantierId": "3",
+      "description": "Étude architecte",
+      "montant": 3500,
+      "date": "2024-11-25",
+      "categorieId": "sous_traitance"
+    },
+    {
+      "id": "10",
+      "chantierId": "3",
+      "description": "Permis de construire - frais",
+      "montant": 850,
+      "date": "2024-12-01",
+      "categorieId": "autre"
+    },
+    {
+      "id": "11",
+      "chantierId": "4",
+      "description": "Échafaudage façade complète",
+      "montant": 4200,
+      "date": "2024-09-10",
+      "categorieId": "location"
+    },
+    {
+      "id": "12",
+      "chantierId": "4",
+      "description": "Enduit façade",
+      "montant": 12000,
+      "date": "2024-09-20",
+      "categorieId": "materiel_fournitures"
+    },
+    {
+      "id": "13",
+      "chantierId": "4",
+      "description": "Main d'oeuvre façadiers",
+      "montant": 28000,
+      "date": "2024-10-15",
+      "categorieId": "main_oeuvre"
+    },
+    {
+      "id": "14",
+      "chantierId": "4",
+      "description": "Peinture extérieure",
+      "montant": 8500,
+      "date": "2024-11-01",
+      "categorieId": "travaux_peinture"
+    },
+    {
+      "id": "15",
+      "chantierId": "4",
+      "description": "Nettoyage fin de chantier",
+      "montant": 1200,
+      "date": "2024-11-10",
+      "categorieId": "autre"
+    },
+    {
+      "id": "657d",
+      "chantierId": "samir_maison",
+      "description": "Hdid",
+      "montant": 2280,
+      "date": "2021-11-12",
+      "categorieId": "materiel_fournitures",
+      "payeur": "Walid",
+      "beneficiaire": "Hdid",
+      "photosUrls": [],
+      "validated": true
+    },
+    {
+      "id": "894a",
+      "chantierId": "samir_maison",
+      "description": "Tiwajni (Matériel)",
+      "montant": 2830,
+      "date": "2021-11-20",
+      "categorieId": "materiel",
+      "payeur": "Walid",
+      "beneficiaire": "Matériel",
+      "photosUrls": [
+        "https://drive.google.com/open?id=1TQCGx3saF2eVA2n-BMo1inQkxIpicMle",
+        "https://drive.google.com/open?id=1nvvtPyzlv0FvDutSmPA-fGqWhDhwGT-4",
+        "https://drive.google.com/open?id=1V39uUq_OH-F949C-u6Aqy-dDQFqiMW8A",
+        "https://drive.google.com/open?id=1Ktxyojg9uxwq6KT3NFYHyUE34MuhfxYP",
+        "https://drive.google.com/open?id=1tduyczQWBnTrgo6Qdv7SrOsWzvE9B4SF",
+        "https://drive.google.com/open?id=1g3MView2nHq8soESlaaaPLkNfxAxRSmH"
+      ],
+      "validated": true
+    },
+    {
+      "id": "b80f",
+      "chantierId": "commun_garages",
+      "description": "Mounir (Tvx)",
+      "montant": 1000,
+      "date": "2021-12-10",
+      "categorieId": "main_oeuvre",
+      "payeur": "Walid",
+      "beneficiaire": "Mounir (Tvx)",
+      "photosUrls": [],
+      "validated": true
+    },
+    {
+      "id": "8635",
+      "chantierId": "samir_maison",
+      "description": "Facture Basha Hdid",
+      "montant": 198,
+      "date": "2021-12-10",
+      "categorieId": "materiel",
+      "payeur": "Walid",
+      "beneficiaire": "Matériel",
+      "commentaire": "198 Samir // 78,5 Garage",
+      "photosUrls": [
+        "https://drive.google.com/open?id=1hpmKJZoApiTICGhnmFWp3SkAXfTM3Iae",
+        "https://drive.google.com/open?id=1c28iQp6AngZg01yNoRgxs9MV67x-WFie",
+        "https://drive.google.com/open?id=11OclKHRg3NLL2WMdoQ_Bf0yi43g9Hfr9"
+      ],
+      "validated": true
+    },
+    {
+      "id": "ff57",
+      "chantierId": "commun_garages",
+      "description": "Facture Basha Hdid",
+      "montant": 78.5,
+      "date": "2021-12-10",
+      "categorieId": "materiel",
+      "payeur": "Walid",
+      "beneficiaire": "Matériel",
+      "commentaire": "198 Samir // 78,5 Garage",
+      "photosUrls": [
+        "https://drive.google.com/open?id=1hpmKJZoApiTICGhnmFWp3SkAXfTM3Iae",
+        "https://drive.google.com/open?id=1c28iQp6AngZg01yNoRgxs9MV67x-WFie",
+        "https://drive.google.com/open?id=11OclKHRg3NLL2WMdoQ_Bf0yi43g9Hfr9"
+      ],
+      "validated": true
+    },
+    {
+      "id": "1eaa",
+      "chantierId": "commun_garages",
+      "description": "Mounir (Tvx)",
+      "montant": 1000,
+      "date": "2021-12-21",
+      "categorieId": "main_oeuvre",
+      "payeur": "Walid",
+      "beneficiaire": "Mounir (Tvx)",
+      "photosUrls": [
+        "https://drive.google.com/open?id=1AmZhoJgh83_3u0o819uWeVPmEbd6B5MZ"
+      ],
+      "validated": false
+    },
+    {
+      "id": "0434",
+      "chantierId": "commun_garages",
+      "description": "Bousaïd (Matériel)",
+      "montant": 9700,
+      "date": "2021-12-21",
+      "categorieId": "materiel",
+      "payeur": "Walid",
+      "beneficiaire": "Matériel",
+      "photosUrls": [
+        "https://drive.google.com/open?id=174b7aU7RQe6V92NU1ryAEfFjMeKwT-Vy",
+        "https://drive.google.com/open?id=1W9uF27prMn7zUUsqv2uZwAego-C4ERtQ",
+        "https://drive.google.com/open?id=1s0IwzusMoLcC9AYGJQkl1HmUCUpzCdp_"
+      ],
+      "validated": false
+    },
+    {
+      "id": "5139",
+      "chantierId": "samir_maison",
+      "description": "Marbre tala beige Guellala",
+      "montant": 135,
+      "date": "2021-12-21",
+      "categorieId": "travaux_carrelage",
+      "payeur": "Walid",
+      "beneficiaire": "Marbre",
+      "photosUrls": [
+        "https://drive.google.com/open?id=1sy3ktzj1T4PyVmAz5qHrSZQMOBYCVwHd"
+      ],
+      "validated": false
+    },
+    {
+      "id": "9b91",
+      "chantierId": "commun_autre",
+      "description": "Peinture Matériel",
+      "montant": 755,
+      "date": "2021-12-21",
+      "categorieId": "materiel",
+      "payeur": "Walid",
+      "beneficiaire": "Matériel",
+      "photosUrls": [
+        "https://drive.google.com/open?id=1SMsFZJf_Mfo_tGkbHV-w5k2l18Uu4D4T",
+        "https://drive.google.com/open?id=1oaWQNmRWbrsFM4rblZW4JPJMor5wE4tq"
+      ],
+      "validated": false
+    },
+    {
+      "id": "b967",
+      "chantierId": "commun_garages",
+      "description": "Mounir (Tvx)",
+      "montant": 2000,
+      "date": "2021-12-24",
+      "categorieId": "main_oeuvre",
+      "payeur": "Walid",
+      "beneficiaire": "Mounir (Tvx)",
+      "photosUrls": [
+        "https://drive.google.com/open?id=1PDQBGeZNZ-A9OlwdXULv3O8k8fDH7cEx"
+      ],
+      "validated": false
+    },
+    {
+      "id": "0feb",
+      "chantierId": "commun_autre",
+      "description": "Peinture",
+      "montant": 1000,
+      "date": "2021-12-27",
+      "categorieId": "travaux_peinture",
+      "payeur": "Walid",
+      "beneficiaire": "Peinture",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "378d",
+      "chantierId": "samir_maison",
+      "description": "Mounir (Tvx)",
+      "montant": 1000,
+      "date": "2022-01-08",
+      "categorieId": "main_oeuvre",
+      "payeur": "Walid",
+      "beneficiaire": "Mounir (Tvx)",
+      "photosUrls": [
+        "https://drive.google.com/open?id=1iafa1hsq4vO17mYzMXRvi5EUaTA6tHp0"
+      ],
+      "validated": false
+    },
+    {
+      "id": "8b85",
+      "chantierId": "commun_garages",
+      "description": "Remboursement Mounir",
+      "montant": 63,
+      "date": "2022-01-08",
+      "categorieId": "materiel",
+      "payeur": "Walid",
+      "beneficiaire": "Matériel",
+      "commentaire": "Cadre fer",
+      "photosUrls": [
+        "https://drive.google.com/open?id=1jdkuQ3oP47JiqFBW3ebb3CFqj5AXA93W",
+        "https://drive.google.com/open?id=1LZAU58Yv4JQ5UPMRhx8hTh2516Yia1w1"
+      ],
+      "validated": false
+    },
+    {
+      "id": "10e9",
+      "chantierId": "commun_autre",
+      "description": "Peinture",
+      "montant": 1500,
+      "date": "2022-01-08",
+      "categorieId": "travaux_peinture",
+      "payeur": "Walid",
+      "beneficiaire": "Peinture",
+      "commentaire": "Avance pour kais",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "6101",
+      "chantierId": "wissem_autre",
+      "description": "Peinture",
+      "montant": 285,
+      "date": "2022-01-08",
+      "categorieId": "travaux_peinture",
+      "payeur": "Walid",
+      "beneficiaire": "Peinture",
+      "commentaire": "Stucco pour wissem",
+      "photosUrls": [
+        "https://drive.google.com/open?id=17ydCpipn2gBXlODeen3gGZ78m4CfJTR7"
+      ],
+      "validated": false
+    },
+    {
+      "id": "f9c5",
+      "chantierId": "wissem_autre",
+      "description": "Peinture",
+      "montant": 600,
+      "date": "2022-01-22",
+      "categorieId": "travaux_peinture",
+      "payeur": "Walid",
+      "beneficiaire": "Peinture",
+      "commentaire": "600 wissem et 1200 chedly",
+      "photosUrls": [
+        "https://drive.google.com/open?id=1a4SSQx-9TpjEgYXDTeuZD7hMSx94hfEz"
+      ],
+      "validated": false
+    },
+    {
+      "id": "213d",
+      "chantierId": "commun_autre",
+      "description": "Peinture",
+      "montant": 1200,
+      "date": "2022-01-22",
+      "categorieId": "travaux_peinture",
+      "payeur": "Walid",
+      "beneficiaire": "Peinture",
+      "commentaire": "600 wissem et 1200 chedly",
+      "photosUrls": [
+        "https://drive.google.com/open?id=1a4SSQx-9TpjEgYXDTeuZD7hMSx94hfEz"
+      ],
+      "validated": false
+    },
+    {
+      "id": "0734",
+      "chantierId": "wissem_autre",
+      "description": "Peinture",
+      "montant": 267,
+      "date": "2022-01-22",
+      "categorieId": "travaux_peinture",
+      "payeur": "Walid",
+      "beneficiaire": "Peinture",
+      "photosUrls": [
+        "https://drive.google.com/open?id=1q0EUPB-5im1h9ekJL0voTxmrnK2lhn2m"
+      ],
+      "validated": false
+    },
+    {
+      "id": "85bd",
+      "chantierId": "samir_maison",
+      "description": "Equipements bricola - paumelle...",
+      "montant": 411.5,
+      "date": "2022-01-22",
+      "categorieId": "travaux_menuiserie",
+      "payeur": "Walid",
+      "beneficiaire": "Menuiserie Equipements",
+      "photosUrls": [
+        "https://drive.google.com/open?id=1p6man_lQmmysisgnhZHeUfkqbEBgWZgy"
+      ],
+      "validated": false
+    },
+    {
+      "id": "fb29",
+      "chantierId": "commun_garages",
+      "description": "Hdid",
+      "montant": 1000,
+      "date": "2022-01-22",
+      "categorieId": "materiel_fournitures",
+      "payeur": "Walid",
+      "beneficiaire": "Hdid",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "d6c4",
+      "chantierId": "samir_maison",
+      "description": "Mounir (Tvx)",
+      "montant": 1000,
+      "date": "2022-01-22",
+      "categorieId": "main_oeuvre",
+      "payeur": "Walid",
+      "beneficiaire": "Mounir (Tvx)",
+      "commentaire": "14/01/2022",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "75a9",
+      "chantierId": "samir_maison",
+      "description": "Menuiserie",
+      "montant": 1500,
+      "date": "2022-01-23",
+      "categorieId": "travaux_menuiserie",
+      "payeur": "Walid",
+      "beneficiaire": "Menuiserie",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "5538",
+      "chantierId": "samir_maison",
+      "description": "Marbre Lotfi",
+      "montant": 2240,
+      "date": "2022-01-29",
+      "categorieId": "travaux_carrelage",
+      "payeur": "Samir",
+      "beneficiaire": "Marbre",
+      "commentaire": "Reste plinthes escalier non payé",
+      "photosUrls": [
+        "https://drive.google.com/open?id=1rRh5fW_NeizoS3clA0geCkxeq8sAbl37"
+      ],
+      "validated": false
+    },
+    {
+      "id": "0f4e",
+      "chantierId": "commun_garages",
+      "description": "Mounir (Tvx)",
+      "montant": 50,
+      "date": "2022-01-30",
+      "categorieId": "main_oeuvre",
+      "payeur": "Samir",
+      "beneficiaire": "Mounir (Tvx)",
+      "commentaire": "Donné à Mohsine a la demande de Mounir",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "e6eb",
+      "chantierId": "samir_maison",
+      "description": "Electricité",
+      "montant": 785,
+      "date": "2022-01-30",
+      "categorieId": "autre",
+      "payeur": "Samir",
+      "beneficiaire": "Electricité",
+      "commentaire": "Total: 4785 reste 1000 DT une fois fini hors devis centralisation, caméra et système alarme",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "96a8",
+      "chantierId": "commun_garages",
+      "description": "Plomberie",
+      "montant": 300,
+      "date": "2022-01-30",
+      "categorieId": "autre",
+      "payeur": "Walid",
+      "beneficiaire": "Plomberie",
+      "commentaire": "Mon am amghar",
+      "photosUrls": [
+        "https://drive.google.com/open?id=1eLXrsUh_-gn2WR5O5rk2zMuPrDlZih6m",
+        "https://drive.google.com/open?id=1k_6C9W6r343P21Sj_ji9Aa95b55Df7aD",
+        "https://drive.google.com/open?id=1Ms4Qb-Sg76ce2nK8e4k9N2sV9odj6Syb"
+      ],
+      "validated": false
+    },
+    {
+      "id": "4ba6",
+      "chantierId": "commun_garages",
+      "description": "Electricité",
+      "montant": 280,
+      "date": "2022-01-30",
+      "categorieId": "autre",
+      "payeur": "Walid",
+      "beneficiaire": "Electricité",
+      "commentaire": "Mon am amghar",
+      "photosUrls": [
+        "https://drive.google.com/open?id=1eLXrsUh_-gn2WR5O5rk2zMuPrDlZih6m",
+        "https://drive.google.com/open?id=1k_6C9W6r343P21Sj_ji9Aa95b55Df7aD",
+        "https://drive.google.com/open?id=1Ms4Qb-Sg76ce2nK8e4k9N2sV9odj6Syb"
+      ],
+      "validated": false
+    },
+    {
+      "id": "5688",
+      "chantierId": "commun_garages",
+      "description": "Tiwajni (Matériel)",
+      "montant": 700,
+      "date": "2022-01-30",
+      "categorieId": "materiel",
+      "payeur": "Samir",
+      "beneficiaire": "Matériel",
+      "commentaire": "Commun y compris peinture salon parents et douche Babay Mabrok",
+      "photosUrls": [
+        "https://drive.google.com/open?id=1rVMYpnIGE9v4nOxN4D4OsQAKKar2qX0w",
+        "https://drive.google.com/open?id=1gzcoEXsB1dKCBtZA6a2o2MHJKMpBWpA6"
+      ],
+      "validated": false
+    },
+    {
+      "id": "71c9",
+      "chantierId": "commun_garages",
+      "description": "Hdid",
+      "montant": 2000,
+      "date": "2022-02-28",
+      "categorieId": "materiel_fournitures",
+      "payeur": "Walid",
+      "beneficiaire": "Hdid",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "68fc",
+      "chantierId": "samir_maison",
+      "description": "Poignets, paumelles",
+      "montant": 400,
+      "date": "2022-02-28",
+      "categorieId": "travaux_menuiserie",
+      "payeur": "Walid",
+      "beneficiaire": "Menuiserie Equipements",
+      "commentaire": "Facture chez azedine",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "55d5",
+      "chantierId": "commun_garages",
+      "description": "Mounir (Tvx)",
+      "montant": 1000,
+      "date": "2022-02-28",
+      "categorieId": "main_oeuvre",
+      "payeur": "Walid",
+      "beneficiaire": "Mounir (Tvx)",
+      "photosUrls": [
+        "https://drive.google.com/open?id=1RMbAGp4ka9zNUcYsIErmRg94DLkljdZs"
+      ],
+      "validated": false
+    },
+    {
+      "id": "271e",
+      "chantierId": "commun_garages",
+      "description": "Mounir (Tvx)",
+      "montant": 1000,
+      "date": "2022-03-03",
+      "categorieId": "main_oeuvre",
+      "payeur": "Walid",
+      "beneficiaire": "Mounir (Tvx)",
+      "photosUrls": [
+        "https://drive.google.com/open?id=1EnRqpge0AwKuiu0f0oozT6BqX0XKn946"
+      ],
+      "validated": false
+    },
+    {
+      "id": "913e",
+      "chantierId": "commun_autre",
+      "description": "Aluminium",
+      "montant": 720,
+      "date": "2022-03-05",
+      "categorieId": "travaux_menuiserie",
+      "payeur": "Wissem",
+      "beneficiaire": "Aluminium",
+      "commentaire": "Fenêtre sdb + majen",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "992d",
+      "chantierId": "commun_autre",
+      "description": "Climatiseur gooba3",
+      "montant": 2250,
+      "date": "2022-03-06",
+      "categorieId": "materiel",
+      "payeur": "Wissem",
+      "beneficiaire": "Matériel",
+      "commentaire": "Clim GREE 1800w ",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "451e",
+      "chantierId": "commun_autre",
+      "description": "Hdid",
+      "montant": 500,
+      "date": "2022-03-06",
+      "categorieId": "materiel_fournitures",
+      "payeur": "Wissem",
+      "beneficiaire": "Hdid",
+      "commentaire": "Paiement total fait le 05 03 2022",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "5332",
+      "chantierId": "commun_autre",
+      "description": "Electricité",
+      "montant": 850,
+      "date": "2022-03-06",
+      "categorieId": "autre",
+      "payeur": "Wissem",
+      "beneficiaire": "Electricité",
+      "commentaire": "Paiement totalité restant du garage et préparation SDB parents + tvx Sdb2 parents",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "96ae",
+      "chantierId": "commun_garages",
+      "description": "Mounir (Tvx)",
+      "montant": 5339,
+      "date": "2022-03-07",
+      "categorieId": "main_oeuvre",
+      "payeur": "Wissem",
+      "beneficiaire": "Mounir (Tvx)",
+      "commentaire": "Finalisation paiement garage, toilette,",
+      "photosUrls": [
+        "https://drive.google.com/open?id=1CoVbVaPqu1w9NcIcFIJj3kPgPsOBlRFB",
+        "https://drive.google.com/open?id=1xBtSMG0UccthI6ZlPocNT4o9T1Smczy3",
+        "https://drive.google.com/open?id=1VHqK0CwdAWJ28msgUkgzuVge3uHrTv80"
+      ],
+      "validated": false
+    },
+    {
+      "id": "1999",
+      "chantierId": "samir_maison",
+      "description": "Meuble Jaafar Plus",
+      "montant": 2000,
+      "date": "2022-03-12",
+      "categorieId": "materiel_equipement",
+      "payeur": "Samir",
+      "beneficiaire": "Meubles",
+      "commentaire": "Sur un total de 6050 DT - chambre à coucher & jarraya, salon, table télé",
+      "photosUrls": [
+        "https://drive.google.com/open?id=1CrglDfjrvYGdRd7BJDpChCMGfQf0mXNY",
+        "https://drive.google.com/open?id=1dBAxMWn9O5zYM0dFSFCNro06SDEESyPK"
+      ],
+      "validated": false
+    },
+    {
+      "id": "2fdb",
+      "chantierId": "commun_autre",
+      "description": "Cobam (Matériel)",
+      "montant": 540,
+      "date": "2022-03-12",
+      "categorieId": "materiel",
+      "payeur": "Samir",
+      "beneficiaire": "Matériel",
+      "commentaire": "Faïence douche parents 33,5m²",
+      "photosUrls": [
+        "https://drive.google.com/open?id=1AXAwmTr1Z5T0zxtYKfBLM8OGWDqcSVIO"
+      ],
+      "validated": false
+    },
+    {
+      "id": "8ee6",
+      "chantierId": "samir_maison",
+      "description": "Quincaillerie - Haj Mhemed Rafik ",
+      "montant": 900,
+      "date": "2022-03-12",
+      "categorieId": "autre",
+      "payeur": "Samir",
+      "beneficiaire": "Electroménagers",
+      "commentaire": "Chauffe eau Bosch 100L et surpresseur DAB Inox",
+      "photosUrls": [
+        "https://drive.google.com/open?id=1FXfEuBQbV3yoVS1LPrhUOLU3ZzXhhhl-"
+      ],
+      "validated": false
+    },
+    {
+      "id": "e4d4",
+      "chantierId": "commun_garages",
+      "description": "Tiwajni (Matériel)",
+      "montant": 900,
+      "date": "2022-03-12",
+      "categorieId": "materiel",
+      "payeur": "Wissem",
+      "beneficiaire": "Matériel",
+      "commentaire": "Payé par Samir - complément du 1000 DT restant des 2000€ transféré par Wissem",
+      "photosUrls": [
+        "https://drive.google.com/open?id=1xSdXR8BZo897go4UcPSkTbGlyXf9TRJb",
+        "https://drive.google.com/open?id=1X5qHJ5pEbMETCGbNxPFNtBOymhONMY6B",
+        "https://drive.google.com/open?id=1cpKctDhMVtcaIYNSgPiXd0dE-RqlGxxu"
+      ],
+      "validated": false
+    },
+    {
+      "id": "1ffb",
+      "chantierId": "samir_maison",
+      "description": "Tiwajni (Matériel)",
+      "montant": 500,
+      "date": "2022-03-12",
+      "categorieId": "materiel",
+      "payeur": "Samir",
+      "beneficiaire": "Matériel",
+      "photosUrls": [
+        "https://drive.google.com/open?id=1mu23mCenAK2PKQXoTAIrNwBCzzduIUc5"
+      ],
+      "validated": false
+    },
+    {
+      "id": "d3ae",
+      "chantierId": "commun_autre",
+      "description": "Serrures elmey",
+      "montant": 25,
+      "date": "2022-03-12",
+      "categorieId": "materiel",
+      "payeur": "Samir",
+      "beneficiaire": "Matériel",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "e517",
+      "chantierId": "wissem_autre",
+      "description": "Mounir (Tvx)",
+      "montant": 1000,
+      "date": "2022-04-08",
+      "categorieId": "main_oeuvre",
+      "payeur": "Walid",
+      "beneficiaire": "Mounir (Tvx)",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "143b",
+      "chantierId": "samir_maison",
+      "description": "Menuiserie",
+      "montant": 2300,
+      "date": "2022-04-08",
+      "categorieId": "travaux_menuiserie",
+      "payeur": "Walid",
+      "beneficiaire": "Menuiserie",
+      "commentaire": "1900 (fin portes autres) + 400 (fin porte principale)",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "7ef7",
+      "chantierId": "commun_garages",
+      "description": "Mounir (Tvx)",
+      "montant": 407,
+      "date": "2022-04-08",
+      "categorieId": "main_oeuvre",
+      "payeur": "Walid",
+      "beneficiaire": "Mounir (Tvx)",
+      "commentaire": "Divers ",
+      "photosUrls": [
+        "https://drive.google.com/open?id=1eEA-QGXD95ic-OLIulkw4_OO8leosUwn",
+        "https://drive.google.com/open?id=12J0Un6PzGqPoJi56Ci9N3VuTLjw_LSLz",
+        "https://drive.google.com/open?id=1g7VlE4pmCdcNiW9Nh5-Hhr-KDGp8lRh2",
+        "https://drive.google.com/open?id=18h1ndnYAJWIgYZYF8r79hjJ44197g35r"
+      ],
+      "validated": false
+    },
+    {
+      "id": "0114",
+      "chantierId": "samir_maison",
+      "description": "Bousaïd (Matériel)",
+      "montant": 4000,
+      "date": "2022-04-09",
+      "categorieId": "materiel",
+      "payeur": "Samir",
+      "beneficiaire": "Matériel",
+      "commentaire": "Accompte 22/03/2022 - reste 2300 DT",
+      "photosUrls": [
+        "https://drive.google.com/open?id=1Yqi2SnKfjoRP6t9Yhr-9zt7e_nzYzjDh"
+      ],
+      "validated": false
+    },
+    {
+      "id": "1793",
+      "chantierId": "samir_maison",
+      "description": "Electricité",
+      "montant": 1000,
+      "date": "2022-04-10",
+      "categorieId": "autre",
+      "payeur": "Walid",
+      "beneficiaire": "Electricité",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "55fb",
+      "chantierId": "samir_maison",
+      "description": "Bousaïd (Matériel)",
+      "montant": 3510,
+      "date": "2022-04-22",
+      "categorieId": "materiel",
+      "payeur": "Wissem",
+      "beneficiaire": "Matériel",
+      "commentaire": "Paiement avec remise à zéro du compteur ",
+      "photosUrls": [
+        "https://drive.google.com/open?id=1u6URyMNtJ1aJj0vqXgGZpOwocHUvzwJ5",
+        "https://drive.google.com/open?id=1jyEqr2qpQ-L1Rdpxnr4UngLruy2jdIhL"
+      ],
+      "validated": false
+    },
+    {
+      "id": "d4f7",
+      "chantierId": "samir_maison",
+      "description": "Menuiserie",
+      "montant": 3000,
+      "date": "2022-04-22",
+      "categorieId": "travaux_menuiserie",
+      "payeur": "Wissem",
+      "beneficiaire": "Menuiserie",
+      "commentaire": "Donné ce jour 22 04 22 - à Azzedine",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "7d57",
+      "chantierId": "samir_maison",
+      "description": "Peinture",
+      "montant": 3000,
+      "date": "2022-04-22",
+      "categorieId": "travaux_peinture",
+      "payeur": "Wissem",
+      "beneficiaire": "Peinture",
+      "commentaire": "Donné à Gaddour ce jour 22 04 22",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "5dcd",
+      "chantierId": "samir_maison",
+      "description": "Peinture Matériel",
+      "montant": 1000,
+      "date": "2022-04-22",
+      "categorieId": "materiel_fournitures",
+      "payeur": "Wissem",
+      "beneficiaire": "Peinture Matériel",
+      "commentaire": "Donné à Gaddour ce jour 22 04 22",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "9e65",
+      "chantierId": "samir_maison",
+      "description": "Aluminium",
+      "montant": 1000,
+      "date": "2022-04-22",
+      "categorieId": "travaux_menuiserie",
+      "payeur": "Wissem",
+      "beneficiaire": "Aluminium",
+      "commentaire": "Donné à Hamdi le 21 04 2022",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "53f7",
+      "chantierId": "samir_maison",
+      "description": "Mounir (Tvx)",
+      "montant": 1760,
+      "date": "2022-04-25",
+      "categorieId": "main_oeuvre",
+      "payeur": "Wissem",
+      "beneficiaire": "Mounir (Tvx)",
+      "commentaire": "Paiement le 24 04 2022",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "2a7e",
+      "chantierId": "samir_maison",
+      "description": "Marbre Lotfi",
+      "montant": 1780,
+      "date": "2022-04-25",
+      "categorieId": "travaux_carrelage",
+      "payeur": "Wissem",
+      "beneficiaire": "Marbre",
+      "commentaire": "Paiement lotfi le 25 04 2022",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "922a",
+      "chantierId": "samir_maison",
+      "description": "Quincaillerie bouss3id",
+      "montant": 280,
+      "date": "2022-04-25",
+      "categorieId": "materiel",
+      "payeur": "Wissem",
+      "beneficiaire": "Matériel",
+      "commentaire": "Payé le 25 04 2022",
+      "photosUrls": [
+        "https://drive.google.com/open?id=1ykvHvb2vFRTkMDaqpyUAmTCb--pHzJut"
+      ],
+      "validated": false
+    },
+    {
+      "id": "9fcb",
+      "chantierId": "commun_autre",
+      "description": "Bousaïd (Matériel)",
+      "montant": 1785,
+      "date": "2022-04-26",
+      "categorieId": "materiel",
+      "payeur": "Wissem",
+      "beneficiaire": "Matériel",
+      "commentaire": "Matériel + Quincaillerie",
+      "photosUrls": [
+        "https://drive.google.com/open?id=1N91ushgtp_C-izUxgFQq-lECiLxiAVCS",
+        "https://drive.google.com/open?id=1uHdUfCjZ8LKJqZMHXHp3JSPwx-3Vm8pW"
+      ],
+      "validated": false
+    },
+    {
+      "id": "912d",
+      "chantierId": "samir_autre",
+      "description": "Bateau billet samir mo ete 2022",
+      "montant": 1000,
+      "date": "2022-04-26",
+      "categorieId": "autre",
+      "payeur": "Wissem",
+      "beneficiaire": "Autre",
+      "commentaire": "Reste 4974d et à payer au plus tard fin mai 2022",
+      "photosUrls": [
+        "https://drive.google.com/open?id=1u4jzr9SpboTulI-8YYQuciAfae1DObPW",
+        "https://drive.google.com/open?id=1wvePzyDMOSGz8E4jpQkarmnsVbGJll2H",
+        "https://drive.google.com/open?id=1SG-ehuDbR1gr3XdJKESKELkBLxzXr1ko"
+      ],
+      "validated": false
+    },
+    {
+      "id": "cc7a",
+      "chantierId": "commun_autre",
+      "description": "Divers acte de nettoyage et fourniture trab et merch",
+      "montant": 620,
+      "date": "2022-04-27",
+      "categorieId": "main_oeuvre",
+      "payeur": "Wissem",
+      "beneficiaire": "Mounir (Tvx)",
+      "photosUrls": [
+        "https://drive.google.com/open?id=1ooYgP4PSwXc4rhVJ1XOomPS0Z-D4QBkO"
+      ],
+      "validated": false
+    },
+    {
+      "id": "0c33",
+      "chantierId": "samir_maison",
+      "description": "Jir pour toit maison",
+      "montant": 500,
+      "date": "2022-04-27",
+      "categorieId": "materiel_fournitures",
+      "payeur": "Wissem",
+      "beneficiaire": "Peinture Matériel",
+      "commentaire": "Achat de 6 sac x 83d= 498d",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "de10",
+      "chantierId": "commun_autre",
+      "description": "Marbre Lotfi",
+      "montant": 30,
+      "date": "2022-04-27",
+      "categorieId": "travaux_carrelage",
+      "payeur": "Wissem",
+      "beneficiaire": "Marbre",
+      "commentaire": "77x56 x2mm marbre Tala gris",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "6bf9",
+      "chantierId": "wissem_housh",
+      "description": "Bousaïd (Matériel)",
+      "montant": 2760,
+      "date": "2022-04-27",
+      "categorieId": "materiel",
+      "payeur": "Wissem",
+      "beneficiaire": "Matériel",
+      "commentaire": "2668,294 matériel + 96,898 quincaillerie = 2760 Dinard arrondis",
+      "photosUrls": [
+        "https://drive.google.com/open?id=1MY4QUPhRNbptghiKYUhZadUSU-cSA3lZ",
+        "https://drive.google.com/open?id=1Ik_1aLSMLqlllw3FGau-4hfjtqiOW81f"
+      ],
+      "validated": false
+    },
+    {
+      "id": "acdd",
+      "chantierId": "commun_autre",
+      "description": "Mestawi",
+      "montant": 60,
+      "date": "2022-04-29",
+      "categorieId": "materiel",
+      "payeur": "Wissem",
+      "beneficiaire": "Matériel",
+      "commentaire": "Douche parent",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "70e4",
+      "chantierId": "wissem_autre",
+      "description": "Mestawi",
+      "montant": 40,
+      "date": "2022-04-29",
+      "categorieId": "materiel",
+      "payeur": "Wissem",
+      "beneficiaire": "Matériel",
+      "commentaire": "Villa",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "9dda",
+      "chantierId": "commun_autre",
+      "description": "Mon3em ",
+      "montant": 500,
+      "date": "2022-04-30",
+      "categorieId": "autre",
+      "payeur": "Wissem",
+      "beneficiaire": "Plomberie",
+      "commentaire": "Douche parents + grande salle de bain et dérivation alimententation eau Samir et parents et moi. Reste 900d à payer à la fin. Cette dernière ne prends pas d'autres prestations en dehors du reste à finir dans la douche et sdb parents ",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "6853",
+      "chantierId": "commun_autre",
+      "description": "Mounir",
+      "montant": 360,
+      "date": "2022-05-01",
+      "categorieId": "main_oeuvre",
+      "payeur": "Wissem",
+      "beneficiaire": "Mounir (Tvx)",
+      "commentaire": "3 jours de travail banay et 5adam",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "e43a",
+      "chantierId": "commun_autre",
+      "description": "Tiwajni suite achat mon3em",
+      "montant": 1390,
+      "date": "2022-05-01",
+      "categorieId": "materiel",
+      "payeur": "Wissem",
+      "beneficiaire": "Matériel",
+      "commentaire": "Prix après remise",
+      "photosUrls": [
+        "https://drive.google.com/open?id=1Ip53up-_XHSKEf2Bt_NUrLkAVOwowKGx",
+        "https://drive.google.com/open?id=1pdcAHN8JMLa2KDYsEc1JAjhdDil5lIie",
+        "https://drive.google.com/open?id=1-mBbLaQsDFwpLQbQXrFgXkO4lvhdpVJh",
+        "https://drive.google.com/open?id=1eOEbrYiq37YkXmd2T3xXEyWhFTvvi_D3"
+      ],
+      "validated": false
+    },
+    {
+      "id": "9fff",
+      "chantierId": "samir_maison",
+      "description": "Lassad ",
+      "montant": 400,
+      "date": "2022-05-04",
+      "categorieId": "materiel_fournitures",
+      "payeur": "Wissem",
+      "beneficiaire": "Hdid",
+      "commentaire": "330 bab et reste chebek! ",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "ae0e",
+      "chantierId": "commun_autre",
+      "description": "Sani decor pour achat par terre douche et sdb",
+      "montant": 113,
+      "date": "2022-05-05",
+      "categorieId": "materiel",
+      "payeur": "Wissem",
+      "beneficiaire": "Matériel",
+      "commentaire": "Carrelage 15 x 15 pour zone douche. Facture perdue 113d",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "274b",
+      "chantierId": "wissem_housh",
+      "description": "Mounir",
+      "montant": 3000,
+      "date": "2022-05-05",
+      "categorieId": "main_oeuvre",
+      "payeur": "Wissem",
+      "beneficiaire": "Mounir (Tvx)",
+      "commentaire": "Paiement à la demande de Mounir le 04 05 2022 le matin. ",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "1414",
+      "chantierId": "samir_maison",
+      "description": "Materiel sanitaire",
+      "montant": 2693,
+      "date": "2022-05-05",
+      "categorieId": "materiel",
+      "payeur": "Wissem",
+      "beneficiaire": "Plomberie Matériel",
+      "commentaire": "3 toilettes et 3 lavabo dont un avec meuble. Livraison prévue demain 06 05 22",
+      "photosUrls": [
+        "https://drive.google.com/open?id=16o6g60nk1FXlKsOt0h3rLw_VjLEUSVOb"
+      ],
+      "validated": false
+    },
+    {
+      "id": "d23b",
+      "chantierId": "samir_maison",
+      "description": "Materiel teliouine",
+      "montant": 49,
+      "date": "2022-05-06",
+      "categorieId": "materiel",
+      "payeur": "Wissem",
+      "beneficiaire": "Matériel",
+      "photosUrls": [
+        "https://drive.google.com/open?id=1XLwWFNvhtre10G4mTuqnJKbrcdFSI-Wx"
+      ],
+      "validated": false
+    },
+    {
+      "id": "3afd",
+      "chantierId": "commun_autre",
+      "description": "Achat porte douche",
+      "montant": 280,
+      "date": "2022-05-08",
+      "categorieId": "materiel",
+      "payeur": "Wissem",
+      "beneficiaire": "Matériel",
+      "commentaire": "80mx220m",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "90ca",
+      "chantierId": "commun_autre",
+      "description": "Mosaique boutique houmtSoug",
+      "montant": 670,
+      "date": "2022-05-11",
+      "categorieId": "materiel",
+      "payeur": "Wissem",
+      "beneficiaire": "Matériel",
+      "commentaire": "26 Faeance et 7 m parterre",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "a4a0",
+      "chantierId": "samir_maison",
+      "description": "Azedine",
+      "montant": 1000,
+      "date": "2022-05-11",
+      "categorieId": "travaux_menuiserie",
+      "payeur": "Wissem",
+      "beneficiaire": "Menuiserie",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "8352",
+      "chantierId": "samir_maison",
+      "description": "Gadour ",
+      "montant": 1300,
+      "date": "2022-05-11",
+      "categorieId": "travaux_peinture",
+      "payeur": "Wissem",
+      "beneficiaire": "Peinture",
+      "commentaire": "Donné ce jour le 11 05 2022",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "f851",
+      "chantierId": "samir_maison",
+      "description": "Mounir",
+      "montant": 1500,
+      "date": "2022-05-13",
+      "categorieId": "main_oeuvre",
+      "payeur": "Wissem",
+      "beneficiaire": "Mounir (Tvx)",
+      "commentaire": "Reste à devoir à Mounir ce jour 4500 D",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "a72e",
+      "chantierId": "samir_maison",
+      "description": "Karim gournisa",
+      "montant": 800,
+      "date": "2022-05-13",
+      "categorieId": "travaux_menuiserie",
+      "payeur": "Wissem",
+      "beneficiaire": "Menuiserie - Vitrier",
+      "commentaire": "Paiement de 800 d sur 1000d reste 200d disponible chez Walid laisse ce jour 13 05 2022",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "67d3",
+      "chantierId": "samir_maison",
+      "description": "Anoir goobaa",
+      "montant": 1900,
+      "date": "2022-05-13",
+      "categorieId": "autre",
+      "payeur": "Wissem",
+      "beneficiaire": "Electroménagers",
+      "commentaire": "Achat et installation 2 clim 880*2 + 70*2 montage",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "00d9",
+      "chantierId": "samir_maison",
+      "description": "GED",
+      "montant": 288,
+      "date": "2022-05-13",
+      "categorieId": "materiel",
+      "payeur": "Wissem",
+      "beneficiaire": "Electricité Matériel",
+      "commentaire": "6 poto terrasse et 6 applique exter achat le 11 05 22",
+      "photosUrls": [
+        "https://drive.google.com/open?id=1UZjSZ7redqy1E-3YrEdIKJlo-QfM_QjG"
+      ],
+      "validated": false
+    },
+    {
+      "id": "897c",
+      "chantierId": "wissem_housh",
+      "description": "Mosaiquz de lile haoumt souk",
+      "montant": 481.8,
+      "date": "2022-05-13",
+      "categorieId": "materiel",
+      "payeur": "Wissem",
+      "beneficiaire": "Matériel",
+      "commentaire": "Faeance blanc 20*20 et par terre parquet 3 pack",
+      "photosUrls": [
+        "https://drive.google.com/open?id=1CWLADtEGNVqZ0zHCOoePMO1sXkDksvRK"
+      ],
+      "validated": false
+    },
+    {
+      "id": "e6a2",
+      "chantierId": "commun_autre",
+      "description": "Mounir suite travaux douches et sdb parents",
+      "montant": 1892,
+      "date": "2022-05-13",
+      "categorieId": "main_oeuvre",
+      "payeur": "Wissem",
+      "beneficiaire": "Mounir (Tvx)",
+      "commentaire": "Paiement Mounir ce jour le 12 05 2022",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "520d",
+      "chantierId": "commun_autre",
+      "description": "Mounir",
+      "montant": 795,
+      "date": "2022-05-13",
+      "categorieId": "main_oeuvre",
+      "payeur": "Wissem",
+      "beneficiaire": "Mounir (Tvx)",
+      "commentaire": "600 d + 135 + 30+ 30",
+      "photosUrls": [
+        "https://drive.google.com/open?id=1GDp_-4cU6S3MN_RSo6EOP41BtROl49RD"
+      ],
+      "validated": false
+    },
+    {
+      "id": "24f8",
+      "chantierId": "commun_autre",
+      "description": "Mohamed ben attia ",
+      "montant": 50,
+      "date": "2022-05-13",
+      "categorieId": "main_oeuvre",
+      "payeur": "Wissem",
+      "beneficiaire": "Mounir (Tvx)",
+      "commentaire": "Avance 50d reste 550 sur devis origine mais 600 d ont été laissés le 13 05 22 à Walid pour les lui donner ",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "0e3f",
+      "chantierId": "samir_maison",
+      "description": "Tiwajni",
+      "montant": 1200,
+      "date": "2022-05-13",
+      "categorieId": "materiel",
+      "payeur": "Wissem",
+      "beneficiaire": "Matériel",
+      "commentaire": "1100d + 100d les deux supports clim",
+      "photosUrls": [
+        "https://drive.google.com/open?id=12Lqo1tLJIltRobaGd_kc_uZ6CS9SeHai"
+      ],
+      "validated": false
+    },
+    {
+      "id": "b5c6",
+      "chantierId": "samir_maison",
+      "description": "Hamdi srandi",
+      "montant": 520,
+      "date": "2022-05-13",
+      "categorieId": "travaux_menuiserie",
+      "payeur": "Wissem",
+      "beneficiaire": "Aluminium",
+      "commentaire": "520d",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "0f57",
+      "chantierId": "samir_autre",
+      "description": "Billet bateau agence ITA avenue salah bzn youssef",
+      "montant": 4974,
+      "date": "2022-05-13",
+      "categorieId": "autre",
+      "payeur": "Wissem",
+      "beneficiaire": "Autre",
+      "commentaire": "Paiement total du billet ce jour le 12 05 2022",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "3759",
+      "chantierId": "samir_maison",
+      "description": "Bricola",
+      "montant": 503,
+      "date": "2022-05-13",
+      "categorieId": "materiel",
+      "payeur": "Wissem",
+      "beneficiaire": "Plomberie Matériel",
+      "commentaire": "3 kit douchette + 2 mitigeur douche douzeSopal",
+      "photosUrls": [
+        "https://drive.google.com/open?id=1gIfzDgOifK-su6P5jhHQ7Sva0Ztuo3fN"
+      ],
+      "validated": false
+    },
+    {
+      "id": "f47f",
+      "chantierId": "samir_maison",
+      "description": "Bricola",
+      "montant": 849,
+      "date": "2022-05-13",
+      "categorieId": "materiel",
+      "payeur": "Wissem",
+      "beneficiaire": "Plomberie Matériel",
+      "commentaire": "12 Lampe LED 3 flexible douche 3 mitigeur lavabo mitigeur douche douz",
+      "photosUrls": [
+        "https://drive.google.com/open?id=14IR1ConewnCO6FcW9EyesDvW1iXVFPfk"
+      ],
+      "validated": false
+    },
+    {
+      "id": "77ff",
+      "chantierId": "samir_maison",
+      "description": "Bricola",
+      "montant": 59,
+      "date": "2022-05-13",
+      "categorieId": "materiel",
+      "payeur": "Wissem",
+      "beneficiaire": "Electricité Matériel",
+      "commentaire": "Achat le 11 05 2022",
+      "photosUrls": [
+        "https://drive.google.com/open?id=10wbwWfehlGrSzKpiMsNMjGLiXAV85uGB"
+      ],
+      "validated": false
+    },
+    {
+      "id": "1397",
+      "chantierId": "commun_autre",
+      "description": "Azdine ",
+      "montant": 875,
+      "date": "2022-05-13",
+      "categorieId": "travaux_menuiserie",
+      "payeur": "Wissem",
+      "beneficiaire": "Menuiserie",
+      "commentaire": "Paiement en main le 11 04 2022",
+      "photosUrls": [
+        "https://drive.google.com/open?id=1Q1lvYbnxGuE-961JvkYxsL8CrxctpRvK"
+      ],
+      "validated": false
+    },
+    {
+      "id": "7745",
+      "chantierId": "samir_maison",
+      "description": "Mounir (Tvx)",
+      "montant": 1000,
+      "date": "2022-05-14",
+      "categorieId": "main_oeuvre",
+      "payeur": "Walid",
+      "beneficiaire": "Mounir (Tvx)",
+      "commentaire": "Régul. - Mounir 1 - F8 - 190404",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "e443",
+      "chantierId": "samir_maison",
+      "description": "Mounir (Tvx)",
+      "montant": 12000,
+      "date": "2022-05-14",
+      "categorieId": "main_oeuvre",
+      "payeur": "Walid",
+      "beneficiaire": "Mounir (Tvx)",
+      "commentaire": "Régul. - Mounir 2 - F8 - 1900729",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "9eef",
+      "chantierId": "samir_maison",
+      "description": "Mounir (Tvx)",
+      "montant": 1000,
+      "date": "2022-05-14",
+      "categorieId": "main_oeuvre",
+      "payeur": "Walid",
+      "beneficiaire": "Mounir (Tvx)",
+      "commentaire": "Régul. F8 - 191006",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "3355",
+      "chantierId": "samir_maison",
+      "description": "Mounir (Tvx)",
+      "montant": 1000,
+      "date": "2022-05-14",
+      "categorieId": "main_oeuvre",
+      "payeur": "Walid",
+      "beneficiaire": "Mounir (Tvx)",
+      "commentaire": "Régul. F8 - 191101",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "4eb7",
+      "chantierId": "samir_maison",
+      "description": "Mounir (Tvx)",
+      "montant": 5850,
+      "date": "2022-05-14",
+      "categorieId": "main_oeuvre",
+      "payeur": "Walid",
+      "beneficiaire": "Mounir (Tvx)",
+      "commentaire": "Régul. F8 - 191402 // Mounir régul. facture + 450 trax inclus",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "fb5f",
+      "chantierId": "samir_maison",
+      "description": "Mounir (Tvx)",
+      "montant": 19500,
+      "date": "2022-05-14",
+      "categorieId": "main_oeuvre",
+      "payeur": "Walid",
+      "beneficiaire": "Mounir (Tvx)",
+      "commentaire": "Régul. Walid du 200620 au 210421 - Mounir 7 à 10 / F19-F21-F33",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "d3c0",
+      "chantierId": "samir_maison",
+      "description": "Mounir (Tvx)",
+      "montant": 5090,
+      "date": "2022-05-14",
+      "categorieId": "main_oeuvre",
+      "payeur": "Walid",
+      "beneficiaire": "Mounir (Tvx)",
+      "commentaire": "Régul. F33 - prix du m²",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "7114",
+      "chantierId": "samir_maison",
+      "description": "Mounir (Tvx)",
+      "montant": 60,
+      "date": "2022-05-14",
+      "categorieId": "main_oeuvre",
+      "payeur": "Walid",
+      "beneficiaire": "Mounir (Tvx)",
+      "commentaire": "Régul. Mise à jour partie ajout - 211108",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "180d",
+      "chantierId": "samir_maison",
+      "description": "Mounir (Tvx)",
+      "montant": 3980,
+      "date": "2022-05-14",
+      "categorieId": "main_oeuvre",
+      "payeur": "Samir",
+      "beneficiaire": "Mounir (Tvx)",
+      "commentaire": "Régul. du 210817 au 210819 - F35",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "4d26",
+      "chantierId": "samir_maison",
+      "description": "Mounir (Tvx)",
+      "montant": 5000,
+      "date": "2022-05-14",
+      "categorieId": "main_oeuvre",
+      "payeur": "Walid",
+      "beneficiaire": "Mounir (Tvx)",
+      "commentaire": "Régul. F46 du 210824 au 211105 avancement 18 à 20 (somme)",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "92b9",
+      "chantierId": "samir_maison",
+      "description": "Mounir (Tvx)",
+      "montant": 1240,
+      "date": "2022-05-14",
+      "categorieId": "main_oeuvre",
+      "payeur": "Samir",
+      "beneficiaire": "Mounir (Tvx)",
+      "commentaire": "Régul. montant donné à Mounir pour Marbre - conservé par Mounir - 220123",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "84a1",
+      "chantierId": "samir_maison",
+      "description": "Suivi Walid",
+      "montant": 3225,
+      "date": "2022-05-15",
+      "categorieId": "autre",
+      "payeur": "Samir",
+      "beneficiaire": "Suivi Chantier",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "cb3b",
+      "chantierId": "samir_maison",
+      "description": "Dalle 1 Gabes",
+      "montant": 3370,
+      "date": "2022-05-15",
+      "categorieId": "travaux_maconnerie",
+      "payeur": "Samir",
+      "beneficiaire": "Dalles",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "aebf",
+      "chantierId": "samir_maison",
+      "description": "Dalles",
+      "montant": 12855,
+      "date": "2022-05-15",
+      "categorieId": "travaux_maconnerie",
+      "payeur": "Walid",
+      "beneficiaire": "Dalles",
+      "photosUrls": [
+        "https://drive.google.com/open?id=12Y6NU9m7Nwyf5Y-r-jysepIcqvhgtNrt"
+      ],
+      "validated": false
+    },
+    {
+      "id": "e3e1",
+      "chantierId": "samir_maison",
+      "description": "Carrelage",
+      "montant": 6590,
+      "date": "2022-05-15",
+      "categorieId": "travaux_carrelage",
+      "payeur": "Samir",
+      "beneficiaire": "Carrelage",
+      "photosUrls": [
+        "https://drive.google.com/open?id=1q9SbiC43pS10r6LjT6ZSxsh4DeGhNVu4"
+      ],
+      "validated": false
+    },
+    {
+      "id": "c061",
+      "chantierId": "samir_maison",
+      "description": "F20",
+      "montant": 5700,
+      "date": "2022-05-15",
+      "categorieId": "travaux_carrelage",
+      "payeur": "Walid",
+      "beneficiaire": "Carrelage",
+      "photosUrls": [
+        "https://drive.google.com/open?id=1znBmA91jkBiiWJ2qqMc1eGsRwCcArgid"
+      ],
+      "validated": false
+    },
+    {
+      "id": "240e",
+      "chantierId": "samir_maison",
+      "description": "Cobam - F37",
+      "montant": 2173,
+      "date": "2022-05-15",
+      "categorieId": "travaux_carrelage",
+      "payeur": "Walid",
+      "beneficiaire": "Carrelage",
+      "commentaire": "F37",
+      "photosUrls": [
+        "https://drive.google.com/open?id=1-KtYZeAOfInQp0x0P8UkxR2Dkghy2v5i"
+      ],
+      "validated": false
+    },
+    {
+      "id": "16ed",
+      "chantierId": "samir_maison",
+      "description": "F19 - F18",
+      "montant": 3600,
+      "date": "2022-05-15",
+      "categorieId": "autre",
+      "payeur": "Walid",
+      "beneficiaire": "Faux Plafond",
+      "commentaire": "F18 et F19",
+      "photosUrls": [
+        "https://drive.google.com/open?id=11Z4hBggYP8_Pp3XsI70WsDVQkk9PrHm5"
+      ],
+      "validated": false
+    },
+    {
+      "id": "ebd4",
+      "chantierId": "samir_maison",
+      "description": "Faux Plafond",
+      "montant": 2040,
+      "date": "2022-05-15",
+      "categorieId": "autre",
+      "payeur": "Samir",
+      "beneficiaire": "Faux Plafond",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "6d16",
+      "chantierId": "samir_maison",
+      "description": "Menuiserie",
+      "montant": 1000,
+      "date": "2022-05-16",
+      "categorieId": "travaux_menuiserie",
+      "payeur": "Samir",
+      "beneficiaire": "Menuiserie",
+      "commentaire": "Démarrage",
+      "photosUrls": [
+        "https://drive.google.com/open?id=11MSvRWQ4vA78zbkNMu8YHUD8i_t8XCaA"
+      ],
+      "validated": false
+    },
+    {
+      "id": "3e49",
+      "chantierId": "samir_maison",
+      "description": "Menuiserie portes et fenêtres",
+      "montant": 3500,
+      "date": "2022-05-16",
+      "categorieId": "travaux_menuiserie",
+      "payeur": "Walid",
+      "beneficiaire": "Menuiserie",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "3a65",
+      "chantierId": "samir_maison",
+      "description": "Plomberie",
+      "montant": 1000,
+      "date": "2022-05-16",
+      "categorieId": "autre",
+      "payeur": "Walid",
+      "beneficiaire": "Plomberie",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "8b8b",
+      "chantierId": "samir_maison",
+      "description": "Plomberie",
+      "montant": 1045,
+      "date": "2022-05-16",
+      "categorieId": "autre",
+      "payeur": "Samir",
+      "beneficiaire": "Plomberie",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "7b80",
+      "chantierId": "samir_maison",
+      "description": "Electricité",
+      "montant": 1500,
+      "date": "2022-05-16",
+      "categorieId": "autre",
+      "payeur": "Samir",
+      "beneficiaire": "Electricité",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "6c19",
+      "chantierId": "samir_maison",
+      "description": "Electricité",
+      "montant": 1500,
+      "date": "2022-05-16",
+      "categorieId": "autre",
+      "payeur": "Walid",
+      "beneficiaire": "Electricité",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "c8cd",
+      "chantierId": "samir_maison",
+      "description": "Matériel Electricité",
+      "montant": 2634,
+      "date": "2022-05-16",
+      "categorieId": "materiel",
+      "payeur": "Samir",
+      "beneficiaire": "Electricité Matériel",
+      "commentaire": "F31",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "b237",
+      "chantierId": "samir_maison",
+      "description": "Aluminium Wissem Sfaxi",
+      "montant": 6000,
+      "date": "2022-05-16",
+      "categorieId": "travaux_menuiserie",
+      "payeur": "Samir",
+      "beneficiaire": "Aluminium",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "12d0",
+      "chantierId": "samir_maison",
+      "description": "9 Coffrets Fenêtre Alu. - F7",
+      "montant": 790,
+      "date": "2022-05-16",
+      "categorieId": "travaux_menuiserie",
+      "payeur": "Walid",
+      "beneficiaire": "Aluminium",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "3476",
+      "chantierId": "samir_maison",
+      "description": "Fenêtres",
+      "montant": 1000,
+      "date": "2022-05-16",
+      "categorieId": "materiel_fournitures",
+      "payeur": "Samir",
+      "beneficiaire": "Hdid",
+      "commentaire": "F29",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "d72d",
+      "chantierId": "samir_maison",
+      "description": "Fenêtres",
+      "montant": 2400,
+      "date": "2022-05-16",
+      "categorieId": "materiel_fournitures",
+      "payeur": "Walid",
+      "beneficiaire": "Hdid",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "ea3e",
+      "chantierId": "samir_maison",
+      "description": "Lassad",
+      "montant": 1300,
+      "date": "2022-05-17",
+      "categorieId": "materiel_fournitures",
+      "payeur": "Samir",
+      "beneficiaire": "Hdid",
+      "commentaire": "Portes cuisine et terrasse + rambarde terrasse",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "e4f2",
+      "chantierId": "samir_maison",
+      "description": "Marbre Lotfi",
+      "montant": 4540,
+      "date": "2022-05-17",
+      "categorieId": "travaux_carrelage",
+      "payeur": "Walid",
+      "beneficiaire": "Marbre",
+      "commentaire": "F21 - F38 - soufflet porte et fenêtres + avancement par Walid",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "ba17",
+      "chantierId": "samir_maison",
+      "description": "Fer, Yajour, Ouled Chaaban - F1 - F2 - F3 - F4 - F5",
+      "montant": 11669,
+      "date": "2022-05-18",
+      "categorieId": "materiel",
+      "payeur": "Walid",
+      "beneficiaire": "Matériel",
+      "commentaire": "Fer, Yajour, Ouled Chaaban - F1 - F2 - F3 - F4 - F5",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "0ddf",
+      "chantierId": "samir_maison",
+      "description": "Ouled Chaaban - F17 / Boussaïd 4 - F26 / Boussaid 7 - F45 ",
+      "montant": 10063,
+      "date": "2022-05-18",
+      "categorieId": "materiel",
+      "payeur": "Samir",
+      "beneficiaire": "Matériel",
+      "commentaire": "Ouled Chaaban - F17 / Boussaïd 4 - F26 / Boussaid 7 - F45 ",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "b2f9",
+      "chantierId": "samir_maison",
+      "description": "F13 à F16 et F6-9-10-28-27 - Boussaïd 1 - 2 - 3 et Ouled Chaaban",
+      "montant": 17446,
+      "date": "2022-05-18",
+      "categorieId": "materiel",
+      "payeur": "Walid",
+      "beneficiaire": "Matériel",
+      "commentaire": "F13 à F16 et F6-9-10-28-27 - Boussaïd 1 - 2 - 3 et Ouled Chaaban",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "814c",
+      "chantierId": "samir_maison",
+      "description": "F22-23-24-12-33-34 - Boussaïd 5-6",
+      "montant": 14423,
+      "date": "2022-05-18",
+      "categorieId": "materiel",
+      "payeur": "Walid",
+      "beneficiaire": "Matériel",
+      "commentaire": "F22-23-24-12-33-34 - Boussaïd 5-6",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "3513",
+      "chantierId": "samir_maison",
+      "description": "Remise à zéro Boussaïd 11 - F40-43-44",
+      "montant": 9400,
+      "date": "2022-05-18",
+      "categorieId": "materiel",
+      "payeur": "Walid",
+      "beneficiaire": "Matériel",
+      "commentaire": "Remise à zéro Boussaïd 11 - F40-43-44",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "914b",
+      "chantierId": "samir_maison",
+      "description": "F47 - Plusieurs factures - tiliwine, bricola",
+      "montant": 672,
+      "date": "2022-05-18",
+      "categorieId": "materiel",
+      "payeur": "Walid",
+      "beneficiaire": "Matériel",
+      "commentaire": "F47 - Plusieurs factures - tiliwine, bricola",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "5c6e",
+      "chantierId": "samir_maison",
+      "description": "Payé par Wissem avant le 13/05/2022 - puis 1500 DT pour un reste de clôture à 4500 DT",
+      "montant": 3000,
+      "date": "2022-05-18",
+      "categorieId": "main_oeuvre",
+      "payeur": "Wissem",
+      "beneficiaire": "Mounir (Tvx)",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "ff9e",
+      "chantierId": "commun_garages",
+      "description": "Mounir (Tvx)",
+      "montant": 1695,
+      "date": "2022-05-27",
+      "categorieId": "main_oeuvre",
+      "payeur": "Wissem",
+      "beneficiaire": "Mounir (Tvx)",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "c6fb",
+      "chantierId": "commun_autre",
+      "description": "Mounir (Tvx)",
+      "montant": 1755,
+      "date": "2022-05-27",
+      "categorieId": "main_oeuvre",
+      "payeur": "Ommi",
+      "beneficiaire": "Mounir (Tvx)",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "b7d9",
+      "chantierId": "commun_garages",
+      "description": "Mounir (Tvx)",
+      "montant": 3000,
+      "date": "2022-05-27",
+      "categorieId": "main_oeuvre",
+      "payeur": "WalSam",
+      "beneficiaire": "Mounir (Tvx)",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "cee5",
+      "chantierId": "commun_garages",
+      "description": "Matériel",
+      "montant": 7470,
+      "date": "2022-05-28",
+      "categorieId": "materiel",
+      "payeur": "Wissem",
+      "beneficiaire": "Matériel",
+      "commentaire": "Régul. Avancement Boussaïd, Hdid, retombée poutre garages",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "6752",
+      "chantierId": "commun_garages",
+      "description": "Boussaïd 1",
+      "montant": 4000,
+      "date": "2022-05-28",
+      "categorieId": "materiel",
+      "payeur": "WalSam",
+      "beneficiaire": "Matériel",
+      "commentaire": "Régul. F40",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "5627",
+      "chantierId": "commun_garages",
+      "description": "Basha Hdid et Dalles Gabes Garage",
+      "montant": 3053,
+      "date": "2022-05-28",
+      "categorieId": "materiel",
+      "payeur": "WalSam",
+      "beneficiaire": "Matériel",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "5b2f",
+      "chantierId": "commun_garages",
+      "description": "F56 - Twajni 1500 et Bousaïd 1500",
+      "montant": 5100,
+      "date": "2022-05-28",
+      "categorieId": "materiel",
+      "payeur": "Wissem",
+      "beneficiaire": "Matériel",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "02d1",
+      "chantierId": "commun_garages",
+      "description": "F48",
+      "montant": 1000,
+      "date": "2022-05-28",
+      "categorieId": "travaux_peinture",
+      "payeur": "WalWiss",
+      "beneficiaire": "Peinture",
+      "commentaire": "Régul. F48",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "09db",
+      "chantierId": "commun_autre",
+      "description": "Aluminium",
+      "montant": 2000,
+      "date": "2022-05-28",
+      "categorieId": "travaux_menuiserie",
+      "payeur": "Wissem",
+      "beneficiaire": "Aluminium",
+      "commentaire": "Régul. F48 - F50",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "77f4",
+      "chantierId": "commun_garages",
+      "description": "Hdid",
+      "montant": 1000,
+      "date": "2022-05-28",
+      "categorieId": "materiel_fournitures",
+      "payeur": "Wissem",
+      "beneficiaire": "Hdid",
+      "commentaire": "Régul. Lassad F51",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "36dd",
+      "chantierId": "commun_garages",
+      "description": "Hdid",
+      "montant": 660,
+      "date": "2022-05-28",
+      "categorieId": "materiel_fournitures",
+      "payeur": "Babay",
+      "beneficiaire": "Hdid",
+      "commentaire": "Régul. paiement par Babay",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "f929",
+      "chantierId": "commun_autre",
+      "description": "Marbre cuisine 2100 DT",
+      "montant": 2100,
+      "date": "2022-05-28",
+      "categorieId": "travaux_carrelage",
+      "payeur": "Wissem",
+      "beneficiaire": "Marbre",
+      "commentaire": "Régul. 1100 puis 1000 - F51 et F52",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "8542",
+      "chantierId": "commun_autre",
+      "description": "Menuiserie",
+      "montant": 2800,
+      "date": "2022-05-28",
+      "categorieId": "travaux_menuiserie",
+      "payeur": "Wissem",
+      "beneficiaire": "Menuiserie",
+      "commentaire": "Régul. Paiement Azzedine - (2200 DT cuisine, 1000 Portes + 320 fenêtres garage et toilettes) reste 700 DT",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "0664",
+      "chantierId": "commun_autre",
+      "description": "Lavabo",
+      "montant": 474.35,
+      "date": "2022-05-29",
+      "categorieId": "materiel",
+      "payeur": "Walid",
+      "beneficiaire": "Plomberie Matériel",
+      "photosUrls": [
+        "https://drive.google.com/open?id=1XYwPN7KJSbWuhZsngU6Ux6yfNKfLkO22",
+        "https://drive.google.com/open?id=1Jau_3Qin9uzsCzfKIBJ1hT1d_l6biIu_"
+      ],
+      "validated": false
+    },
+    {
+      "id": "6a28",
+      "chantierId": "commun_autre",
+      "description": "Peinture Matériel",
+      "montant": 1400,
+      "date": "2022-05-29",
+      "categorieId": "materiel_fournitures",
+      "payeur": "Walid",
+      "beneficiaire": "Peinture Matériel",
+      "photosUrls": [
+        "https://drive.google.com/open?id=1qRbu8JGvkNEtu-8V_u4EQSXPcAFPmj2v"
+      ],
+      "validated": false
+    },
+    {
+      "id": "529c",
+      "chantierId": "wissem_housh",
+      "description": "3000 wissem et 500 samir",
+      "montant": 3000,
+      "date": "2022-05-29",
+      "categorieId": "main_oeuvre",
+      "payeur": "Walid",
+      "beneficiaire": "Mounir (Tvx)",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "8866",
+      "chantierId": "samir_maison",
+      "description": "3000 wissem et 500 samir",
+      "montant": 500,
+      "date": "2022-05-29",
+      "categorieId": "main_oeuvre",
+      "payeur": "Walid",
+      "beneficiaire": "Mounir (Tvx)",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "cecd",
+      "chantierId": "samir_maison",
+      "description": "Karim mestaoui",
+      "montant": 200,
+      "date": "2022-05-29",
+      "categorieId": "travaux_menuiserie",
+      "payeur": "Walid",
+      "beneficiaire": "Menuiserie - Vitrier",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "bfa6",
+      "chantierId": "commun_autre",
+      "description": "Karim mestaoui",
+      "montant": 250,
+      "date": "2022-05-29",
+      "categorieId": "travaux_menuiserie",
+      "payeur": "Walid",
+      "beneficiaire": "Menuiserie - Vitrier",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "9a39",
+      "chantierId": "commun_autre",
+      "description": "Kais b sassi",
+      "montant": 500,
+      "date": "2022-05-29",
+      "categorieId": "travaux_peinture",
+      "payeur": "Walid",
+      "beneficiaire": "Peinture",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "0028",
+      "chantierId": "commun_autre",
+      "description": "Monem amghar",
+      "montant": 500,
+      "date": "2022-05-29",
+      "categorieId": "autre",
+      "payeur": "Walid",
+      "beneficiaire": "Electricité",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "6d6a",
+      "chantierId": "samir_maison",
+      "description": "Maher belhaj",
+      "montant": 200,
+      "date": "2022-05-30",
+      "categorieId": "autre",
+      "payeur": "Walid",
+      "beneficiaire": "Electricité",
+      "commentaire": "Montage applique exter et escalier inter",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "d2c5",
+      "chantierId": "commun_autre",
+      "description": "Bricola",
+      "montant": 73.2,
+      "date": "2022-06-04",
+      "categorieId": "materiel",
+      "payeur": "Walid",
+      "beneficiaire": "Matériel",
+      "commentaire": "4 spot",
+      "photosUrls": [
+        "https://drive.google.com/open?id=13pEqlTsS71i-tDIllqAf7ZiFxI0OR2cu"
+      ],
+      "validated": false
+    },
+    {
+      "id": "563b",
+      "chantierId": "samir_maison",
+      "description": "Mounir (Tvx)",
+      "montant": 1700,
+      "date": "2022-06-04",
+      "categorieId": "main_oeuvre",
+      "payeur": "Walid",
+      "beneficiaire": "Mounir (Tvx)",
+      "commentaire": "Initialement prêt pour Mounir par Walid - transformé en dépense Maison Samir payé par Wissem",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "7cb8",
+      "chantierId": "wissem_housh",
+      "description": "Mounir (Tvx)",
+      "montant": 700,
+      "date": "2022-06-04",
+      "categorieId": "main_oeuvre",
+      "payeur": "Walid",
+      "beneficiaire": "Mounir (Tvx)",
+      "commentaire": "Excédent des 1700 DT payé par Walid pour MaZ total Mounir pour Maison Samir / 700 DT partiront pour le compte Wissem Housh",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "4ac6",
+      "chantierId": "commun_autre",
+      "description": "Kais bn sassi",
+      "montant": 500,
+      "date": "2022-06-08",
+      "categorieId": "travaux_peinture",
+      "payeur": "Walid",
+      "beneficiaire": "Peinture",
+      "commentaire": "Donné par Walid à kais le 06062022",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "b9dd",
+      "chantierId": "wissem_housh",
+      "description": "A mounir suite avance de sa part pour deplacemenr radem",
+      "montant": 210,
+      "date": "2022-06-08",
+      "categorieId": "main_oeuvre",
+      "payeur": "Walid",
+      "beneficiaire": "Mounir (Tvx)",
+      "commentaire": "Payé par Walid à Mounir le 05062022",
+      "photosUrls": [
+        "https://drive.google.com/open?id=14UJInOXS6QB7u4Iwt7r0uK2mEA7Ut8AD"
+      ],
+      "validated": false
+    },
+    {
+      "id": "39a9",
+      "chantierId": "wissem_housh",
+      "description": "Boussid ",
+      "montant": 8220,
+      "date": "2022-06-10",
+      "categorieId": "materiel",
+      "payeur": "Walid",
+      "beneficiaire": "Matériel",
+      "commentaire": "7250d + 970 d",
+      "photosUrls": [
+        "https://drive.google.com/open?id=1iaymZ1PNHW_37-rFcz2h9u50VmRx6OrS"
+      ],
+      "validated": false
+    },
+    {
+      "id": "2f7f",
+      "chantierId": "wissem_housh",
+      "description": "Mounir pour payer dallet gabes",
+      "montant": 1350,
+      "date": "2022-06-10",
+      "categorieId": "main_oeuvre",
+      "payeur": "Walid",
+      "beneficiaire": "Mounir (Tvx)",
+      "commentaire": "1350d donné à Mounir par Walid suite paiement dallet Gabès. Msg messenger Walid du 09062022",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "7bf9",
+      "chantierId": "samir_maison",
+      "description": "Finalisation paiement - reste cuisine uniquement ",
+      "montant": 3600,
+      "date": "2022-06-19",
+      "categorieId": "travaux_menuiserie",
+      "payeur": "Walid",
+      "beneficiaire": "Menuiserie",
+      "commentaire": "Reste que cuisine paiement en 2023 - finalisation à 3600 ou 4000 ? A revérifier ",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "fb9f",
+      "chantierId": "samir_maison",
+      "description": "Basha",
+      "montant": 1300,
+      "date": "2022-06-22",
+      "categorieId": "autre",
+      "payeur": "Walid",
+      "beneficiaire": "Plomberie",
+      "commentaire": "Finalisation Basha - potentiellement ajouts à voir en direct",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "6059",
+      "chantierId": "samir_maison",
+      "description": "Meubles",
+      "montant": 1230,
+      "date": "2022-06-22",
+      "categorieId": "materiel_equipement",
+      "payeur": "Ommi",
+      "beneficiaire": "Meubles",
+      "commentaire": "Zarbiya - 280; rideau achat 450; couture 500 9DT/m et 5m par fenêtre.",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "f795",
+      "chantierId": "wissem_housh",
+      "description": "Sac midoun",
+      "montant": 2446.4,
+      "date": "2022-06-26",
+      "categorieId": "travaux_carrelage",
+      "payeur": "Walid",
+      "beneficiaire": "Carrelage",
+      "commentaire": "Véranda et houch",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "8099",
+      "chantierId": "wissem_housh",
+      "description": "Kais ben sassi",
+      "montant": 1150,
+      "date": "2022-06-26",
+      "categorieId": "travaux_peinture",
+      "payeur": "Walid",
+      "beneficiaire": "Peinture",
+      "commentaire": "Dernière tranche",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "6edb",
+      "chantierId": "wissem_housh",
+      "description": "A mounir pour 3 eme tranche sur 4",
+      "montant": 2300,
+      "date": "2022-06-30",
+      "categorieId": "main_oeuvre",
+      "payeur": "Walid",
+      "beneficiaire": "Mounir (Tvx)",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "99bc",
+      "chantierId": "wissem_housh",
+      "description": "Société Boussid",
+      "montant": 6977,
+      "date": "2022-06-30",
+      "categorieId": "materiel",
+      "payeur": "Walid",
+      "beneficiaire": "Matériel",
+      "commentaire": "Paiement avec remise à zéro le 29062022 de toute la facture mawaed binaa",
+      "photosUrls": [
+        "https://drive.google.com/open?id=1IEVVNnJXIAZlILFNbN-aXDD-3fEMDw74",
+        "https://drive.google.com/open?id=1ogf-fHIKOJvH2XCItAHX-oubFR8EaRia"
+      ],
+      "validated": false
+    },
+    {
+      "id": "337c",
+      "chantierId": "samir_maison",
+      "description": "Tiwajni ",
+      "montant": 1100,
+      "date": "2022-06-30",
+      "categorieId": "materiel",
+      "payeur": "Walid",
+      "beneficiaire": "Electricité Matériel",
+      "photosUrls": [
+        "https://drive.google.com/open?id=18kTBMs7T1KuadskgHxpncjdiuxXZf_N9",
+        "https://drive.google.com/open?id=1otw9vUCp1onMK1naSexvDsEfH3Jdf9Qf",
+        "https://drive.google.com/open?id=1BZyGrRhWIU8fA1DUnVZMoZK1KxhXLYPj",
+        "https://drive.google.com/open?id=1c-LVyGyxDUE4jr4NTR0UCFn460BskgX1",
+        "https://drive.google.com/open?id=1_bj4BUIeBX0oDxzbYgrmjcvtqK_pTYkK"
+      ],
+      "validated": false
+    },
+    {
+      "id": "f098",
+      "chantierId": "commun_autre",
+      "description": "Moun3m ",
+      "montant": 400,
+      "date": "2022-07-03",
+      "categorieId": "autre",
+      "payeur": "Walid",
+      "beneficiaire": "Electricité",
+      "commentaire": "Dernière tranche ",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "d23a",
+      "chantierId": "wissem_housh",
+      "description": "Bricola ",
+      "montant": 110.4,
+      "date": "2022-07-03",
+      "categorieId": "travaux_peinture",
+      "payeur": "Walid",
+      "beneficiaire": "Peinture",
+      "commentaire": "Deux x 3 litres ",
+      "photosUrls": [
+        "https://drive.google.com/open?id=1zGggEmazHkl7Kdx_S_9TFMl7YN8C1ZR0"
+      ],
+      "validated": false
+    },
+    {
+      "id": "d0e4",
+      "chantierId": "samir_autre",
+      "description": "Four, Plaque, Bague",
+      "montant": 1890,
+      "date": "2022-07-04",
+      "categorieId": "autre",
+      "payeur": "Ommi",
+      "beneficiaire": "Electroménagers",
+      "commentaire": "660 four, 330 plaque, 900 bague",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "6b40",
+      "chantierId": "samir_maison",
+      "description": "Télé",
+      "montant": 2000,
+      "date": "2022-07-04",
+      "categorieId": "materiel_equipement",
+      "payeur": "Samiha",
+      "beneficiaire": "Meubles",
+      "commentaire": "Télé 1750 DT avec parabole et autres 2000DT total",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "7d44",
+      "chantierId": "wissem_housh",
+      "description": "Kais ben Sassi",
+      "montant": 1000,
+      "date": "2022-07-06",
+      "categorieId": "travaux_peinture",
+      "payeur": "Walid",
+      "beneficiaire": "Peinture",
+      "commentaire": "Donnée le 05072022 par Walid à kais",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "8aed",
+      "chantierId": "wissem_housh",
+      "description": "Hamdi alu srandi",
+      "montant": 1030,
+      "date": "2022-07-06",
+      "categorieId": "travaux_menuiserie",
+      "payeur": "Walid",
+      "beneficiaire": "Aluminium",
+      "commentaire": "Fenêtre + paroi douche parents",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "ddfd",
+      "chantierId": "samir_maison",
+      "description": "Peinture Matériel",
+      "montant": 5500,
+      "date": "2022-07-11",
+      "categorieId": "materiel_fournitures",
+      "payeur": "Walid",
+      "beneficiaire": "Peinture Matériel",
+      "commentaire": "Payé par Walid - confirmation par écrit à Wissem màj par Samir - facture a récupérer ",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "79f5",
+      "chantierId": "wissem_autre",
+      "description": "Ged houmet soug",
+      "montant": 1000,
+      "date": "2022-07-24",
+      "categorieId": "autre",
+      "payeur": "Maman",
+      "beneficiaire": "Electricité",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "d831",
+      "chantierId": "samir_maison",
+      "description": "Tiwajni",
+      "montant": 170,
+      "date": "2022-07-24",
+      "categorieId": "materiel",
+      "payeur": "Samir",
+      "beneficiaire": "Matériel",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "fddf",
+      "chantierId": "wissem_housh",
+      "description": "Tiwajni",
+      "montant": 2400,
+      "date": "2022-07-24",
+      "categorieId": "materiel",
+      "payeur": "Wissem",
+      "beneficiaire": "Electricité Matériel",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "8d43",
+      "chantierId": "wissem_housh",
+      "description": "Fon travaux wissem et modif garages ",
+      "montant": 4755,
+      "date": "2022-07-24",
+      "categorieId": "main_oeuvre",
+      "payeur": "Wissem",
+      "beneficiaire": "Mounir (Tvx)",
+      "commentaire": "Les ajouts + restant du après paiement par walid",
+      "photosUrls": [
+        "https://drive.google.com/open?id=1Ovy2QAxb8lLHGHS6ZCi452dScMe7KIAw"
+      ],
+      "validated": false
+    },
+    {
+      "id": "bbfd",
+      "chantierId": "samir_maison",
+      "description": "Gaddour",
+      "montant": 4300,
+      "date": "2022-07-25",
+      "categorieId": "travaux_peinture",
+      "payeur": "Ommi",
+      "beneficiaire": "Peinture",
+      "commentaire": "Payé par Ommi",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "c248",
+      "chantierId": "samir_maison",
+      "description": "Basha",
+      "montant": 300,
+      "date": "2022-07-26",
+      "categorieId": "autre",
+      "payeur": "Samir",
+      "beneficiaire": "Plomberie",
+      "commentaire": "Donné hier clôture - reste cuisine - faite gratuitement avant décembre - sinon facturée",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "70f5",
+      "chantierId": "wissem_housh",
+      "description": "Houch et escalier",
+      "montant": 1750,
+      "date": "2022-08-17",
+      "categorieId": "materiel_fournitures",
+      "payeur": "Wissem",
+      "beneficiaire": "Hdid",
+      "commentaire": "Donnée 1750 sur 2000 dinars",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "f844",
+      "chantierId": "samir_maison",
+      "description": "Wissem Sfaxi",
+      "montant": 700,
+      "date": "2022-08-17",
+      "categorieId": "travaux_menuiserie",
+      "payeur": "Samir",
+      "beneficiaire": "Aluminium",
+      "commentaire": "Clôture Alu. Wissem Sfaxi",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "1954",
+      "chantierId": "wissem_housh",
+      "description": "Azedine ",
+      "montant": 560,
+      "date": "2022-08-17",
+      "categorieId": "travaux_menuiserie",
+      "payeur": "Wissem",
+      "beneficiaire": "Menuiserie",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "eb09",
+      "chantierId": "wissem_housh",
+      "description": "Mon3em",
+      "montant": 1000,
+      "date": "2022-08-17",
+      "categorieId": "autre",
+      "payeur": "Wissem",
+      "beneficiaire": "Electricité",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "2679",
+      "chantierId": "commun_autre",
+      "description": "Fawzi",
+      "montant": 600,
+      "date": "2022-08-19",
+      "categorieId": "travaux_carrelage",
+      "payeur": "Wissem",
+      "beneficiaire": "Carrelage",
+      "commentaire": "Avance 1/2",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "1fea",
+      "chantierId": "commun_autre",
+      "description": "SAC",
+      "montant": 100,
+      "date": "2022-08-19",
+      "categorieId": "materiel",
+      "payeur": "Wissem",
+      "beneficiaire": "Matériel",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "00eb",
+      "chantierId": "samir_maison",
+      "description": "Hamdi",
+      "montant": 250,
+      "date": "2022-08-19",
+      "categorieId": "travaux_menuiserie",
+      "payeur": "Samir",
+      "beneficiaire": "Aluminium",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "a2ab",
+      "chantierId": "samir_maison",
+      "description": "Meuble Jaafar",
+      "montant": 4050,
+      "date": "2022-08-19",
+      "categorieId": "materiel_equipement",
+      "payeur": "Ommi",
+      "beneficiaire": "Meubles",
+      "commentaire": "Clôture facture meubles (Cadeau samiha initialement)",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "24e9",
+      "chantierId": "samir_maison",
+      "description": "Rideau",
+      "montant": 1000,
+      "date": "2022-08-19",
+      "categorieId": "materiel_equipement",
+      "payeur": "Ommi",
+      "beneficiaire": "Meubles",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "4e49",
+      "chantierId": "wissem_housh",
+      "description": "Lassad najjar",
+      "montant": 200,
+      "date": "2022-08-20",
+      "categorieId": "materiel_fournitures",
+      "payeur": "Wissem",
+      "beneficiaire": "Hdid",
+      "commentaire": "Total 1950 ( main courante escalier contour porte housh mai' courante côté housh et réparation beb entrée) ",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "9c6f",
+      "chantierId": "commun_autre",
+      "description": "Fawzi entreprise tiliwin",
+      "montant": 400,
+      "date": "2022-08-20",
+      "categorieId": "travaux_carrelage",
+      "payeur": "Wissem",
+      "beneficiaire": "Marbre",
+      "commentaire": "Reste sur 950 dinars",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "e415",
+      "chantierId": "samir_maison",
+      "description": "Azzedine",
+      "montant": 700,
+      "date": "2022-08-21",
+      "categorieId": "travaux_menuiserie",
+      "payeur": "Samir",
+      "beneficiaire": "Menuiserie",
+      "photosUrls": [
+        "https://drive.google.com/open?id=1se1Pcd_Tt-kGHCzfj8s9qooS6sxukVuE"
+      ],
+      "validated": false
+    },
+    {
+      "id": "e911",
+      "chantierId": "wissem_housh",
+      "description": "Nabil ben attia",
+      "montant": 300,
+      "date": "2022-08-22",
+      "categorieId": "travaux_menuiserie",
+      "payeur": "Wissem",
+      "beneficiaire": "Menuiserie",
+      "commentaire": "Reste 2300",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "de27",
+      "chantierId": "samir_maison",
+      "description": "Cuisine",
+      "montant": 460,
+      "date": "2022-09-02",
+      "categorieId": "materiel_fournitures",
+      "payeur": "Babay",
+      "beneficiaire": "Peinture Matériel",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "aed8",
+      "chantierId": "samir_maison",
+      "description": "Peinture",
+      "montant": 100,
+      "date": "2022-09-02",
+      "categorieId": "travaux_peinture",
+      "payeur": "Babay",
+      "beneficiaire": "Peinture",
+      "commentaire": "Avancement peinture",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "d65a",
+      "chantierId": "wissem_housh",
+      "description": "Nabil Ben Attia",
+      "montant": 500,
+      "date": "2022-09-02",
+      "categorieId": "travaux_menuiserie",
+      "payeur": "Wissem",
+      "beneficiaire": "Menuiserie",
+      "commentaire": "Armoire bit housh",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "6cb5",
+      "chantierId": "commun_autre",
+      "description": "Carrelage",
+      "montant": 350,
+      "date": "2022-09-02",
+      "categorieId": "travaux_carrelage",
+      "payeur": "Wissem",
+      "beneficiaire": "Carrelage",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "09be",
+      "chantierId": "commun_autre",
+      "description": "Plomberie Matériel",
+      "montant": 1250,
+      "date": "2022-09-02",
+      "categorieId": "materiel",
+      "payeur": "Wissem",
+      "beneficiaire": "Plomberie Matériel",
+      "commentaire": "Evier et meuble lavabo",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "7e68",
+      "chantierId": "commun_autre",
+      "description": "Tiwajni",
+      "montant": 200,
+      "date": "2022-09-02",
+      "categorieId": "materiel",
+      "payeur": "Wissem",
+      "beneficiaire": "Matériel",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "9fcf",
+      "chantierId": "commun_autre",
+      "description": "Tiwajni",
+      "montant": 250,
+      "date": "2022-09-02",
+      "categorieId": "materiel",
+      "payeur": "Babay",
+      "beneficiaire": "Matériel",
+      "commentaire": "Fermeture compte Tiwajni - douche parents",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "37db",
+      "chantierId": "commun_autre",
+      "description": "Basha",
+      "montant": 80,
+      "date": "2022-09-02",
+      "categorieId": "autre",
+      "payeur": "Babay",
+      "beneficiaire": "Plomberie",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "98da",
+      "chantierId": "wissem_housh",
+      "description": "Hamdi",
+      "montant": 150,
+      "date": "2022-09-02",
+      "categorieId": "travaux_menuiserie",
+      "payeur": "Wissem",
+      "beneficiaire": "Aluminium",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "9e64",
+      "chantierId": "wissem_housh",
+      "description": "Mounir (Tvx)",
+      "montant": 70,
+      "date": "2022-09-02",
+      "categorieId": "main_oeuvre",
+      "payeur": "Wissem",
+      "beneficiaire": "Mounir (Tvx)",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "4cc1",
+      "chantierId": "commun_autre",
+      "description": "Hdid",
+      "montant": 360,
+      "date": "2022-09-02",
+      "categorieId": "materiel_fournitures",
+      "payeur": "Wissem",
+      "beneficiaire": "Hdid",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "bab3",
+      "chantierId": "wissem_housh",
+      "description": "Kais",
+      "montant": 300,
+      "date": "2022-09-02",
+      "categorieId": "travaux_peinture",
+      "payeur": "Wissem",
+      "beneficiaire": "Peinture",
+      "commentaire": "Peinture Bab Sor; rombarde; porte principle + porte housh",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "9019",
+      "chantierId": "wissem_housh",
+      "description": "Plomberie Matériel",
+      "montant": 464,
+      "date": "2022-09-03",
+      "categorieId": "materiel",
+      "payeur": "Walid",
+      "beneficiaire": "Plomberie Matériel",
+      "commentaire": "Meuble SdB",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "b89e",
+      "chantierId": "samir_maison",
+      "description": "Faouzi marbre",
+      "montant": 1000,
+      "date": "2022-09-13",
+      "categorieId": "travaux_carrelage",
+      "payeur": "Babay",
+      "beneficiaire": "Marbre",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "7715",
+      "chantierId": "anis_samiha",
+      "description": "Bricola",
+      "montant": 439,
+      "date": "2022-09-13",
+      "categorieId": "materiel",
+      "payeur": "Babay",
+      "beneficiaire": "Matériel",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "991f",
+      "chantierId": "samir_maison",
+      "description": "Mitigeur - Bricola",
+      "montant": 303,
+      "date": "2022-09-13",
+      "categorieId": "materiel",
+      "payeur": "Babay",
+      "beneficiaire": "Plomberie Matériel",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "3345",
+      "chantierId": "samir_maison",
+      "description": "Gaddour Cuisine",
+      "montant": 300,
+      "date": "2022-09-14",
+      "categorieId": "travaux_peinture",
+      "payeur": "Babay",
+      "beneficiaire": "Peinture",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "005e",
+      "chantierId": "samir_maison",
+      "description": "Gaddour",
+      "montant": 800,
+      "date": "2022-09-21",
+      "categorieId": "travaux_peinture",
+      "payeur": "Babay",
+      "beneficiaire": "Peinture",
+      "photosUrls": [
+        "https://drive.google.com/open?id=1yuYPap6xw3h3v7olcRGpeC8Eho_y2_55"
+      ],
+      "validated": false
+    },
+    {
+      "id": "9ca1",
+      "chantierId": "samir_maison",
+      "description": "Suivi Chantier",
+      "montant": 800,
+      "date": "2022-11-10",
+      "categorieId": "autre",
+      "payeur": "Samir",
+      "beneficiaire": "Suivi Chantier",
+      "commentaire": "Clôture Suivi Walid",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "6f3d",
+      "chantierId": "samir_maison",
+      "description": "Menuiserie",
+      "montant": 500,
+      "date": "2022-11-11",
+      "categorieId": "travaux_menuiserie",
+      "payeur": "Samir",
+      "beneficiaire": "Menuiserie",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "c92e",
+      "chantierId": "commun_garages",
+      "description": "900 Garage - 600 Sour - 100 Armoire",
+      "montant": 1600,
+      "date": "2022-11-13",
+      "categorieId": "travaux_peinture",
+      "payeur": "Walid",
+      "beneficiaire": "Peinture",
+      "photosUrls": [
+        "https://drive.google.com/open?id=1Gv5v5I88XgxsqnHl7O0v4m3RUJEw9TZG"
+      ],
+      "validated": false
+    },
+    {
+      "id": "4838",
+      "chantierId": "samir_maison",
+      "description": "Menuiserie",
+      "montant": 2000,
+      "date": "2023-01-23",
+      "categorieId": "travaux_menuiserie",
+      "payeur": "Samir",
+      "beneficiaire": "Menuiserie",
+      "commentaire": "Test",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "4f04",
+      "chantierId": "samir_maison",
+      "description": "Test ",
+      "montant": 1000,
+      "date": "2023-05-21",
+      "categorieId": "travaux_menuiserie",
+      "payeur": "Samir",
+      "beneficiaire": "Menuiserie",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "8210",
+      "chantierId": "samir_maison",
+      "description": "Menuiserie",
+      "montant": 1200,
+      "date": "2023-11-23",
+      "categorieId": "travaux_menuiserie",
+      "payeur": "Samir",
+      "beneficiaire": "Menuiserie",
+      "commentaire": "Mise a jour le 23/11/23",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "0415",
+      "chantierId": "samir_maison",
+      "description": "Test",
+      "montant": 1000,
+      "date": "2024-10-16",
+      "categorieId": "travaux_menuiserie",
+      "payeur": "Samir",
+      "beneficiaire": "Aluminium",
+      "photosUrls": [
+        "https://drive.google.com/open?id=1xSUaqei1v0ysg6nE2jTr0eunfMJDxX8t"
+      ],
+      "validated": false
+    },
+    {
+      "id": "ex66",
+      "chantierId": "commun_autre",
+      "description": "Main courante veranda cuisine + chebek douche parents",
+      "montant": 600,
+      "date": "2022-04-30",
+      "categorieId": "materiel_fournitures",
+      "payeur": "Wissem",
+      "beneficiaire": "M lass3ed (Hdid)",
+      "commentaire": "Facture 270x2 pour main courante veranda cuisine+ chebek douche parents",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "ex184",
+      "chantierId": "commun_garages",
+      "description": "Travaux Mounir",
+      "montant": 4720,
+      "date": "2022-05-27",
+      "categorieId": "main_oeuvre",
+      "payeur": "Wissem",
+      "beneficiaire": "Mounir",
+      "commentaire": "Regul.",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "ex216",
+      "chantierId": "samir_maison",
+      "description": "Dettes Samir payee totalement ce jour",
+      "montant": 3000,
+      "date": "2022-06-04",
+      "categorieId": "main_oeuvre",
+      "payeur": "Walid",
+      "beneficiaire": "Mounir",
+      "commentaire": "2300 restant des 4000 dues puisque mounir me devait 1700 - Samir ne doit plus rien a Mounir sur les 9000 d initialement fixes",
+      "photosUrls": [],
+      "validated": false
+    },
+    {
+      "id": "ex276",
+      "chantierId": "commun_autre",
+      "description": "Refection sdb - Marbre Tiliwin",
+      "montant": 550,
+      "date": "2022-08-19",
+      "categorieId": "travaux_carrelage",
+      "payeur": "Wissem",
+      "beneficiaire": "Tiliwin",
+      "commentaire": "Avance 1/2 (950-550)",
+      "photosUrls": [],
+      "validated": false
+    }
+  ],
+  "clients": [
+    {
+      "id": "c1",
+      "nom": "M. et Mme Dupont",
+      "adresse": "15 rue des Lilas, 75011 Paris",
+      "email": "dupont.famille@email.fr",
+      "telephone": "0145678901",
+      "contacts": [
+        {
+          "id": "ct1",
+          "nom": "Dupont",
+          "prenom": "Jean",
+          "fonction": "Propriétaire",
+          "email": "jean.dupont@email.fr",
+          "telephone": "0612345678"
+        }
+      ]
+    },
+    {
+      "id": "c2",
+      "nom": "M. Martin",
+      "adresse": "8 avenue du Parc, 92100 Boulogne",
+      "email": "p.martin@email.fr",
+      "telephone": "0156789012",
+      "contacts": [
+        {
+          "id": "ct2",
+          "nom": "Martin",
+          "prenom": "Pierre",
+          "fonction": "Propriétaire",
+          "email": "p.martin@email.fr",
+          "telephone": "0623456789"
+        }
+      ]
+    },
+    {
+      "id": "c3",
+      "nom": "Famille Bernard",
+      "adresse": "42 chemin des Vignes, 78000 Versailles",
+      "email": "bernard.famille@email.fr",
+      "telephone": "0167890123",
+      "contacts": [
+        {
+          "id": "ct3",
+          "nom": "Bernard",
+          "prenom": "Sophie",
+          "fonction": "Propriétaire",
+          "email": "sophie.bernard@email.fr",
+          "telephone": "0634567890"
+        },
+        {
+          "id": "ct4",
+          "nom": "Bernard",
+          "prenom": "Marc",
+          "fonction": "Propriétaire",
+          "email": "marc.bernard@email.fr",
+          "telephone": "0645678901"
+        }
+      ]
+    },
+    {
+      "id": "c4",
+      "nom": "Copropriété Immeuble RST",
+      "adresse": "120 boulevard Haussmann, 75008 Paris",
+      "email": "syndic.rst@email.fr",
+      "telephone": "0178901234",
+      "contacts": [
+        {
+          "id": "ct5",
+          "nom": "Leroy",
+          "prenom": "François",
+          "fonction": "Président du conseil syndical",
+          "email": "f.leroy@email.fr",
+          "telephone": "0656789012"
+        }
+      ]
+    },
+    {
+      "id": "b4e4",
+      "nom": "Samir",
+      "adresse": "Djerba",
+      "email": "",
+      "telephone": "",
+      "contacts": []
+    }
+  ],
+  "moas": [
+    {
+      "id": "moa1",
+      "nom": "SCI Bernard Investissements",
+      "adresse": "42 chemin des Vignes, 78000 Versailles",
+      "email": "contact@sci-bernard.fr",
+      "telephone": "0139456789",
+      "contacts": [
+        {
+          "id": "ctm1",
+          "nom": "Bernard",
+          "prenom": "Marc",
+          "fonction": "Gérant",
+          "email": "marc.bernard@sci-bernard.fr",
+          "telephone": "0645678901"
+        }
+      ]
+    },
+    {
+      "id": "moa2",
+      "nom": "Syndic Immobilier Paris Centre",
+      "adresse": "50 rue de Rivoli, 75001 Paris",
+      "email": "contact@syndic-paris.fr",
+      "telephone": "0142567890",
+      "contacts": [
+        {
+          "id": "ctm2",
+          "nom": "Moreau",
+          "prenom": "Claire",
+          "fonction": "Gestionnaire de copropriété",
+          "email": "c.moreau@syndic-paris.fr",
+          "telephone": "0667890123"
+        }
+      ]
+    },
+    {
+      "id": "5eed",
+      "nom": "Samir",
+      "adresse": "",
+      "email": "",
+      "telephone": "",
+      "contacts": []
+    }
+  ],
+  "moes": [
+    {
+      "id": "moe1",
+      "nom": "Cabinet Architecture Moderne",
+      "adresse": "25 rue Beaubourg, 75003 Paris",
+      "email": "contact@archi-moderne.fr",
+      "telephone": "0148567890",
+      "contacts": [
+        {
+          "id": "cte1",
+          "nom": "Dubois",
+          "prenom": "Marie",
+          "fonction": "Architecte DPLG",
+          "email": "m.dubois@archi-moderne.fr",
+          "telephone": "0678901234"
+        },
+        {
+          "id": "cte2",
+          "nom": "Petit",
+          "prenom": "Lucas",
+          "fonction": "Chef de projet",
+          "email": "l.petit@archi-moderne.fr",
+          "telephone": "0689012345"
+        }
+      ]
+    },
+    {
+      "id": "moe2",
+      "nom": "Bureau d'Études Façades IDF",
+      "adresse": "15 rue de la Paix, 75002 Paris",
+      "email": "contact@be-facades.fr",
+      "telephone": "0153678901",
+      "contacts": [
+        {
+          "id": "cte3",
+          "nom": "Garnier",
+          "prenom": "Philippe",
+          "fonction": "Ingénieur structure",
+          "email": "p.garnier@be-facades.fr",
+          "telephone": "0690123456"
+        }
+      ]
+    },
+    {
+      "id": "7374",
+      "nom": "Kamel",
+      "adresse": "",
+      "email": "",
+      "telephone": "",
+      "contacts": []
+    }
+  ],
+  "entreprises": [
+    {
+      "id": "e1",
+      "nom": "Bâtiment Pro SAS",
+      "adresse": "Zone Industrielle Nord, 93000 Bobigny",
+      "email": "contact@batiment-pro.fr",
+      "telephone": "0148456789",
+      "siret": "12345678901234",
+      "specialites": [
+        "maconnerie",
+        "gros_oeuvre",
+        "carrelage"
+      ],
+      "contacts": [
+        {
+          "id": "ctb1",
+          "nom": "Robert",
+          "prenom": "Paul",
+          "fonction": "Chef de chantier",
+          "email": "p.robert@batiment-pro.fr",
+          "telephone": "0612987654"
+        },
+        {
+          "id": "ctb2",
+          "nom": "Simon",
+          "prenom": "Jacques",
+          "fonction": "Conducteur de travaux",
+          "email": "j.simon@batiment-pro.fr",
+          "telephone": "0623098765"
+        }
+      ]
+    },
+    {
+      "id": "e2",
+      "nom": "Constructions Martin & Fils",
+      "adresse": "12 rue des Artisans, 92100 Boulogne",
+      "email": "contact@martin-construction.fr",
+      "telephone": "0156234567",
+      "siret": "98765432109876",
+      "specialites": [
+        "maconnerie",
+        "terrassement"
+      ],
+      "contacts": [
+        {
+          "id": "ctb3",
+          "nom": "Martin",
+          "prenom": "André",
+          "fonction": "Gérant",
+          "email": "a.martin@martin-construction.fr",
+          "telephone": "0634109876"
+        }
+      ]
+    },
+    {
+      "id": "e3",
+      "nom": "Façades & Peintures IDF",
+      "adresse": "8 avenue de l'Industrie, 94200 Ivry",
+      "email": "contact@facades-peintures.fr",
+      "telephone": "0149345678",
+      "siret": "45678901234567",
+      "specialites": [
+        "peinture",
+        "ravalement"
+      ],
+      "contacts": [
+        {
+          "id": "ctb4",
+          "nom": "Blanc",
+          "prenom": "Michel",
+          "fonction": "Responsable technique",
+          "email": "m.blanc@facades-peintures.fr",
+          "telephone": "0645210987"
+        }
+      ]
+    },
+    {
+      "id": "e24c",
+      "nom": "Mounir",
+      "adresse": "",
+      "email": "",
+      "telephone": "",
+      "contacts": [],
+      "siret": "",
+      "specialites": [
+        "maconnerie",
+        "gros_oeuvre",
+        "carrelage",
+        "couverture",
+        "isolation",
+        "demolition",
+        "terrassement",
+        "ravalement"
+      ]
+    }
+  ],
+  "categories": [
+    {
+      "id": "travaux",
+      "nom": "Travaux",
+      "parentId": null
+    },
+    {
+      "id": "travaux_maconnerie",
+      "nom": "Maçonnerie",
+      "parentId": "travaux"
+    },
+    {
+      "id": "travaux_menuiserie",
+      "nom": "Menuiserie",
+      "parentId": "travaux"
+    },
+    {
+      "id": "travaux_peinture",
+      "nom": "Peinture",
+      "parentId": "travaux"
+    },
+    {
+      "id": "travaux_electricite",
+      "nom": "Électricité",
+      "parentId": "travaux"
+    },
+    {
+      "id": "travaux_plomberie",
+      "nom": "Plomberie",
+      "parentId": "travaux"
+    },
+    {
+      "id": "travaux_carrelage",
+      "nom": "Carrelage",
+      "parentId": "travaux"
+    },
+    {
+      "id": "travaux_couverture",
+      "nom": "Couverture",
+      "parentId": "travaux"
+    },
+    {
+      "id": "travaux_isolation",
+      "nom": "Isolation",
+      "parentId": "travaux"
+    },
+    {
+      "id": "materiel",
+      "nom": "Matériel",
+      "parentId": null
+    },
+    {
+      "id": "materiel_outillage",
+      "nom": "Outillage",
+      "parentId": "materiel"
+    },
+    {
+      "id": "materiel_equipement",
+      "nom": "Équipement",
+      "parentId": "materiel"
+    },
+    {
+      "id": "materiel_fournitures",
+      "nom": "Fournitures",
+      "parentId": "materiel"
+    },
+    {
+      "id": "main_oeuvre",
+      "nom": "Main d'oeuvre",
+      "parentId": null
+    },
+    {
+      "id": "location",
+      "nom": "Location",
+      "parentId": null
+    },
+    {
+      "id": "sous_traitance",
+      "nom": "Sous-traitance",
+      "parentId": null
+    },
+    {
+      "id": "autre",
+      "nom": "Autre",
+      "parentId": null
+    }
+  ],
+  "devis": [
+    {
+      "id": "76af",
+      "chantierId": "samir_maison",
+      "categorieId": "main_oeuvre",
+      "montant": 36750,
+      "date": "2022-05-14",
+      "fournisseur": "Mounir",
+      "description": "Travaux de base",
+      "commentaire": "Régul. - accord de base - 175 DT x 210 m",
+      "photosUrls": [],
+      "statut": "en_attente"
+    },
+    {
+      "id": "a060",
+      "chantierId": "samir_maison",
+      "categorieId": "travaux_menuiserie",
+      "montant": 20350,
+      "date": "2022-05-14",
+      "fournisseur": "Azzedine",
+      "commentaire": "Régul.",
+      "photosUrls": [],
+      "statut": "en_attente"
+    },
+    {
+      "id": "7cac",
+      "chantierId": "samir_maison",
+      "categorieId": "autre",
+      "montant": 4985,
+      "date": "2022-05-14",
+      "fournisseur": "Maher",
+      "description": "Tvx",
+      "commentaire": "Régul.",
+      "photosUrls": [],
+      "statut": "en_attente"
+    },
+    {
+      "id": "0b25",
+      "chantierId": "samir_maison",
+      "categorieId": "main_oeuvre",
+      "montant": 5090,
+      "date": "2022-05-14",
+      "fournisseur": "Mounir",
+      "description": "TS régul. prix du m²",
+      "commentaire": "Régul. F36 - correction métrage; modif. escalier...",
+      "photosUrls": [],
+      "statut": "en_attente"
+    },
+    {
+      "id": "798b",
+      "chantierId": "samir_maison",
+      "categorieId": "main_oeuvre",
+      "montant": 23090,
+      "date": "2022-05-14",
+      "fournisseur": "Mounir",
+      "description": "TS",
+      "commentaire": "Régul. F55 - F42 - Tout les Travaux Sup. et clôture Chantier",
+      "photosUrls": [],
+      "statut": "en_attente"
+    },
+    {
+      "id": "2012",
+      "chantierId": "samir_maison",
+      "categorieId": "main_oeuvre",
+      "montant": 3775,
+      "date": "2022-05-14",
+      "fournisseur": "Mounir",
+      "description": "Majen",
+      "commentaire": "Régul. Majen - 3300 Tvx et 475 Hjar",
+      "photosUrls": [],
+      "statut": "en_attente"
+    },
+    {
+      "id": "80a5",
+      "chantierId": "samir_maison",
+      "categorieId": "autre",
+      "montant": 3345,
+      "date": "2022-05-14",
+      "fournisseur": "Jamel Basha",
+      "photosUrls": [],
+      "statut": "en_attente"
+    },
+    {
+      "id": "e7d0",
+      "chantierId": "samir_maison",
+      "categorieId": "autre",
+      "montant": 5640,
+      "date": "2022-05-14",
+      "fournisseur": "Salah Aydi",
+      "description": "Tavaux de base  (3800) + modification (1840)",
+      "commentaire": "Régul.",
+      "photosUrls": [],
+      "statut": "en_attente"
+    },
+    {
+      "id": "eb92",
+      "chantierId": "samir_maison",
+      "categorieId": "travaux_carrelage",
+      "montant": 7320,
+      "date": "2022-05-14",
+      "fournisseur": "Marbre Lotfi",
+      "description": "Marbre Lotfi",
+      "commentaire": "Regul. Marbre Lotfi",
+      "photosUrls": [],
+      "statut": "en_attente"
+    },
+    {
+      "id": "e55d",
+      "chantierId": "samir_maison",
+      "categorieId": "travaux_menuiserie",
+      "montant": 1520,
+      "date": "2022-05-15",
+      "fournisseur": "Hamdi",
+      "description": "Escalier (Hamdi)",
+      "commentaire": "Regul.",
+      "photosUrls": [],
+      "statut": "en_attente"
+    },
+    {
+      "id": "48f6",
+      "chantierId": "samir_maison",
+      "categorieId": "materiel_fournitures",
+      "montant": 3400,
+      "date": "2022-05-15",
+      "fournisseur": "Aldoun",
+      "description": "Fer Fenêtres",
+      "photosUrls": [
+        "https://drive.google.com/open?id=1Uz-VDXYcnxsOKBaMhNZo1sW1VDVu7lIu"
+      ],
+      "statut": "en_attente"
+    },
+    {
+      "id": "c887",
+      "chantierId": "samir_maison",
+      "categorieId": "materiel_fournitures",
+      "montant": 3960,
+      "date": "2022-05-15",
+      "fournisseur": "Lassad Najjar",
+      "description": "Fer Lassad - rombardes terrasses - 3 portes",
+      "commentaire": "Régul.",
+      "photosUrls": [
+        "https://drive.google.com/open?id=1xxpVBI498V70fxE8fIU30iRJ5TVjpl4X"
+      ],
+      "statut": "en_attente"
+    },
+    {
+      "id": "5d36",
+      "chantierId": "samir_maison",
+      "categorieId": "autre",
+      "montant": 4000,
+      "date": "2022-05-15",
+      "fournisseur": "Walid",
+      "description": "Suivi Walid",
+      "photosUrls": [],
+      "statut": "en_attente"
+    },
+    {
+      "id": "65df",
+      "chantierId": "samir_maison",
+      "categorieId": "travaux_carrelage",
+      "montant": 135,
+      "date": "2022-05-15",
+      "fournisseur": "Mounir",
+      "description": "Marbre contour majen par Mounir",
+      "commentaire": "Contour terrasse Majen",
+      "photosUrls": [],
+      "statut": "en_attente"
+    },
+    {
+      "id": "feb9",
+      "chantierId": "samir_maison",
+      "categorieId": "travaux_menuiserie",
+      "montant": 790,
+      "date": "2022-05-15",
+      "fournisseur": "Guellala Aluminium",
+      "description": "Coffrets Fenêtres",
+      "photosUrls": [],
+      "statut": "en_attente"
+    },
+    {
+      "id": "5dd1",
+      "chantierId": "samir_maison",
+      "categorieId": "travaux_menuiserie",
+      "montant": 1000,
+      "date": "2022-05-15",
+      "fournisseur": "Karim Mestaoui",
+      "description": "Gonisa portes et armoires",
+      "photosUrls": [],
+      "statut": "en_attente"
+    },
+    {
+      "id": "9c18",
+      "chantierId": "samir_maison",
+      "categorieId": "materiel",
+      "montant": 4045,
+      "date": "2022-05-15",
+      "fournisseur": "Achat par Wissem",
+      "description": "Plomberie Matériel",
+      "commentaire": "Reste 750DT pour mitigeurs",
+      "photosUrls": [],
+      "statut": "en_attente"
+    },
+    {
+      "id": "6018",
+      "chantierId": "samir_maison",
+      "categorieId": "travaux_carrelage",
+      "montant": 14463,
+      "date": "2022-05-15",
+      "fournisseur": "Inconnu",
+      "description": "Parterre",
+      "commentaire": "Zliz - carrelage - faïence",
+      "photosUrls": [
+        "https://drive.google.com/open?id=19x1UqgLz7Fmg38U8xjczSplA0gyKHGwp"
+      ],
+      "statut": "en_attente"
+    },
+    {
+      "id": "dd0d",
+      "chantierId": "samir_maison",
+      "categorieId": "travaux_peinture",
+      "montant": 9300,
+      "date": "2022-05-15",
+      "fournisseur": "Gaddour",
+      "commentaire": "Main d'œuvre",
+      "photosUrls": [
+        "https://drive.google.com/open?id=1uAtOhS7QUmXiBG7YUPmVDkDjXEymqJ0n"
+      ],
+      "statut": "en_attente"
+    },
+    {
+      "id": "16f1",
+      "chantierId": "samir_maison",
+      "categorieId": "autre",
+      "montant": 2800,
+      "date": "2022-05-15",
+      "fournisseur": "Estimation",
+      "commentaire": "Voir détail dans dépenses",
+      "photosUrls": [],
+      "statut": "en_attente"
+    },
+    {
+      "id": "15bb",
+      "chantierId": "samir_maison",
+      "categorieId": "materiel_equipement",
+      "montant": 10280,
+      "date": "2022-05-15",
+      "fournisseur": "Inconnu",
+      "description": "Meubles Jaafar - Clim...",
+      "commentaire": "Voir détail dans dépenses",
+      "photosUrls": [
+        "https://drive.google.com/open?id=1iyE17hJRPKdZphlThEi0w8sGymuQLxGE"
+      ],
+      "statut": "en_attente"
+    },
+    {
+      "id": "b431",
+      "chantierId": "samir_autre",
+      "categorieId": "autre",
+      "montant": 17870,
+      "date": "2022-05-15",
+      "fournisseur": "Estimation",
+      "description": "Dépenses Mariage et voyage",
+      "photosUrls": [
+        "https://drive.google.com/open?id=1DWX4bx0jNrTqEhiafy2XKO19_arFharP"
+      ],
+      "statut": "en_attente"
+    },
+    {
+      "id": "8450",
+      "chantierId": "samir_maison",
+      "categorieId": "materiel",
+      "montant": 75040,
+      "date": "2022-05-15",
+      "fournisseur": "Boussaïd - Tiwajni - Tiliouine",
+      "description": "Matériel",
+      "commentaire": "Reprise prix dépenses sur factures",
+      "photosUrls": [],
+      "statut": "en_attente"
+    },
+    {
+      "id": "48f8",
+      "chantierId": "samir_maison",
+      "categorieId": "travaux_maconnerie",
+      "montant": 16225,
+      "date": "2022-05-15",
+      "fournisseur": "Inconnu",
+      "commentaire": "Prise dépenses sur facture",
+      "photosUrls": [],
+      "statut": "en_attente"
+    },
+    {
+      "id": "a45d",
+      "chantierId": "samir_maison",
+      "categorieId": "materiel",
+      "montant": 4081,
+      "date": "2022-05-16",
+      "fournisseur": "Inconnu",
+      "photosUrls": [],
+      "statut": "en_attente"
+    },
+    {
+      "id": "319c",
+      "chantierId": "samir_maison",
+      "categorieId": "materiel",
+      "montant": 1200,
+      "date": "2022-05-18",
+      "fournisseur": "Tiwajni",
+      "description": "Matériel Tiwajni remise à zéro",
+      "photosUrls": [],
+      "statut": "en_attente"
+    },
+    {
+      "id": "f108",
+      "chantierId": "samir_maison",
+      "categorieId": "travaux_menuiserie",
+      "montant": 811.5,
+      "date": "2022-05-18",
+      "fournisseur": "Azzedine sur facture",
+      "description": "Poignets et paumelles - 400 (facture 380) + 411,5DT",
+      "commentaire": "voir F54 - 190747",
+      "photosUrls": [],
+      "statut": "en_attente"
+    },
+    {
+      "id": "9f6e",
+      "chantierId": "commun_garages",
+      "categorieId": "main_oeuvre",
+      "montant": 14120,
+      "date": "2022-05-26",
+      "fournisseur": "Mounir",
+      "photosUrls": [
+        "https://drive.google.com/open?id=196gDUX9yHqJrqMdT8VxBCF9XdqOY6Lqo"
+      ],
+      "statut": "en_attente"
+    },
+    {
+      "id": "9d2e",
+      "chantierId": "commun_garages",
+      "categorieId": "main_oeuvre",
+      "montant": 7961,
+      "date": "2022-05-27",
+      "fournisseur": "Mounir",
+      "description": "Travaux Supplémentaires",
+      "commentaire": "Ecart de 800 DT à vérifier",
+      "photosUrls": [
+        "https://drive.google.com/open?id=1U5c4FyivMXvYqf2RIhma_i6r4S4E-gIh"
+      ],
+      "statut": "en_attente"
+    },
+    {
+      "id": "3e3e",
+      "chantierId": "commun_autre",
+      "categorieId": "travaux_menuiserie",
+      "montant": 2720,
+      "date": "2022-05-27",
+      "fournisseur": "Wissem Sfaxi et Srandi",
+      "description": "Fenêtres salon et cuisine; Majen",
+      "photosUrls": [
+        "https://drive.google.com/open?id=1aoyLHrLskWXnGEQQX1AgIDebBkfWrm_1"
+      ],
+      "statut": "en_attente"
+    },
+    {
+      "id": "5d60",
+      "chantierId": "commun_garages",
+      "categorieId": "travaux_menuiserie",
+      "montant": 3520,
+      "date": "2022-05-27",
+      "fournisseur": "Pripri",
+      "description": "Garages & Sanitaire, Cuisine Parents",
+      "photosUrls": [
+        "https://drive.google.com/open?id=1b38pKqBuwGgCvDRseFTUBKGHxaO4HEzt"
+      ],
+      "statut": "en_attente"
+    },
+    {
+      "id": "059c",
+      "chantierId": "commun_garages",
+      "categorieId": "autre",
+      "montant": 1830,
+      "date": "2022-05-27",
+      "fournisseur": "Monaem",
+      "description": "Electricité et Plomberie",
+      "commentaire": "Garage, toilette, douche et SdB Parents, Baby Mabrouk",
+      "photosUrls": [],
+      "statut": "en_attente"
+    },
+    {
+      "id": "1694",
+      "chantierId": "commun_garages",
+      "categorieId": "autre",
+      "montant": 800,
+      "date": "2022-05-27",
+      "fournisseur": "Monaem",
+      "description": "Electricité et Plomberie",
+      "commentaire": "Garage, toilette, douche et SdB Parents, Baby Mabrouk",
+      "photosUrls": [],
+      "statut": "en_attente"
+    },
+    {
+      "id": "9de1",
+      "chantierId": "commun_autre",
+      "categorieId": "travaux_carrelage",
+      "montant": 2130,
+      "date": "2022-05-27",
+      "fournisseur": "Lotfi",
+      "description": "Cuisine",
+      "photosUrls": [],
+      "statut": "en_attente"
+    },
+    {
+      "id": "bd9a",
+      "chantierId": "commun_garages",
+      "categorieId": "materiel_fournitures",
+      "montant": 5760,
+      "date": "2022-05-27",
+      "fournisseur": "Lassad",
+      "commentaire": "Garage, veranda main courante, portes parents",
+      "photosUrls": [],
+      "statut": "en_attente"
+    },
+    {
+      "id": "1374",
+      "chantierId": "commun_garages",
+      "categorieId": "travaux_peinture",
+      "montant": 6350,
+      "date": "2022-05-27",
+      "fournisseur": "Kaïs",
+      "description": "Kaïs",
+      "commentaire": "Rash Dar Parents, Salon, Cuisine, Sor, Garages?",
+      "photosUrls": [],
+      "statut": "en_attente"
+    },
+    {
+      "id": "0f97",
+      "chantierId": "commun_garages",
+      "categorieId": "materiel",
+      "montant": 37963,
+      "date": "2022-05-27",
+      "fournisseur": "Inconnu",
+      "photosUrls": [
+        "https://drive.google.com/open?id=1vVxLGxxqO9vsXD57httb6225Y0oiqA01"
+      ],
+      "statut": "en_attente"
+    },
+    {
+      "id": "523b",
+      "chantierId": "commun_autre",
+      "categorieId": "main_oeuvre",
+      "montant": 2737,
+      "date": "2022-05-27",
+      "fournisseur": "Dépenses via Mounir",
+      "photosUrls": [
+        "https://drive.google.com/open?id=1cW-w7epn0uC-uCF-Ul1IQZBLurfJBpoA"
+      ],
+      "statut": "en_attente"
+    },
+    {
+      "id": "80ff",
+      "chantierId": "commun_autre",
+      "categorieId": "travaux_menuiserie",
+      "montant": 250,
+      "date": "2022-06-03",
+      "fournisseur": "Karim ",
+      "commentaire": "A clarifier avec Wissem - gornisa pourquoi ?",
+      "photosUrls": [],
+      "statut": "en_attente"
+    },
+    {
+      "id": "6937",
+      "chantierId": "commun_autre",
+      "categorieId": "materiel",
+      "montant": 474,
+      "date": "2022-06-03",
+      "fournisseur": "Inconnu",
+      "commentaire": "Pour Equilibrage des comptes",
+      "photosUrls": [],
+      "statut": "en_attente"
+    },
+    {
+      "id": "cb5e",
+      "chantierId": "commun_autre",
+      "categorieId": "materiel_fournitures",
+      "montant": 1400,
+      "date": "2022-06-03",
+      "fournisseur": "Inconnu",
+      "commentaire": "Régul. voir facture dépenses",
+      "photosUrls": [],
+      "statut": "en_attente"
+    },
+    {
+      "id": "c5cd",
+      "chantierId": "commun_autre",
+      "categorieId": "materiel",
+      "montant": 73,
+      "date": "2022-06-05",
+      "fournisseur": "Inconnu",
+      "commentaire": "Régul. Matériel pour RaZ",
+      "photosUrls": [],
+      "statut": "en_attente"
+    },
+    {
+      "id": "18fa",
+      "chantierId": "wissem_housh",
+      "categorieId": "materiel",
+      "montant": 18479,
+      "date": "2022-06-05",
+      "fournisseur": "Inconnu",
+      "commentaire": "Régul. voir devis dans dépenses",
+      "photosUrls": [],
+      "statut": "en_attente"
+    },
+    {
+      "id": "969f",
+      "chantierId": "wissem_housh",
+      "categorieId": "travaux_peinture",
+      "montant": 3412,
+      "date": "2022-06-05",
+      "fournisseur": "Inconnu",
+      "commentaire": "Montant = 0 juste pour mise en forme - à détailler avec une autre entrée",
+      "photosUrls": [],
+      "statut": "en_attente"
+    },
+    {
+      "id": "91f8",
+      "chantierId": "commun_autre",
+      "categorieId": "travaux_carrelage",
+      "montant": 550,
+      "date": "2022-06-08",
+      "fournisseur": "Mjahed guallala ",
+      "description": "Niche salle de bain et souflet douche parent ",
+      "photosUrls": [
+        "https://drive.google.com/open?id=1S37e9IxPN7rtZsEtVmgPhRIXukrCkhBz"
+      ],
+      "statut": "en_attente"
+    },
+    {
+      "id": "d04d",
+      "chantierId": "wissem_housh",
+      "categorieId": "main_oeuvre",
+      "montant": 11798,
+      "date": "2022-06-08",
+      "fournisseur": "Mounir main doeuvre ",
+      "description": "Main doeuvre mounir",
+      "commentaire": "6200d chambre 25m2+ 5598d faience +par terre+ zliz terrasse et doukana+ réfection escalier",
+      "photosUrls": [
+        "https://drive.google.com/open?id=1n4kmDY9jkeQ3_osZ00djYJAF3aammECf",
+        "https://drive.google.com/open?id=1CtLqiXcKTtgwpTXZo9chWFMw-pm07Cl2"
+      ],
+      "statut": "en_attente"
+    },
+    {
+      "id": "d952",
+      "chantierId": "samir_maison",
+      "categorieId": "travaux_menuiserie",
+      "montant": 300,
+      "date": "2022-06-19",
+      "fournisseur": "Pripri",
+      "description": "Placard sous escalier",
+      "photosUrls": [],
+      "statut": "en_attente"
+    },
+    {
+      "id": "ca42",
+      "chantierId": "samir_maison",
+      "categorieId": "travaux_peinture",
+      "montant": 300,
+      "date": "2022-06-19",
+      "fournisseur": "Gaddour",
+      "description": "Sor (retrait puis rajout)",
+      "photosUrls": [],
+      "statut": "en_attente"
+    },
+    {
+      "id": "3b12",
+      "chantierId": "samir_maison",
+      "categorieId": "travaux_menuiserie",
+      "montant": 600,
+      "date": "2022-06-22",
+      "fournisseur": "Azzedine",
+      "description": "Ajout augmentation matériaux - cuisine",
+      "photosUrls": [],
+      "statut": "en_attente"
+    },
+    {
+      "id": "061e",
+      "chantierId": "wissem_housh",
+      "categorieId": "travaux_carrelage",
+      "montant": 2446,
+      "date": "2022-07-11",
+      "fournisseur": "Inconnu",
+      "commentaire": "Mise a jour pour affichage a confirmer ",
+      "photosUrls": [],
+      "statut": "en_attente"
+    },
+    {
+      "id": "c711",
+      "chantierId": "wissem_housh",
+      "categorieId": "travaux_menuiserie",
+      "montant": 1030,
+      "date": "2022-07-11",
+      "fournisseur": "Inconnu",
+      "commentaire": "Mise a jour par Samir pour affichage a confirmer",
+      "photosUrls": [],
+      "statut": "en_attente"
+    },
+    {
+      "id": "babf",
+      "chantierId": "samir_maison",
+      "categorieId": "travaux_peinture",
+      "montant": 200,
+      "date": "2022-07-13",
+      "fournisseur": "Gaddour",
+      "description": "Travaux sup. Modif. Couleur portes gris",
+      "photosUrls": [],
+      "statut": "en_attente"
+    },
+    {
+      "id": "e905",
+      "chantierId": "samir_maison",
+      "categorieId": "travaux_menuiserie",
+      "montant": 250,
+      "date": "2022-08-19",
+      "fournisseur": "Hamdi",
+      "description": "Moustiquaires SdB RDC",
+      "photosUrls": [],
+      "statut": "en_attente"
+    },
+    {
+      "id": "4d09",
+      "chantierId": "samir_maison",
+      "categorieId": "materiel",
+      "montant": 170,
+      "date": "2022-08-19",
+      "fournisseur": "Tiwajni",
+      "commentaire": "Clôture facture tiwajni (régul.)",
+      "photosUrls": [],
+      "statut": "en_attente"
+    },
+    {
+      "id": "6d42",
+      "chantierId": "commun_autre",
+      "categorieId": "travaux_carrelage",
+      "montant": 600,
+      "date": "2022-08-19",
+      "fournisseur": "Inconnu",
+      "commentaire": "Régul. Dépenses",
+      "photosUrls": [],
+      "statut": "en_attente"
+    },
+    {
+      "id": "9ef2",
+      "chantierId": "samir_maison",
+      "categorieId": "materiel_fournitures",
+      "montant": 6793,
+      "date": "2022-08-19",
+      "fournisseur": "Ben othman",
+      "photosUrls": [
+        "https://drive.google.com/open?id=17Td1ItbbwDLcqAPtw24-6tOcerv_f897"
+      ],
+      "statut": "en_attente"
+    },
+    {
+      "id": "dcaa",
+      "chantierId": "samir_maison",
+      "categorieId": "materiel_fournitures",
+      "montant": 460,
+      "date": "2022-09-02",
+      "fournisseur": "Inconnu",
+      "description": "Matériel peinture cuisine",
+      "photosUrls": [],
+      "statut": "en_attente"
+    },
+    {
+      "id": "02c7",
+      "chantierId": "samir_maison",
+      "categorieId": "travaux_carrelage",
+      "montant": 1050,
+      "date": "2022-09-02",
+      "fournisseur": "Faouzi tiliouine",
+      "description": "Cuisine",
+      "photosUrls": [],
+      "statut": "en_attente"
+    },
+    {
+      "id": "6a63",
+      "chantierId": "wissem_housh",
+      "categorieId": "travaux_menuiserie",
+      "montant": 3600,
+      "date": "2022-09-02",
+      "fournisseur": "Nabil Ben Attia",
+      "description": "Maro Salon Housh",
+      "photosUrls": [],
+      "statut": "en_attente"
+    },
+    {
+      "id": "6e87",
+      "chantierId": "commun_autre",
+      "categorieId": "travaux_carrelage",
+      "montant": 950,
+      "date": "2022-09-02",
+      "fournisseur": "Faouzi",
+      "description": "Douche Parents",
+      "photosUrls": [],
+      "statut": "en_attente"
+    },
+    {
+      "id": "3f7c",
+      "chantierId": "wissem_housh",
+      "categorieId": "materiel_fournitures",
+      "montant": 1600,
+      "date": "2022-09-02",
+      "fournisseur": "Haddad",
+      "commentaire": "Hdid Escalier",
+      "photosUrls": [],
+      "statut": "en_attente"
+    },
+    {
+      "id": "28ce",
+      "chantierId": "samir_maison",
+      "categorieId": "materiel",
+      "montant": 560,
+      "date": "2022-09-04",
+      "fournisseur": "Bricola (mitigeur) sac (évier)",
+      "description": "Évier (249) et mitigeur (309)",
+      "commentaire": "Voir facture chez papi",
+      "photosUrls": [],
+      "statut": "en_attente"
+    },
+    {
+      "id": "2c0d",
+      "chantierId": "anis_samiha",
+      "categorieId": "main_oeuvre",
+      "montant": 760,
+      "date": "2022-09-14",
+      "fournisseur": "Faouzi Ben Cheikh",
+      "description": "Travaux SdB par Faouzi",
+      "photosUrls": [
+        "https://drive.google.com/open?id=1ytmsl9KEIkVQezy9hLCIVmmI-50qhiLb"
+      ],
+      "statut": "en_attente"
+    },
+    {
+      "id": "ex120",
+      "chantierId": "samir_maison",
+      "categorieId": "travaux_menuiserie",
+      "montant": 6661,
+      "date": "2022-05-15",
+      "fournisseur": "Wissem Sfaxi",
+      "description": "Aluminium Fenetres",
+      "commentaire": "Regul.",
+      "photosUrls": [
+        "https://drive.google.com/open?id=1HvThEmN8Q2cjs9oYD5-ZnhfjIqnojxLT"
+      ],
+      "statut": "en_attente"
+    }
+  ],
+  "transferts": [
+    {
+      "id": "8937",
+      "date": "2022-05-06",
+      "source": "Samir",
+      "destination": "Wissem",
+      "montant": 3240,
+      "devise": "DNT",
+      "montantConverti": 3240,
+      "commentaire": "Suite transfert 1000€ Western Union à Saif"
+    },
+    {
+      "id": "ecb8",
+      "date": "2022-05-06",
+      "source": "Samir",
+      "destination": "Wissem",
+      "montant": 1940,
+      "devise": "DNT",
+      "montantConverti": 1940,
+      "commentaire": "Suite transfert 600€ Western Union à Hakim"
+    },
+    {
+      "id": "942a",
+      "date": "2022-05-06",
+      "source": "Samir",
+      "destination": "Wissem",
+      "montant": 5000,
+      "devise": "EUR",
+      "tauxChange": 3.31,
+      "montantConverti": 16550,
+      "commentaire": "Taux de change 3,31 - donné le 20/04/2022"
+    },
+    {
+      "id": "29e5",
+      "date": "2022-05-06",
+      "source": "Samir",
+      "destination": "Wissem",
+      "montant": 3700,
+      "devise": "EUR",
+      "tauxChange": 3.25,
+      "montantConverti": 12025,
+      "commentaire": "Échange de 2000€ pour 3,25 "
+    },
+    {
+      "id": "f5e1",
+      "date": "2022-05-13",
+      "source": "Wissem",
+      "destination": "Walid",
+      "montant": 800,
+      "devise": "DNT",
+      "montantConverti": 800,
+      "commentaire": "600 d Mohamed Ben Attia + 200 d pour Karim gourniza"
+    },
+    {
+      "id": "88b9",
+      "date": "2022-05-19",
+      "source": "Wissem",
+      "destination": "Walid",
+      "montant": 800,
+      "devise": "DNT",
+      "montantConverti": 800,
+      "commentaire": "200  Karim et 600 Mohamed "
+    },
+    {
+      "id": "2f1b",
+      "date": "2022-05-23",
+      "source": "Wissem",
+      "destination": "Walid",
+      "montant": 9750,
+      "devise": "DNT",
+      "montantConverti": 9750,
+      "commentaire": "À suite du virement fait à Sami le 20 05 2022"
+    },
+    {
+      "id": "d479",
+      "date": "2022-06-03",
+      "source": "Wissem",
+      "destination": "Walid",
+      "montant": 4000,
+      "devise": "EUR",
+      "tauxChange": 3.22,
+      "montantConverti": 12880,
+      "commentaire": "Régul. Taux 3,22 "
+    },
+    {
+      "id": "c12d",
+      "date": "2022-06-03",
+      "source": "Wissem",
+      "destination": "Walid",
+      "montant": 4000,
+      "devise": "DNT",
+      "montantConverti": 4000,
+      "commentaire": "Régul. Laissé à Walid par Wissem en novembre 2022"
+    },
+    {
+      "id": "327d",
+      "date": "2022-06-03",
+      "source": "Wissem",
+      "destination": "Walid",
+      "montant": 6500,
+      "devise": "DNT",
+      "montantConverti": 6500,
+      "commentaire": "Régul. laissé à Walid le 26/02/2022 (emprunté à Samir et Remboursé)"
+    },
+    {
+      "id": "0f3f",
+      "date": "2022-06-03",
+      "source": "Samir",
+      "destination": "Walid",
+      "montant": 168424,
+      "devise": "DNT",
+      "montantConverti": 168424,
+      "commentaire": "Régul. Transmis à Walid budget Samir du 20/04/19 au 10/04/22 hors RaZ. des écarts"
+    },
+    {
+      "id": "a797",
+      "date": "2022-06-04",
+      "source": "Wissem",
+      "destination": "Walid",
+      "montant": 3200,
+      "devise": "DNT",
+      "montantConverti": 3200,
+      "commentaire": "Change chez goubbaa de paris"
+    },
+    {
+      "id": "475e",
+      "date": "2022-06-04",
+      "source": "Wissem",
+      "destination": "Walid",
+      "montant": 2000,
+      "devise": "DNT",
+      "montantConverti": 2000,
+      "commentaire": "Donné suite récup 2000 des 1000€ envoyé à serbia à Abd Rahmane"
+    },
+    {
+      "id": "8144",
+      "date": "2022-06-04",
+      "source": "Wissem",
+      "destination": "Walid",
+      "montant": 1700,
+      "devise": "DNT",
+      "montantConverti": 1700,
+      "commentaire": "Remboursement du prêt d'argent donné à Mounir par Walid 1700 DT"
+    },
+    {
+      "id": "f380",
+      "date": "2022-06-08",
+      "source": "Wissem",
+      "destination": "Walid",
+      "montant": 1200,
+      "devise": "DNT",
+      "montantConverti": 1200,
+      "commentaire": "Depose par Nabil Ben Attia à la mazer3a le 06062022"
+    },
+    {
+      "id": "85dc",
+      "date": "2022-06-09",
+      "source": "Wissem",
+      "destination": "Walid",
+      "montant": 3000,
+      "devise": "EUR",
+      "tauxChange": 3.29,
+      "montantConverti": 9870,
+      "commentaire": "Récupéré le 08062022 chez iheb Ben youssef et changés avec taux 3,29 ce qui donne 9870 Dinars"
+    },
+    {
+      "id": "06f9",
+      "date": "2022-06-09",
+      "source": "Wissem",
+      "destination": "Walid",
+      "montant": 490,
+      "devise": "EUR",
+      "tauxChange": 3.29,
+      "montantConverti": 1612.1,
+      "commentaire": "Recuperé chez Amine au café par Walid le 08062022 puis changé avec le taux 3,29 et cela donne 1612,10 Dinars"
+    },
+    {
+      "id": "2277",
+      "date": "2022-06-19",
+      "source": "Samir",
+      "destination": "Walid",
+      "montant": 3000,
+      "devise": "EUR",
+      "tauxChange": 3.23,
+      "montantConverti": 9690,
+      "commentaire": "Taux 3,23 via Oussama Zc "
+    },
+    {
+      "id": "a96a",
+      "date": "2022-06-26",
+      "source": "Wissem",
+      "destination": "Walid",
+      "montant": 250,
+      "devise": "DNT",
+      "montantConverti": 250,
+      "commentaire": "Thermomètre à mongi"
+    },
+    {
+      "id": "0247",
+      "date": "2022-07-03",
+      "source": "Wissem",
+      "destination": "Walid",
+      "montant": 12920,
+      "devise": "DNT",
+      "montantConverti": 12920,
+      "commentaire": "4000€ donnés par Iheb bn youssef à Walid vers le 30062022"
+    },
+    {
+      "id": "e80f",
+      "date": "2022-07-04",
+      "source": "Samir",
+      "destination": "Ommi",
+      "montant": 4300,
+      "devise": "EUR",
+      "tauxChange": 3.255,
+      "montantConverti": 13996.5,
+      "commentaire": "Donné 4650€ (350€ Ommi - 500€ EtudesBTP sous-traitants)"
+    },
+    {
+      "id": "a7f4",
+      "date": "2022-07-04",
+      "source": "Ommi",
+      "destination": "Samir",
+      "montant": 1890,
+      "devise": "DNT",
+      "montantConverti": 1890,
+      "commentaire": "Paiement direct bague, four et plaque"
+    },
+    {
+      "id": "1b59",
+      "date": "2022-08-19",
+      "source": "Ommi",
+      "destination": "Samir",
+      "montant": 2000,
+      "devise": "DNT",
+      "montantConverti": 2000,
+      "commentaire": "Reste Budget 13997Dt"
+    },
+    {
+      "id": "d9c2",
+      "date": "2022-09-02",
+      "source": "Samir",
+      "destination": "Babay",
+      "montant": 700,
+      "devise": "EUR",
+      "montantConverti": 2275,
+      "commentaire": "Finition Cuisine"
+    },
+    {
+      "id": "acde",
+      "date": "2022-09-02",
+      "source": "Walid",
+      "destination": "Wissem",
+      "montant": 5849,
+      "devise": "DNT",
+      "montantConverti": 5849,
+      "commentaire": "Retour Budget à Wissem"
+    },
+    {
+      "id": "794e",
+      "date": "2022-09-16",
+      "source": "Anis",
+      "destination": "Walid",
+      "montant": 1000,
+      "devise": "DNT",
+      "montantConverti": 1000,
+      "commentaire": "Budget donné par Wissem Aout 2022"
+    },
+    {
+      "id": "cc87",
+      "date": "2022-09-16",
+      "source": "Anis",
+      "destination": "Walid",
+      "montant": 5500,
+      "devise": "EUR",
+      "montantConverti": 17875,
+      "commentaire": "Budget donné par Wissem à Walid Aout 2022 // 22/11/13 - Montant donné par Wissem 5500 (Confirmation Walid)"
+    },
+    {
+      "id": "2267",
+      "date": "2022-09-16",
+      "source": "Walid",
+      "destination": "Babay",
+      "montant": 500,
+      "devise": "EUR",
+      "montantConverti": 1625,
+      "commentaire": "Budget pour travaux SdB"
+    },
+    {
+      "id": "4794",
+      "date": "2022-09-16",
+      "source": "Walid",
+      "destination": "Babay",
+      "montant": 800,
+      "devise": "EUR",
+      "montantConverti": 2600,
+      "commentaire": "Complément Budget pour SdB & Samir"
+    },
+    {
+      "id": "fc40",
+      "date": "2022-11-13",
+      "source": "Walid",
+      "destination": "Wissem",
+      "montant": 5800,
+      "devise": "DNT",
+      "montantConverti": 5800,
+      "commentaire": "Mise à jour manuelle suite point avec Walid - Retour reste Budget pour Wissem - Mois Août 2022"
+    },
+    {
+      "id": "ex245",
+      "date": "2022-06-30",
+      "source": "Wissem",
+      "destination": "Walid",
+      "montant": 2500,
+      "devise": "EUR",
+      "tauxChange": 3.26,
+      "montantConverti": 8150,
+      "commentaire": "Transmis par Jamil boutriga 2500EUR x 3,26"
+    }
+  ],
+  "config": {
+    "id": "1",
+    "deviseAffichage": "DNT",
+    "tauxChange": {
+      "EUR": 3.35,
+      "USD": 3.1,
+      "DNT": 1
+    },
+    "lastUpdated": "2025-01-07"
+  },
+  "users": [
+    {
+      "id": "admin1",
+      "email": "sinlatourelle@gmail.com",
+      "password": "admin123",
+      "nom": "Tourelle",
+      "prenom": "Admin",
+      "role": "admin",
+      "chantierIds": [],
+      "actif": true,
+      "createdAt": "2025-01-01"
+    }
+  ],
+  "employes": [
+    {
+      "id": "emp1",
+      "nom": "Ben Ali",
+      "prenom": "Mohamed",
+      "telephone": "+216 98 765 432",
+      "poste": "Macon",
+      "typeContrat": "journalier",
+      "tauxJournalier": 80,
+      "tauxHeuresSupp": 15,
+      "chantierIds": [
+        "1",
+        "2"
+      ],
+      "statut": "actif",
+      "dateEmbauche": "2024-06-15",
+      "createdAt": "2024-06-15"
+    },
+    {
+      "id": "emp2",
+      "nom": "Trabelsi",
+      "prenom": "Ahmed",
+      "telephone": "+216 55 123 456",
+      "poste": "Chef equipe",
+      "typeContrat": "cdi",
+      "tauxJournalier": 120,
+      "tauxHeuresSupp": 20,
+      "chantierIds": [
+        "1"
+      ],
+      "statut": "actif",
+      "dateEmbauche": "2023-01-10",
+      "createdAt": "2023-01-10"
+    },
+    {
+      "id": "emp3",
+      "nom": "Hammami",
+      "prenom": "Youssef",
+      "poste": "Manoeuvre",
+      "typeContrat": "journalier",
+      "tauxJournalier": 50,
+      "chantierIds": [
+        "1",
+        "2"
+      ],
+      "statut": "actif",
+      "dateEmbauche": "2024-09-01",
+      "createdAt": "2024-09-01"
+    }
+  ],
+  "pointages": [],
+  "paiements-employes": [],
+  "materiels": [],
+  "utilisations-materiel": [],
+  "taches": [],
+  "productions": [],
+  "lots-travaux": [],
+  "facturations": [],
+  "pv-avancements": [],
+  "paiements-client": [],
+  "photos-chantier": [],
+  "etats-avancement": []
+}
