@@ -29,11 +29,28 @@ export function generateToken(userId: string, expiresInMinutes: number = 60 * 24
   return btoa(JSON.stringify(payload));
 }
 
-// Décoder et valider un token
+// Décoder et valider un token (supporte JWT et tokens simples)
 export function decodeToken(token: string): { userId: string; exp: number; iat: number } | null {
   try {
-    const payload = JSON.parse(atob(token));
-    if (payload.exp && payload.exp > Date.now()) {
+    let payload;
+
+    // Check if it's a JWT (has 3 parts separated by dots)
+    if (token.includes('.')) {
+      const parts = token.split('.');
+      if (parts.length === 3) {
+        // Decode the payload part (second part) of JWT
+        payload = JSON.parse(atob(parts[1]));
+      } else {
+        return null;
+      }
+    } else {
+      // Simple base64 token
+      payload = JSON.parse(atob(token));
+    }
+
+    // JWT exp is in seconds, convert to milliseconds for comparison
+    const expMs = payload.exp > 1e12 ? payload.exp : payload.exp * 1000;
+    if (expMs && expMs > Date.now()) {
       return payload;
     }
     return null; // Token expiré
