@@ -234,7 +234,7 @@ async function seed() {
       console.log(`💰 Migrating ${db.depenses.length} depenses...`);
       for (const dep of db.depenses) {
         // Remove fields not in Prisma schema
-        const { payeur, beneficiaire, ...depData } = dep;
+        const { payeur, beneficiaire, photosUrls, validated, ...depData } = dep;
         if (depData.date) depData.date = parseDate(depData.date);
         if (depData.createdAt) depData.createdAt = parseDate(depData.createdAt);
         await prisma.depense.upsert({
@@ -249,12 +249,14 @@ async function seed() {
     if (db.devis?.length) {
       console.log(`📋 Migrating ${db.devis.length} devis...`);
       for (const d of db.devis) {
-        const devisData = { ...d };
+        // Remove fields not in Prisma schema
+        const { categorieId, commentaire, photosUrls, dateCreation, ...devisData } = d;
         if (devisData.date) devisData.date = parseDate(devisData.date);
-        if (devisData.dateCreation) devisData.dateCreation = parseDate(devisData.dateCreation);
         if (devisData.dateValidite) devisData.dateValidite = parseDate(devisData.dateValidite);
         if (devisData.createdAt) devisData.createdAt = parseDate(devisData.createdAt);
         if (devisData.updatedAt) devisData.updatedAt = parseDate(devisData.updatedAt);
+        // Ensure required fields have defaults
+        if (!devisData.description) devisData.description = '';
         await prisma.devis.upsert({
           where: { id: d.id },
           update: devisData,
