@@ -35,7 +35,7 @@ export const ROLE_PERMISSIONS: Record<UserRole, RolePermissions> = {
 
   entrepreneur: {
     // Chantiers
-    canViewAllChantiers: true,
+    canViewAllChantiers: false,    // Seulement ses chantiers assignés
     canCreateChantier: true,
     canEditChantier: true,
     canDeleteChantier: true,
