@@ -8,7 +8,7 @@ import { useToast } from '../contexts/ToastContext';
 import Loading from '../components/Loading';
 import ErrorMessage from '../components/ErrorMessage';
 import ChantierActorsSection from '../components/ChantierActorsSection';
-import { ArrowLeft, Edit, Trash2, PlusCircle, Loader2, AlertTriangle, FileDown, Users, ListTodo, Package, Receipt, ClipboardCheck, Banknote, TrendingUp, Camera, Plus, Image as ImageIcon, X, Upload, ZoomIn } from 'lucide-react';
+import { ArrowLeft, Edit, Trash2, PlusCircle, Loader2, AlertTriangle, FileDown, Users, ListTodo, Package, Receipt, ClipboardCheck, Banknote, TrendingUp, Camera, Plus, Image as ImageIcon, Upload, ZoomIn } from 'lucide-react';
 import { exportChantierPdf } from '../utils/exportPdf';
 import ImageLightbox from '../components/ImageLightbox';
 
