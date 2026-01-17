@@ -447,13 +447,26 @@ export default function ChantierDetail() {
                 </div>
               </div>
               {photos.find(p => p.type === 'presentation') && (
-                <button
-                  onClick={(e) => { e.stopPropagation(); handleDeletePhoto(photos.find(p => p.type === 'presentation')!); }}
-                  className="absolute top-2 right-2 p-1.5 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity z-10"
-                  title="Supprimer"
-                >
-                  <X className="w-4 h-4" />
-                </button>
+                <div className="absolute top-2 right-2 flex gap-1 z-10">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setPhotoType('presentation');
+                      setShowPhotoModal(true);
+                    }}
+                    className="p-1.5 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-colors shadow"
+                    title="Modifier"
+                  >
+                    <Edit className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={(e) => { e.stopPropagation(); handleDeletePhoto(photos.find(p => p.type === 'presentation')!); }}
+                    className="p-1.5 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors shadow"
+                    title="Supprimer"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
               )}
               {photos.find(p => p.type === 'presentation')?.commentaire && (
                 <p className="mt-2 text-sm text-gray-600 italic">
@@ -521,13 +534,15 @@ export default function ChantierDetail() {
                         <ZoomIn className="w-6 h-6 text-white opacity-0 group-hover:opacity-80 transition-opacity drop-shadow-lg" />
                       </div>
                     </div>
-                    <button
-                      onClick={(e) => { e.stopPropagation(); handleDeletePhoto(photo); }}
-                      className="absolute top-1 right-1 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity z-10"
-                      title="Supprimer"
-                    >
-                      <X className="w-3 h-3" />
-                    </button>
+                    <div className="absolute top-1 right-1 flex gap-1 z-10">
+                      <button
+                        onClick={(e) => { e.stopPropagation(); handleDeletePhoto(photo); }}
+                        className="p-1 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors shadow"
+                        title="Supprimer"
+                      >
+                        <Trash2 className="w-3 h-3" />
+                      </button>
+                    </div>
                     <div className="mt-1">
                       {photo.phase && (
                         <p className="text-xs font-medium text-gray-700 truncate">{photo.phase}</p>
