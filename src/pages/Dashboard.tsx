@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Wallet, FileText, ArrowRightLeft, TrendingUp, TrendingDown, Loader2, Plus,
-  Building2, PlusCircle, LayoutGrid, List, FileDown, BarChart2, Home, RotateCcw
+  Building2, PlusCircle, LayoutGrid, List, FileDown, BarChart2, Home, RotateCcw, Filter
 } from 'lucide-react';
 import {
   getChantiers, getDepenses, getDevis, getTransferts,
@@ -21,6 +21,7 @@ import FilterBar, { type FilterState } from '../components/FilterBar';
 import DataTable, { renderMontant, renderTypeBadge, renderPhotoLinks } from '../components/DataTable';
 import ChantierCard from '../components/ChantierCard';
 import ChantierListItem from '../components/ChantierListItem';
+import ChantierFilterPanel from '../components/ChantierFilterPanel';
 import { exportAllChantiersPdf } from '../utils/exportPdf';
 
 type ViewMode = 'overview' | 'analytics';
@@ -49,6 +50,10 @@ export default function Dashboard() {
   const [categories, setCategories] = useState<Categorie[]>([]);
   const [viewMode, setViewMode] = useState<ViewMode>('overview');
   const [chantierViewMode, setChantierViewMode] = useState<ChantierViewMode>('grid');
+  const [chantierFilter, setChantierFilter] = useState<{ selectedIds: string[]; orderedIds: string[] }>({
+    selectedIds: [],
+    orderedIds: []
+  });
 
   const [filters, setFilters] = useState<FilterState>({
     chantierIds: [],
@@ -147,6 +152,11 @@ export default function Dashboard() {
     loadData();
   }, [loadData]);
 
+  // Handler for chantier filter panel
+  const handleChantierFilterApply = useCallback((selectedIds: string[], orderedIds: string[]) => {
+    setChantierFilter({ selectedIds, orderedIds });
+  }, []);
+
   // Filter chantiers based on user permissions
   const accessibleChantiers = useMemo(() => {
     if (!user) return [];
@@ -157,6 +167,22 @@ export default function Dashboard() {
     // Other roles only see their assigned chantiers
     return chantiers.filter(c => canAccessChantier(c.id));
   }, [chantiers, user, hasPermission, canAccessChantier]);
+
+  // Apply filter and ordering to accessible chantiers
+  const displayedChantiers = useMemo(() => {
+    if (chantierFilter.selectedIds.length === 0) {
+      return accessibleChantiers;
+    }
+    // Filter by selected IDs and order by orderedIds
+    const selectedSet = new Set(chantierFilter.selectedIds);
+    const filtered = accessibleChantiers.filter(c => selectedSet.has(c.id));
+    // Sort by order in orderedIds
+    return filtered.sort((a, b) => {
+      const indexA = chantierFilter.orderedIds.indexOf(a.id);
+      const indexB = chantierFilter.orderedIds.indexOf(b.id);
+      return indexA - indexB;
+    });
+  }, [accessibleChantiers, chantierFilter]);
 
   // Filter depenses to only include accessible chantiers
   const accessibleDepenses = useMemo(() => {
@@ -562,33 +588,48 @@ export default function Dashboard() {
 
           {/* Chantiers list */}
           <div className="flex items-center justify-between mb-2">
-            <h2 className="text-lg font-bold text-gray-800">Chantiers ({accessibleChantiers.length})</h2>
-            <div className="flex bg-gray-100 rounded-lg p-1">
-              <button
-                onClick={() => setChantierViewMode('grid')}
-                className={`p-2 rounded-md transition-colors ${
-                  chantierViewMode === 'grid' ? 'bg-white shadow text-blue-600' : 'text-gray-500 hover:text-gray-700'
-                }`}
-                title="Vue grille"
-              >
-                <LayoutGrid className="w-4 h-4" />
-              </button>
-              <button
-                onClick={() => setChantierViewMode('list')}
-                className={`p-2 rounded-md transition-colors ${
-                  chantierViewMode === 'list' ? 'bg-white shadow text-blue-600' : 'text-gray-500 hover:text-gray-700'
-                }`}
-                title="Vue liste"
-              >
-                <List className="w-4 h-4" />
-              </button>
+            <h2 className="text-lg font-bold text-gray-800">
+              Chantiers ({displayedChantiers.length}
+              {displayedChantiers.length < accessibleChantiers.length && (
+                <span className="text-gray-400 font-normal">/{accessibleChantiers.length}</span>
+              )}
+              )
+            </h2>
+            <div className="flex items-center gap-2">
+              {/* Filtre et réorganisation */}
+              <ChantierFilterPanel
+                chantiers={accessibleChantiers}
+                onApply={handleChantierFilterApply}
+                storageKey="dashboard"
+              />
+              {/* Vue grille/liste */}
+              <div className="flex bg-gray-100 rounded-lg p-1">
+                <button
+                  onClick={() => setChantierViewMode('grid')}
+                  className={`p-2 rounded-md transition-colors ${
+                    chantierViewMode === 'grid' ? 'bg-white shadow text-blue-600' : 'text-gray-500 hover:text-gray-700'
+                  }`}
+                  title="Vue grille"
+                >
+                  <LayoutGrid className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={() => setChantierViewMode('list')}
+                  className={`p-2 rounded-md transition-colors ${
+                    chantierViewMode === 'list' ? 'bg-white shadow text-blue-600' : 'text-gray-500 hover:text-gray-700'
+                  }`}
+                  title="Vue liste"
+                >
+                  <List className="w-4 h-4" />
+                </button>
+              </div>
             </div>
           </div>
 
           {/* Grid view */}
           {chantierViewMode === 'grid' && (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-              {accessibleChantiers.map(chantier => (
+              {displayedChantiers.map(chantier => (
                 <ChantierCard
                   key={chantier.id}
                   chantier={chantier}
@@ -602,7 +643,7 @@ export default function Dashboard() {
           {/* List view */}
           {chantierViewMode === 'list' && (
             <div className="space-y-3">
-              {accessibleChantiers.map(chantier => (
+              {displayedChantiers.map(chantier => (
                 <ChantierListItem
                   key={chantier.id}
                   chantier={chantier}

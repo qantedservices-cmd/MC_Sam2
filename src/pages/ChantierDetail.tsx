@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { getChantier, getDepenses, deleteChantier, deleteDepense, deleteDepensesByChantier, getCategories, getCategoryLabel, getChantierActors, getPhotosChantier, createPhotoChantier, deletePhotoChantier, updateChantier } from '../services/api';
 import type { Chantier, Depense, Categorie, Client, MOA, MOE, Entreprise, PhotoChantier } from '../types';
@@ -8,9 +8,11 @@ import { useToast } from '../contexts/ToastContext';
 import Loading from '../components/Loading';
 import ErrorMessage from '../components/ErrorMessage';
 import ChantierActorsSection from '../components/ChantierActorsSection';
-import { ArrowLeft, Edit, Trash2, PlusCircle, Loader2, AlertTriangle, FileDown, Users, ListTodo, Package, Receipt, ClipboardCheck, Banknote, TrendingUp, Camera, Plus, Image as ImageIcon, Upload, ZoomIn } from 'lucide-react';
+import { ArrowLeft, Edit, Trash2, PlusCircle, Loader2, AlertTriangle, FileDown, Users, ListTodo, Package, Receipt, ClipboardCheck, Banknote, TrendingUp, Camera, Plus, Image as ImageIcon, Upload, ZoomIn, BarChart2 } from 'lucide-react';
 import { exportChantierPdf } from '../utils/exportPdf';
 import ImageLightbox from '../components/ImageLightbox';
+import ChartDepensesParLot from '../components/charts/ChartDepensesParLot';
+import ChartEvolutionTemps from '../components/charts/ChartEvolutionTemps';
 
 export default function ChantierDetail() {
   const { id } = useParams<{ id: string }>();
@@ -258,6 +260,50 @@ export default function ChantierDetail() {
   const reste = chantier.budgetPrevisionnel - totalDepenses;
   const progression = (totalDepenses / chantier.budgetPrevisionnel) * 100;
   const isOverBudget = progression > 100;
+
+  // Analytics data - dépenses par catégorie
+  const depensesParCategorie = useMemo(() => {
+    const grouped: Record<string, number> = {};
+    depenses.forEach(d => {
+      const catId = d.categorieId || 'autre';
+      grouped[catId] = (grouped[catId] || 0) + d.montant;
+    });
+    return Object.entries(grouped)
+      .map(([categorieId, value]) => ({
+        categorieId,
+        name: getCategoryLabel(categories, categorieId),
+        value
+      }))
+      .sort((a, b) => b.value - a.value);
+  }, [depenses, categories]);
+
+  // Analytics data - évolution dans le temps
+  const evolutionMois = useMemo(() => {
+    const parMoisMap: Record<string, { depenses: number; cumul: number }> = {};
+    let cumul = 0;
+    const sortedDepenses = [...depenses].sort((a, b) => a.date.localeCompare(b.date));
+
+    sortedDepenses.forEach(d => {
+      const mois = d.date.substring(0, 7);
+      if (!parMoisMap[mois]) {
+        parMoisMap[mois] = { depenses: 0, cumul: 0 };
+      }
+      parMoisMap[mois].depenses += d.montant;
+    });
+
+    // Compute cumul
+    Object.keys(parMoisMap).sort().forEach(mois => {
+      cumul += parMoisMap[mois].depenses;
+      parMoisMap[mois].cumul = cumul;
+    });
+
+    return Object.entries(parMoisMap)
+      .map(([date, data]) => ({ date: `${date}-01`, ...data }))
+      .sort((a, b) => a.date.localeCompare(b.date));
+  }, [depenses]);
+
+  // State pour afficher/cacher analytics
+  const [showAnalytics, setShowAnalytics] = useState(false);
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -687,6 +733,77 @@ export default function ChantierDetail() {
           </div>
         </div>
       )}
+
+      {/* Section Analytics */}
+      <div className="bg-white rounded-lg shadow p-6 mb-6">
+        <button
+          onClick={() => setShowAnalytics(!showAnalytics)}
+          className="w-full flex items-center justify-between"
+        >
+          <h2 className="text-lg font-bold text-gray-800 flex items-center gap-2">
+            <BarChart2 className="w-5 h-5 text-amber-500" />
+            Analytics
+          </h2>
+          <span className={`text-sm px-3 py-1 rounded-lg transition-colors ${showAnalytics ? 'bg-amber-100 text-amber-700' : 'bg-gray-100 text-gray-600'}`}>
+            {showAnalytics ? 'Masquer' : 'Afficher'}
+          </span>
+        </button>
+
+        {showAnalytics && depenses.length > 0 && (
+          <div className="mt-4 space-y-6">
+            {/* Répartition par catégorie */}
+            <div>
+              <h3 className="text-sm font-medium text-gray-600 mb-3">Répartition par lot</h3>
+              <ChartDepensesParLot
+                data={depensesParCategorie}
+                height={220}
+              />
+            </div>
+
+            {/* Évolution dans le temps */}
+            {evolutionMois.length > 1 && (
+              <div>
+                <h3 className="text-sm font-medium text-gray-600 mb-3">Évolution des dépenses</h3>
+                <ChartEvolutionTemps
+                  data={evolutionMois}
+                  height={200}
+                />
+              </div>
+            )}
+
+            {/* Top catégories */}
+            <div>
+              <h3 className="text-sm font-medium text-gray-600 mb-3">Top catégories</h3>
+              <div className="space-y-2">
+                {depensesParCategorie.slice(0, 5).map((cat, index) => (
+                  <div key={cat.categorieId} className="flex items-center gap-3">
+                    <span className="text-sm text-gray-400 w-4">{index + 1}</span>
+                    <div className="flex-1">
+                      <div className="flex justify-between text-sm mb-1">
+                        <span className="font-medium text-gray-700">{cat.name}</span>
+                        <span className="text-gray-600">{formatMontant(cat.value, chantier.devise)}</span>
+                      </div>
+                      <div className="w-full bg-gray-100 rounded-full h-1.5">
+                        <div
+                          className="h-1.5 rounded-full bg-amber-500"
+                          style={{ width: `${(cat.value / totalDepenses) * 100}%` }}
+                        />
+                      </div>
+                    </div>
+                    <span className="text-xs text-gray-400 w-12 text-right">
+                      {((cat.value / totalDepenses) * 100).toFixed(1)}%
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {showAnalytics && depenses.length === 0 && (
+          <p className="mt-4 text-gray-500 text-center py-4">Aucune dépense pour afficher les analytics</p>
+        )}
+      </div>
 
       {/* Liste des depenses */}
       <div className="bg-white rounded-lg shadow p-6">
