@@ -49,6 +49,8 @@ export default function ChantierDetail() {
 
   // Analytics state
   const [showAnalytics, setShowAnalytics] = useState(false);
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [selectedMonth, setSelectedMonth] = useState<string | null>(null);
 
   const loadData = async () => {
     if (!id) return;
@@ -121,6 +123,48 @@ export default function ChantierDetail() {
       .map(([date, data]) => ({ date: `${date}-01`, ...data }))
       .sort((a, b) => a.date.localeCompare(b.date));
   }, [depenses]);
+
+  // Filtrer les dépenses selon la sélection analytics
+  const filteredDepenses = useMemo(() => {
+    let result = depenses;
+
+    if (selectedCategories.length > 0) {
+      result = result.filter(d => selectedCategories.includes(d.categorieId || 'autre'));
+    }
+
+    if (selectedMonth) {
+      result = result.filter(d => d.date.startsWith(selectedMonth));
+    }
+
+    return result;
+  }, [depenses, selectedCategories, selectedMonth]);
+
+  // Handler pour sélection catégorie (avec support multi-sélection via Ctrl)
+  const handleCategorieSelect = (categorieId: string, ctrlKey: boolean) => {
+    setSelectedCategories(prev => {
+      if (ctrlKey) {
+        // Multi-sélection
+        if (prev.includes(categorieId)) {
+          return prev.filter(id => id !== categorieId);
+        }
+        return [...prev, categorieId];
+      } else {
+        // Sélection simple (toggle)
+        if (prev.length === 1 && prev[0] === categorieId) {
+          return [];
+        }
+        return [categorieId];
+      }
+    });
+  };
+
+  // Réinitialiser les filtres
+  const resetFilters = () => {
+    setSelectedCategories([]);
+    setSelectedMonth(null);
+  };
+
+  const hasActiveFilter = selectedCategories.length > 0 || selectedMonth !== null;
 
   const handleDelete = async () => {
     if (!id) return;
@@ -751,22 +795,50 @@ export default function ChantierDetail() {
 
         {showAnalytics && depenses.length > 0 && (
           <div className="mt-4 space-y-6">
+            {/* Indicateur de filtre actif */}
+            {hasActiveFilter && (
+              <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg border border-blue-200">
+                <div className="text-sm text-blue-700">
+                  <span className="font-medium">Filtre actif:</span>
+                  {selectedCategories.length > 0 && (
+                    <span className="ml-2">
+                      {selectedCategories.length} categorie(s)
+                    </span>
+                  )}
+                  {selectedMonth && (
+                    <span className="ml-2">
+                      Mois: {new Date(selectedMonth + '-01').toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })}
+                    </span>
+                  )}
+                  <span className="ml-2">({filteredDepenses.length} depenses)</span>
+                </div>
+                <button
+                  onClick={resetFilters}
+                  className="text-xs px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
+                >
+                  Reinitialiser
+                </button>
+              </div>
+            )}
+
             {/* Répartition par catégorie */}
             <div>
-              <h3 className="text-sm font-medium text-gray-600 mb-3">Répartition par lot</h3>
               <ChartDepensesParLot
                 data={depensesParCategorie}
                 height={220}
+                selectedIds={selectedCategories}
+                onSelect={handleCategorieSelect}
               />
             </div>
 
             {/* Évolution dans le temps */}
             {evolutionMois.length > 1 && (
               <div>
-                <h3 className="text-sm font-medium text-gray-600 mb-3">Évolution des dépenses</h3>
                 <ChartEvolutionTemps
                   data={evolutionMois}
                   height={200}
+                  selectedMonth={selectedMonth}
+                  onSelectMonth={setSelectedMonth}
                 />
               </div>
             )}
@@ -808,7 +880,19 @@ export default function ChantierDetail() {
       {/* Liste des depenses */}
       <div className="bg-white rounded-lg shadow p-6">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-bold text-gray-800">Depenses ({depenses.length})</h2>
+          <div className="flex items-center gap-3">
+            <h2 className="text-lg font-bold text-gray-800">
+              Depenses ({hasActiveFilter ? `${filteredDepenses.length}/${depenses.length}` : depenses.length})
+            </h2>
+            {hasActiveFilter && (
+              <button
+                onClick={resetFilters}
+                className="text-xs px-2 py-1 bg-gray-200 text-gray-600 rounded hover:bg-gray-300"
+              >
+                Voir tout
+              </button>
+            )}
+          </div>
           <Link
             to={`/chantiers/${id}/depenses/nouveau`}
             className="flex items-center gap-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
@@ -818,11 +902,13 @@ export default function ChantierDetail() {
           </Link>
         </div>
 
-        {depenses.length === 0 ? (
-          <p className="text-gray-500 text-center py-8">Aucune dépense enregistrée</p>
+        {(hasActiveFilter ? filteredDepenses : depenses).length === 0 ? (
+          <p className="text-gray-500 text-center py-8">
+            {hasActiveFilter ? 'Aucune dépense correspondant au filtre' : 'Aucune dépense enregistrée'}
+          </p>
         ) : (
           <div className="space-y-3">
-            {depenses
+            {(hasActiveFilter ? filteredDepenses : depenses)
               .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
               .map(depense => (
                 <div key={depense.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">

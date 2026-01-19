@@ -15,7 +15,8 @@
       "Bash(git commit -m \"$\\(cat <<''EOF''\nfix: move showAnalytics useState to top of component\n\nFixes white page bug caused by React hooks rules violation.\nuseState must be called unconditionally at the top of the component.\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
       "Bash(npm run build:*)",
       "Bash(git commit:*)",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Bash(curl:*)"
     ]
   }
 }

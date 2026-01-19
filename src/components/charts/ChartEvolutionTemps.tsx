@@ -13,27 +13,53 @@ interface ChartEvolutionTempsProps {
   data: ChartData[];
   budget?: number;
   height?: number;
+  selectedMonth?: string | null;
+  onSelectMonth?: (month: string | null) => void;
 }
 
 export default function ChartEvolutionTemps({
   data,
   budget,
-  height = 300
+  height = 300,
+  selectedMonth,
+  onSelectMonth
 }: ChartEvolutionTempsProps) {
   const maxValue = Math.max(
     ...data.map(d => Math.max(d.depenses, d.cumul)),
     budget || 0
   );
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleClick = (data: any) => {
+    if (onSelectMonth && data?.activePayload?.[0]?.payload?.date) {
+      const clickedMonth = data.activePayload[0].payload.date.substring(0, 7);
+      // Toggle: si deja selectionne, deselectionner
+      onSelectMonth(selectedMonth === clickedMonth ? null : clickedMonth);
+    }
+  };
+
   return (
     <div className="bg-white rounded-lg shadow p-4">
-      <h3 className="text-lg font-semibold text-gray-800 mb-4">
-        Evolution des Depenses
-      </h3>
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="text-lg font-semibold text-gray-800">
+          Evolution des Depenses
+          {onSelectMonth && <span className="text-xs font-normal text-gray-400 ml-2">(Clic pour filtrer)</span>}
+        </h3>
+        {selectedMonth && onSelectMonth && (
+          <button
+            onClick={() => onSelectMonth(null)}
+            className="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded hover:bg-blue-200"
+          >
+            Reinitialiser
+          </button>
+        )}
+      </div>
       <ResponsiveContainer width="100%" height={height}>
         <AreaChart
           data={data}
           margin={{ top: 10, right: 30, left: 10, bottom: 0 }}
+          onClick={onSelectMonth ? handleClick : undefined}
+          style={{ cursor: onSelectMonth ? 'pointer' : 'default' }}
         >
           <defs>
             <linearGradient id="colorDepenses" x1="0" y1="0" x2="0" y2="1">
