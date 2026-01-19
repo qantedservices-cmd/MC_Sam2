@@ -11,7 +11,11 @@
       "Bash(ssh root@72.61.105.112 \"find /root -name ''docker-compose.yml'' 2>/dev/null | head -5\")",
       "Bash(ssh root@72.61.105.112 \"ls -la /root/\")",
       "Bash(ssh:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nfix: move showAnalytics useState to top of component\n\nFixes white page bug caused by React hooks rules violation.\nuseState must be called unconditionally at the top of the component.\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(npm run build:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)"
     ]
   }
 }

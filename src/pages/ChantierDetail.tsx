@@ -81,6 +81,47 @@ export default function ChantierDetail() {
     loadData();
   }, [id]);
 
+  // Analytics data - dépenses par catégorie (must be before conditional returns)
+  const depensesParCategorie = useMemo(() => {
+    const grouped: Record<string, number> = {};
+    depenses.forEach(d => {
+      const catId = d.categorieId || 'autre';
+      grouped[catId] = (grouped[catId] || 0) + d.montant;
+    });
+    return Object.entries(grouped)
+      .map(([categorieId, value]) => ({
+        categorieId,
+        name: getCategoryLabel(categories, categorieId),
+        value
+      }))
+      .sort((a, b) => b.value - a.value);
+  }, [depenses, categories]);
+
+  // Analytics data - évolution dans le temps (must be before conditional returns)
+  const evolutionMois = useMemo(() => {
+    const parMoisMap: Record<string, { depenses: number; cumul: number }> = {};
+    let cumul = 0;
+    const sortedDepenses = [...depenses].sort((a, b) => a.date.localeCompare(b.date));
+
+    sortedDepenses.forEach(d => {
+      const mois = d.date.substring(0, 7);
+      if (!parMoisMap[mois]) {
+        parMoisMap[mois] = { depenses: 0, cumul: 0 };
+      }
+      parMoisMap[mois].depenses += d.montant;
+    });
+
+    // Compute cumul
+    Object.keys(parMoisMap).sort().forEach(mois => {
+      cumul += parMoisMap[mois].depenses;
+      parMoisMap[mois].cumul = cumul;
+    });
+
+    return Object.entries(parMoisMap)
+      .map(([date, data]) => ({ date: `${date}-01`, ...data }))
+      .sort((a, b) => a.date.localeCompare(b.date));
+  }, [depenses]);
+
   const handleDelete = async () => {
     if (!id) return;
     setDeleting(true);
@@ -263,47 +304,6 @@ export default function ChantierDetail() {
   const reste = chantier.budgetPrevisionnel - totalDepenses;
   const progression = (totalDepenses / chantier.budgetPrevisionnel) * 100;
   const isOverBudget = progression > 100;
-
-  // Analytics data - dépenses par catégorie
-  const depensesParCategorie = useMemo(() => {
-    const grouped: Record<string, number> = {};
-    depenses.forEach(d => {
-      const catId = d.categorieId || 'autre';
-      grouped[catId] = (grouped[catId] || 0) + d.montant;
-    });
-    return Object.entries(grouped)
-      .map(([categorieId, value]) => ({
-        categorieId,
-        name: getCategoryLabel(categories, categorieId),
-        value
-      }))
-      .sort((a, b) => b.value - a.value);
-  }, [depenses, categories]);
-
-  // Analytics data - évolution dans le temps
-  const evolutionMois = useMemo(() => {
-    const parMoisMap: Record<string, { depenses: number; cumul: number }> = {};
-    let cumul = 0;
-    const sortedDepenses = [...depenses].sort((a, b) => a.date.localeCompare(b.date));
-
-    sortedDepenses.forEach(d => {
-      const mois = d.date.substring(0, 7);
-      if (!parMoisMap[mois]) {
-        parMoisMap[mois] = { depenses: 0, cumul: 0 };
-      }
-      parMoisMap[mois].depenses += d.montant;
-    });
-
-    // Compute cumul
-    Object.keys(parMoisMap).sort().forEach(mois => {
-      cumul += parMoisMap[mois].depenses;
-      parMoisMap[mois].cumul = cumul;
-    });
-
-    return Object.entries(parMoisMap)
-      .map(([date, data]) => ({ date: `${date}-01`, ...data }))
-      .sort((a, b) => a.date.localeCompare(b.date));
-  }, [depenses]);
 
   return (
     <div className="max-w-4xl mx-auto">
