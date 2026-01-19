@@ -47,6 +47,9 @@ export default function ChantierDetail() {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
 
+  // Analytics state
+  const [showAnalytics, setShowAnalytics] = useState(false);
+
   const loadData = async () => {
     if (!id) return;
     setLoading(true);
@@ -301,9 +304,6 @@ export default function ChantierDetail() {
       .map(([date, data]) => ({ date: `${date}-01`, ...data }))
       .sort((a, b) => a.date.localeCompare(b.date));
   }, [depenses]);
-
-  // State pour afficher/cacher analytics
-  const [showAnalytics, setShowAnalytics] = useState(false);
 
   return (
     <div className="max-w-4xl mx-auto">

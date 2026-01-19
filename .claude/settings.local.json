@@ -10,7 +10,8 @@
       "Bash(ssh root@72.61.105.112 \"cd /root/MC_Sam2 && git pull origin main\")",
       "Bash(ssh root@72.61.105.112 \"find /root -name ''docker-compose.yml'' 2>/dev/null | head -5\")",
       "Bash(ssh root@72.61.105.112 \"ls -la /root/\")",
-      "Bash(ssh:*)"
+      "Bash(ssh:*)",
+      "Bash(git add:*)"
     ]
   }
 }
