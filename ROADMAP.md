@@ -1,288 +1,288 @@
 # ROADMAP - Application Suivi Chantiers BTP
 
-## Phase 1 : Initialisation du Projet
+## BILAN DU PROJET - Janvier 2026
 
-### 1.1 Création du projet React
-- [x] Ouvrir le terminal dans le dossier `Monchantier`
-- [x] Exécuter `npm create vite@latest . -- --template react-ts`
-- [x] Installer les dépendances : `npm install`
-- [x] Vérifier que le projet démarre : `npm run dev`
-- [x] Nettoyer les fichiers par défaut (App.css, assets inutiles)
+### Architecture Actuelle
+```
+Frontend: React 19 + TypeScript + Vite + Tailwind CSS
+Backend:  Express.js + Prisma ORM + PostgreSQL
+Serveur:  Docker Compose sur 72.61.105.112:8080
+```
+
+### Statistiques du Code
+- **Frontend:** ~25 composants, 10 pages, 6 utilitaires
+- **Backend:** 22 routes API, 1 service auth
+- **Total:** ~60 fichiers sources, ~10,000 lignes de code
+
+---
+
+## Phase 1 : Initialisation du Projet (COMPLETE)
+
+### 1.1 Creation du projet React
+- [x] Projet React + TypeScript avec Vite
+- [x] Installation des dependances
+- [x] Nettoyage des fichiers par defaut
 
 ### 1.2 Configuration de Tailwind CSS
-- [x] Installer Tailwind : `npm install -D tailwindcss postcss autoprefixer`
-- [x] Initialiser Tailwind : `npx tailwindcss init -p`
-- [x] Configurer `tailwind.config.js`
-- [x] Ajouter les directives Tailwind dans `src/index.css`
-- [x] Tester que Tailwind fonctionne
+- [x] Installation et configuration Tailwind
+- [x] Styles responsive mobile-first
 
-### 1.3 Installation des dépendances supplémentaires
-- [x] Installer React Router : `npm install react-router-dom`
-- [x] Installer JSON Server : `npm install -D json-server`
-- [x] Installer les icônes : `npm install lucide-react`
-
-### 1.4 Configuration de JSON Server (base de données)
-- [x] Créer le fichier `db.json` à la racine du projet
-- [x] Ajouter la structure initiale des données
-- [x] Ajouter un script dans `package.json`
-- [x] Tester que le serveur démarre : `npm run server`
-- [x] Vérifier l'accès à `http://localhost:3001/chantiers`
+### 1.3 Installation des dependances
+- [x] React Router, Lucide React icons
+- [x] Recharts pour les graphiques
+- [x] jsPDF et html2canvas pour export PDF
 
 ---
 
-## Phase 2 : Structure de Base
+## Phase 2 : Structure de Base (COMPLETE)
 
-### 2.1 Création de la structure des dossiers
-- [x] Créer le dossier `src/components/`
-- [x] Créer le dossier `src/pages/`
-- [x] Créer le dossier `src/services/`
-- [x] Créer le dossier `src/types/`
+### 2.1 Structure des dossiers
+- [x] src/components/, src/pages/, src/services/, src/types/
+- [x] src/utils/, src/contexts/, src/hooks/
 
-### 2.2 Définition des types TypeScript
-- [x] Créer le fichier `src/types/index.ts`
-- [x] Définir le type `Chantier`
-- [x] Définir le type `Depense`
-- [x] Définir les constantes `CATEGORIES_DEPENSE` et `STATUTS_CHANTIER`
+### 2.2 Types TypeScript
+- [x] Types: Chantier, Depense, Devis, Transfert
+- [x] Types: Client, MOA, MOE, Entreprise, Employe
+- [x] Types: User, PhotoChantier, Categorie
+- [x] Constantes STATUTS_CHANTIER
 
 ### 2.3 Service API
-- [x] Créer le fichier `src/services/api.ts`
-- [x] Créer les fonctions CRUD pour les chantiers
-- [x] Créer les fonctions CRUD pour les dépenses
+- [x] CRUD complet pour toutes les entites
+- [x] Gestion des erreurs
+- [x] Support multi-devises (EUR, TND, USD)
 
 ---
 
-## Phase 3 : Layout et Navigation
+## Phase 3 : Layout et Navigation (COMPLETE)
 
-### 3.1 Composant Layout
-- [x] Créer le fichier `src/components/Layout.tsx`
-- [x] Créer le header avec logo/titre "MonChantier"
-- [x] Ajouter lien vers le tableau de bord
-- [x] Ajouter bouton "Nouveau chantier"
-- [x] Créer le conteneur principal pour le contenu
-- [x] Ajouter un style responsive (mobile-first)
-
-### 3.2 Configuration du Router
-- [x] Modifier `src/App.tsx`
-- [x] Importer `BrowserRouter`, `Routes`, `Route` de react-router-dom
-- [x] Définir les routes (`/`, `/chantiers/nouveau`, `/chantiers/:id`, etc.)
-- [x] Envelopper les routes dans le composant Layout
+- [x] Composant Layout avec header responsive
+- [x] Navigation avec menu mobile
+- [x] Routes protegees par authentification
+- [x] Breadcrumb et retour arriere
 
 ---
 
-## Phase 4 : Tableau de Bord (Dashboard)
+## Phase 4 : Tableau de Bord (COMPLETE)
 
-### 4.1 Page Dashboard
-- [x] Créer le fichier `src/pages/Dashboard.tsx`
-- [x] Ajouter les états pour chantiers et dépenses
-- [x] Ajouter un état de chargement
-- [x] Charger les données au montage avec `useEffect`
-
-### 4.2 Section Résumé Global
-- [x] Calculer le budget total de tous les chantiers
-- [x] Calculer les dépenses totales
-- [x] Calculer le budget restant global
-- [x] Afficher les 3 KPIs dans des cartes avec icônes
-
-### 4.3 Liste des Chantiers
-- [x] Créer le composant `src/components/ChantierCard.tsx`
-- [x] Créer le composant `src/components/ChantierListItem.tsx` (bonus)
-- [x] Afficher nom, adresse, budget, dépenses, barre de progression, statut
-- [x] Ajouter un lien vers le détail du chantier
-- [x] Ajouter toggle vue grille/liste (bonus)
-
-### 4.4 Gestion de l'état vide
-- [x] Afficher un message d'accueil pour les nouveaux utilisateurs
-- [x] Proposer de créer un premier chantier
+- [x] KPIs globaux (budget, depenses, reste)
+- [x] Liste des chantiers avec filtres
+- [x] Vue grille/liste toggleable
+- [x] Filtre et reorganisation des chantiers (NEW)
+- [x] Sauvegarde des preferences dans localStorage
 
 ---
 
-## Phase 5 : Formulaire Chantier
+## Phase 5-7 : Formulaires CRUD (COMPLETE)
 
-### 5.1 Page ChantierForm
-- [x] Créer le fichier `src/pages/ChantierForm.tsx`
-- [x] Récupérer le paramètre `id` depuis l'URL (si édition)
-- [x] Créer un état pour le formulaire
-- [x] Si `id` existe, charger les données du chantier existant
-
-### 5.2 Champs du formulaire
-- [x] Champ "Nom du chantier" (input text, requis)
-- [x] Champ "Adresse" (textarea)
-- [x] Champ "Budget prévisionnel" (input number, requis, min 0)
-- [x] Champ "Statut" (select avec options)
+- [x] Formulaire Chantier (creation/edition)
+- [x] Formulaire Depense
+- [x] Formulaire Devis
+- [x] Formulaire Transfert
 - [x] Validation des champs obligatoires
-
-### 5.3 Soumission du formulaire
-- [x] Créer la fonction `handleSubmit`
-- [x] Si création : appeler `createChantier()`
-- [x] Si édition : appeler `updateChantier()`
-- [x] Gérer les erreurs (try/catch)
-- [x] Afficher un message de succès (toast)
-- [x] Rediriger vers le tableau de bord après succès
-
-### 5.4 UX du formulaire
-- [x] Ajouter un bouton "Annuler" qui redirige vers le dashboard
-- [x] Désactiver le bouton "Enregistrer" pendant la soumission
-- [x] Afficher un indicateur de chargement pendant la soumission
+- [x] Notifications toast
 
 ---
 
-## Phase 6 : Détail d'un Chantier
+## Phase 8 : Ameliorations Visuelles (COMPLETE)
 
-### 6.1 Page ChantierDetail
-- [x] Créer le fichier `src/pages/ChantierDetail.tsx`
-- [x] Récupérer le paramètre `id` depuis l'URL
-- [x] Charger les données du chantier
-- [x] Charger les dépenses liées au chantier
-- [x] Gérer le cas où le chantier n'existe pas (404)
-
-### 6.2 En-tête du chantier
-- [x] Afficher le nom du chantier
-- [x] Afficher l'adresse
-- [x] Afficher le statut (badge)
-- [x] Bouton "Modifier" (lien vers formulaire édition)
-- [x] Bouton "Supprimer" (avec confirmation)
-
-### 6.3 Section Finances
-- [x] Afficher le budget prévisionnel
-- [x] Calculer et afficher le total des dépenses
-- [x] Calculer et afficher le budget restant
-- [x] Afficher une barre de progression visuelle
-- [x] Changer la couleur si dépassement (rouge)
-
-### 6.4 Liste des dépenses
-- [x] Afficher description, montant, date, catégorie, bouton supprimer
-- [x] Trier les dépenses par date (plus récentes en premier)
-- [x] Afficher un message si aucune dépense
-
-### 6.5 Bouton Ajouter une dépense
-- [x] Ajouter un bouton "Nouvelle dépense"
-- [x] Le bouton redirige vers `/chantiers/:id/depenses/nouveau`
-
-### 6.6 Suppression du chantier
-- [x] Créer une modale de confirmation
-- [x] Supprimer toutes les dépenses liées avant de supprimer le chantier
-- [x] Rediriger vers le dashboard après suppression
+- [x] Formatage montants et dates
+- [x] Composants Loading et ErrorMessage
+- [x] Context Toast pour notifications
+- [x] Lightbox pour photos
 
 ---
 
-## Phase 7 : Formulaire Dépense
+## Phase 9-10 : Tests et Documentation (COMPLETE)
 
-### 7.1 Page DepenseForm
-- [x] Créer le fichier `src/pages/DepenseForm.tsx`
-- [x] Récupérer le `chantierId` depuis l'URL
-- [x] Créer un état pour le formulaire
-
-### 7.2 Champs du formulaire
-- [x] Champ "Description" (input text, requis)
-- [x] Champ "Montant" (input number, requis, min 0.01)
-- [x] Champ "Date" (input date, requis)
-- [x] Champ "Catégorie" (select avec les 6 options)
-
-### 7.3 Soumission du formulaire
-- [x] Créer la fonction `handleSubmit`
-- [x] Appeler `createDepense()` avec le `chantierId`
-- [x] Gérer les erreurs
-- [x] Afficher notification toast
-- [x] Rediriger vers le détail du chantier après succès
+- [x] Donnees de test
+- [x] Tests manuels fonctionnels
+- [x] README.md
+- [x] Scripts npm fonctionnels
 
 ---
 
-## Phase 8 : Améliorations Visuelles
+## Phase 11 : Backend Express/PostgreSQL (COMPLETE - NEW)
 
-### 8.1 Formatage des données
-- [x] Créer un utilitaire `src/utils/format.ts`
-- [x] Fonction `formatMontant(montant: number)` → "1 234,56 €"
-- [x] Fonction `formatDate(date: string)` → "21 déc. 2025"
-- [x] Appliquer le formatage partout dans l'app
+### 11.1 Migration JSON Server vers Express
+- [x] Backend Express.js avec TypeScript
+- [x] Prisma ORM avec PostgreSQL
+- [x] 22 routes API RESTful
+- [x] Migration des donnees depuis db.json
 
-### 8.2 États de chargement
-- [x] Créer un composant `src/components/Loading.tsx`
-- [x] Afficher le spinner pendant le chargement des données
-- [x] Ajouter des skeletons pour les cartes
+### 11.2 Schema Prisma
+- [x] Tables: User, Chantier, Depense, Devis, Transfert
+- [x] Tables: Client, MOA, MOE, Entreprise, Employe
+- [x] Tables: Categorie, PhotoChantier, Materiel, Pointage
+- [x] Relations many-to-many (UserChantier, ChantierEntreprise)
 
-### 8.3 Messages d'erreur
-- [x] Créer un composant `src/components/ErrorMessage.tsx`
-- [x] Afficher un message user-friendly en cas d'erreur API
-- [x] Proposer un bouton "Réessayer"
-
-### 8.4 Notifications de succès
-- [x] Créer `src/contexts/ToastContext.tsx`
-- [x] Ajouter des notifications toast pour les actions :
-  - [x] "Chantier créé avec succès"
-  - [x] "Chantier modifié avec succès"
-  - [x] "Chantier supprimé avec succès"
-  - [x] "Dépense ajoutée avec succès"
-  - [x] "Dépense supprimée"
+### 11.3 Deploiement Docker
+- [x] Docker Compose avec 4 containers
+- [x] Nginx pour le frontend
+- [x] API Express
+- [x] PostgreSQL 16
+- [x] Service upload de fichiers
 
 ---
 
-## Phase 9 : Tests et Finalisation
+## Phase 12 : Authentification (COMPLETE - NEW)
 
-### 9.1 Données de test
-- [x] Ajouter 5 chantiers de test dans `db.json`
-- [x] Ajouter plusieurs dépenses par chantier
-- [x] Varier les catégories et les montants
+### 12.1 Backend Auth
+- [x] Route /auth/login avec JWT
+- [x] Route /auth/register
+- [x] Middleware d'authentification
+- [x] Hashage bcryptjs des mots de passe
 
-### 9.2 Tests manuels
-- [x] Tester la création d'un chantier
-- [x] Tester la modification d'un chantier
-- [x] Tester la suppression d'un chantier
-- [x] Tester l'ajout d'une dépense
-- [x] Tester la suppression d'une dépense
-- [x] Tester la navigation entre les pages
-- [x] Tester sur mobile (responsive)
+### 12.2 Frontend Auth
+- [x] AuthContext avec gestion session
+- [x] Pages Login et Register
+- [x] Protection des routes
+- [x] Deconnexion automatique token expire
 
-### 9.3 Corrections et polish
-- [x] Corriger les bugs identifiés
-- [x] Améliorer l'accessibilité (labels, aria)
-- [x] Vérifier la cohérence des styles
-- [x] Vérifier que le build fonctionne
+### 12.3 Gestion des Permissions
+- [x] Roles: admin, entrepreneur, client
+- [x] Permissions par role (canEdit, canDelete, canViewAll)
+- [x] Filtrage chantiers par utilisateur assigne
+- [x] Utilisateurs: Monji (entrepreneur), Karim (client)
 
 ---
 
-## Phase 10 : Documentation et Livraison
+## Phase 13 : Photos et Documents (COMPLETE - NEW)
 
-### 10.1 README
-- [x] Mettre à jour le fichier `README.md`
-- [x] Décrire le projet
-- [x] Expliquer comment installer les dépendances
-- [x] Expliquer comment lancer le projet
-- [x] Lister les fonctionnalités
-
-### 10.2 Scripts npm
-- [x] Vérifier que `npm run dev` fonctionne (frontend)
-- [x] Vérifier que `npm run server` fonctionne (backend)
-- [x] Ajouter un script `npm run dev:all` pour lancer les deux
+- [x] Upload de photos via service upload
+- [x] Photo de presentation par chantier
+- [x] Galerie photos avec lightbox
+- [x] Boutons supprimer/modifier photos
+- [x] Stockage sur volume Docker
 
 ---
 
-## Fonctionnalités Bonus Implémentées
+## Phase 14 : Analytics (COMPLETE - NEW)
 
-- [x] Vue liste/grille pour les chantiers
-- [x] Catégorie "Menuiserie" ajoutée
-- [x] Statistiques par statut (en cours, terminés, suspendus)
-- [x] Icônes dans les KPIs
-
----
-
-## Futures Évolutions (Backlog)
-
-### Fonctionnalités à ajouter plus tard
-- [ ] Authentification utilisateur
-- [ ] Gestion des devis
-- [ ] Gestion des factures
-- [x] Export PDF des données
-- [ ] Graphiques et statistiques avancées
-- [ ] Mode hors-ligne (PWA)
-- [ ] Notifications de dépassement de budget
-- [ ] Gestion des sous-traitants
-- [ ] Upload de photos/documents
-- [ ] Historique des modifications
+- [x] Graphique depenses par lot (camembert)
+- [x] Graphique evolution temporelle (barres)
+- [x] Integration dans page ChantierDetail
+- [x] Section analytics toggleable
 
 ---
 
-**Légende :**
-- [ ] À faire
-- [x] Terminé
+## Phase 15 : Filtres Avances (COMPLETE - NEW)
 
-**Statut : PROJET TERMINÉ** ✅
+- [x] ChantierFilterPanel pour Dashboard
+- [x] Selection/deselection des chantiers
+- [x] Reorganisation par drag (boutons haut/bas)
+- [x] Sauvegarde des preferences localStorage
+- [x] Reinitialisation possible
+
+---
+
+## AUDIT TECHNIQUE - Points d'Attention
+
+### Securite (PRIORITE HAUTE)
+- [ ] Ajouter validation des entrees backend (zod/joi)
+- [ ] Configurer CORS avec whitelist domaines
+- [ ] Ajouter rate limiting sur les endpoints
+- [ ] Retirer password hash des reponses API users
+- [ ] Verifier expiration JWT cote backend
+
+### Performance
+- [ ] Ajouter indices DB sur chantierId, date, employeId
+- [ ] Optimiser requetes N+1 dans Dashboard
+- [ ] Reduire iterations array multiples
+- [ ] Code-splitting pour bundle >500KB
+
+### Qualite Code
+- [ ] Creer factory CRUD backend (eliminer duplication 22 routes)
+- [ ] Extraire hook useFiltering pour Dashboard/ChantiersIndex
+- [ ] Remplacer types `any` par types specifiques
+- [ ] Ajouter Error Boundaries React
+
+### Maintenabilite
+- [ ] Decoupe Dashboard.tsx (800+ lignes trop long)
+- [ ] Centraliser messages d'erreur
+- [ ] Ajouter logging structure (pas console.log)
+
+---
+
+## ETAPES RESTANTES (Backlog Priorise)
+
+### Priorite 1 - Securite
+1. [ ] Validation entrees backend avec zod
+2. [ ] Configuration CORS restrictive
+3. [ ] Rate limiting (express-rate-limit)
+4. [ ] Audit securite token JWT
+
+### Priorite 2 - Fonctionnalites Metier
+5. [ ] Gestion des lots (distinction avec categories)
+6. [ ] Gestion des factures
+7. [ ] Notifications depassement budget
+8. [ ] Historique des modifications (audit trail)
+9. [ ] Gestion des sous-traitants detaillee
+
+### Priorite 3 - UX/Performance
+10. [ ] Mode hors-ligne (PWA avec service worker)
+11. [ ] Optimisation requetes Dashboard
+12. [ ] Code-splitting lazy loading
+13. [ ] Amelioration accessibilite (ARIA)
+
+### Priorite 4 - Dette Technique
+14. [ ] Factory CRUD backend
+15. [ ] Hook useFiltering partage
+16. [ ] Refactoring Dashboard (decomposition)
+17. [ ] Types TypeScript stricts (eliminer any)
+18. [ ] Tests unitaires et integration
+
+---
+
+## Fonctionnalites Implementees (Resume)
+
+| Fonctionnalite | Statut | Phase |
+|----------------|--------|-------|
+| CRUD Chantiers | OK | 5 |
+| CRUD Depenses | OK | 7 |
+| CRUD Devis | OK | 11 |
+| CRUD Transferts | OK | 11 |
+| Dashboard KPIs | OK | 4 |
+| Export PDF | OK | 8 |
+| Authentification JWT | OK | 12 |
+| Permissions par role | OK | 12 |
+| Photos chantier | OK | 13 |
+| Analytics graphiques | OK | 14 |
+| Filtre/Ordre chantiers | OK | 15 |
+| Multi-devises | OK | 2 |
+| Backend PostgreSQL | OK | 11 |
+| Deploiement Docker | OK | 11 |
+
+---
+
+## Informations Deploiement
+
+### Production
+- **URL:** http://72.61.105.112:8080
+- **API:** http://72.61.105.112:8080/api
+- **Chemin serveur:** /opt/monchantier
+
+### Comptes Test
+| Email | Role | Acces |
+|-------|------|-------|
+| admin@monchantier.com | Admin | Tous chantiers |
+| monji@gmail.com | Entrepreneur | Samir Maison |
+| karim@gmail.com | Client | Samir Maison, Wissem Housh |
+
+### Commandes Deploiement
+```bash
+# Mise a jour
+ssh root@72.61.105.112 "cd /opt/monchantier && git pull && docker compose up -d --build frontend"
+
+# Logs
+docker compose logs -f api
+docker compose logs -f frontend
+
+# Base de donnees
+docker compose exec db psql -U monchantier -d monchantier
+```
+
+---
+
+**Derniere mise a jour:** 19 Janvier 2026
+**Version:** 2.0.0
+**Statut:** PRODUCTION - Fonctionnel avec points d'amelioration identifies
