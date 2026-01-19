@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Wallet, FileText, ArrowRightLeft, TrendingUp, TrendingDown, Loader2, Plus,
-  Building2, PlusCircle, LayoutGrid, List, FileDown, BarChart2, Home, RotateCcw, Filter
+  Building2, PlusCircle, LayoutGrid, List, FileDown, BarChart2, Home, RotateCcw
 } from 'lucide-react';
 import {
   getChantiers, getDepenses, getDevis, getTransferts,
