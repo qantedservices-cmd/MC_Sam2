@@ -138,6 +138,9 @@ model Depense {
   montant     Float
   devise      String   @default("DNT")
   date        DateTime
+  payeur      String?  // Qui paie? (Walid, Samir, etc.)
+  beneficiaire String? // A qui? (Hdid, Mounir, etc.)
+  photosUrls  String?  // URLs des photos/factures (separees par virgule)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
