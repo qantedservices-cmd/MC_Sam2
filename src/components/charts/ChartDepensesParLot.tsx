@@ -113,24 +113,47 @@ export default function ChartDepensesParLot({
             })}
           </Pie>
           <Tooltip
-            formatter={(value) => [
-              formatMontant(Number(value)),
-              `${((Number(value) / total) * 100).toFixed(1)}%`
-            ]}
-            contentStyle={{
-              backgroundColor: 'white',
-              border: '1px solid #e5e7eb',
-              borderRadius: '8px',
-              boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'
+            content={({ active, payload }) => {
+              if (active && payload && payload.length) {
+                const item = payload[0].payload as ChartData;
+                return (
+                  <div className="bg-white p-3 border rounded-lg shadow-lg">
+                    <p className="font-semibold text-gray-800 mb-1">{item.name}</p>
+                    <p className="text-lg font-bold text-blue-600">{formatMontant(item.value)}</p>
+                    <p className="text-sm text-gray-500">{((item.value / total) * 100).toFixed(1)}% du total</p>
+                  </div>
+                );
+              }
+              return null;
             }}
           />
           <Legend
             layout="vertical"
             align="right"
             verticalAlign="middle"
-            formatter={(value) => (
-              <span className="text-sm text-gray-600">{value}</span>
-            )}
+            onClick={(e) => {
+              const payload = e?.payload as ChartData | undefined;
+              if (onSelect && payload?.categorieId) {
+                onSelect(payload.categorieId, false);
+              }
+            }}
+            formatter={(value, entry) => {
+              const item = entry.payload as ChartData;
+              const isSelected = selectedIds.includes(item?.categorieId);
+              return (
+                <span
+                  className={`text-sm cursor-pointer hover:underline ${
+                    hasSelection
+                      ? isSelected
+                        ? 'text-gray-800 font-semibold'
+                        : 'text-gray-400'
+                      : 'text-gray-600'
+                  }`}
+                >
+                  {value}
+                </span>
+              );
+            }}
           />
         </PieChart>
       </ResponsiveContainer>

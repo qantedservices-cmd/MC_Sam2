@@ -918,10 +918,28 @@ export default function ChantierDetail() {
                       <span className={`px-2 py-0.5 rounded text-xs ${getCategoryStyle(depense.categorieId)}`}>
                         {getCategoryLabel(categories, depense.categorieId)}
                       </span>
+                      {depense.payeur && (
+                        <span className="px-2 py-0.5 rounded text-xs bg-indigo-100 text-indigo-700">
+                          {depense.payeur}
+                        </span>
+                      )}
                     </div>
                     <p className="text-sm text-gray-500">{formatDate(depense.date)}</p>
                   </div>
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-2">
+                    {depense.photosUrls && (
+                      <a
+                        href={Array.isArray(depense.photosUrls)
+                          ? depense.photosUrls[0]
+                          : (depense.photosUrls as string).split(',')[0].trim()}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="p-2 text-blue-600 hover:bg-blue-100 rounded-lg transition-colors"
+                        title="Voir les photos/factures"
+                      >
+                        <Camera className="w-4 h-4" />
+                      </a>
+                    )}
                     <span className="font-bold text-gray-800">{formatMontant(depense.montant)}</span>
                     <button
                       onClick={() => handleDeleteDepense(depense.id)}
