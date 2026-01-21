@@ -5,6 +5,7 @@ import type { Chantier, Depense, Categorie, Client, MOA, MOE, Entreprise, PhotoC
 import { STATUTS_CHANTIER } from '../types';
 import { formatMontant, formatDate } from '../utils/format';
 import { useToast } from '../contexts/ToastContext';
+import { useCurrency } from '../contexts/CurrencyContext';
 import Loading from '../components/Loading';
 import ErrorMessage from '../components/ErrorMessage';
 import ChantierActorsSection from '../components/ChantierActorsSection';
@@ -18,6 +19,7 @@ export default function ChantierDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { showSuccess, showError } = useToast();
+  const { displayCurrency } = useCurrency();
 
   const [chantier, setChantier] = useState<Chantier | null>(null);
   const [depenses, setDepenses] = useState<Depense[]>([]);
@@ -449,16 +451,16 @@ export default function ChantierDetail() {
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
           <div className="bg-blue-50 rounded-lg p-4">
             <p className="text-sm text-gray-500">Budget prévisionnel</p>
-            <p className="text-xl font-bold text-blue-600">{formatMontant(chantier.budgetPrevisionnel)}</p>
+            <p className="text-xl font-bold text-blue-600">{formatMontant(chantier.budgetPrevisionnel, displayCurrency)}</p>
           </div>
           <div className="bg-red-50 rounded-lg p-4">
             <p className="text-sm text-gray-500">Total dépenses</p>
-            <p className="text-xl font-bold text-red-600">{formatMontant(totalDepenses)}</p>
+            <p className="text-xl font-bold text-red-600">{formatMontant(totalDepenses, displayCurrency)}</p>
           </div>
           <div className={`${reste >= 0 ? 'bg-green-50' : 'bg-red-50'} rounded-lg p-4`}>
             <p className="text-sm text-gray-500">Reste</p>
             <p className={`text-xl font-bold ${reste >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-              {formatMontant(reste)}
+              {formatMontant(reste, displayCurrency)}
             </p>
           </div>
         </div>
@@ -853,7 +855,7 @@ export default function ChantierDetail() {
                     <div className="flex-1">
                       <div className="flex justify-between text-sm mb-1">
                         <span className="font-medium text-gray-700">{cat.name}</span>
-                        <span className="text-gray-600">{formatMontant(cat.value, chantier.devise)}</span>
+                        <span className="text-gray-600">{formatMontant(cat.value, displayCurrency)}</span>
                       </div>
                       <div className="w-full bg-gray-100 rounded-full h-1.5">
                         <div
@@ -907,40 +909,67 @@ export default function ChantierDetail() {
             {hasActiveFilter ? 'Aucune dépense correspondant au filtre' : 'Aucune dépense enregistrée'}
           </p>
         ) : (
-          <div className="space-y-3">
+          <div className="space-y-2">
+            {/* En-tête du tableau */}
+            <div className="grid grid-cols-12 gap-2 px-4 py-2 bg-gray-100 rounded-lg text-xs font-semibold text-gray-600 uppercase">
+              <div className="col-span-5">Description</div>
+              <div className="col-span-2">Payeur / Benef.</div>
+              <div className="col-span-2 text-center">Photo</div>
+              <div className="col-span-2 text-right">Montant</div>
+              <div className="col-span-1"></div>
+            </div>
             {(hasActiveFilter ? filteredDepenses : depenses)
               .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
               .map(depense => (
-                <div key={depense.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                  <div className="flex-1">
+                <div key={depense.id} className="grid grid-cols-12 gap-2 items-center p-4 bg-gray-50 rounded-lg">
+                  {/* Description & Catégorie - col 1-5 */}
+                  <div className="col-span-5">
                     <div className="flex items-center gap-2 mb-1 flex-wrap">
                       <span className="font-medium text-gray-800">{depense.description}</span>
                       <span className={`px-2 py-0.5 rounded text-xs ${getCategoryStyle(depense.categorieId)}`}>
                         {getCategoryLabel(categories, depense.categorieId)}
                       </span>
-                      {depense.payeur && (
-                        <span className="px-2 py-0.5 rounded text-xs bg-indigo-100 text-indigo-700">
-                          {depense.payeur}
-                        </span>
-                      )}
                     </div>
                     <p className="text-sm text-gray-500">{formatDate(depense.date)}</p>
                   </div>
-                  <div className="flex items-center gap-2">
-                    {depense.photosUrls && (
+                  {/* Payeur & Bénéficiaire - col 6-7 */}
+                  <div className="col-span-2 text-sm">
+                    {depense.payeur && (
+                      <span className="px-2 py-0.5 rounded text-xs bg-indigo-100 text-indigo-700 block mb-1">
+                        {depense.payeur}
+                      </span>
+                    )}
+                    {depense.beneficiaire && (
+                      <span className="px-2 py-0.5 rounded text-xs bg-gray-200 text-gray-600 block">
+                        → {depense.beneficiaire}
+                      </span>
+                    )}
+                  </div>
+                  {/* Photos - col 8-9 */}
+                  <div className="col-span-2 text-center">
+                    {depense.photosUrls ? (
                       <a
                         href={Array.isArray(depense.photosUrls)
                           ? depense.photosUrls[0]
                           : (depense.photosUrls as string).split(',')[0].trim()}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="p-2 text-blue-600 hover:bg-blue-100 rounded-lg transition-colors"
+                        className="inline-flex items-center gap-1 px-2 py-1 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition-colors text-xs"
                         title="Voir les photos/factures"
                       >
-                        <Camera className="w-4 h-4" />
+                        <Camera className="w-3 h-3" />
+                        Photo
                       </a>
+                    ) : (
+                      <span className="text-xs text-gray-400">-</span>
                     )}
-                    <span className="font-bold text-gray-800">{formatMontant(depense.montant)}</span>
+                  </div>
+                  {/* Montant - col 10-11 */}
+                  <div className="col-span-2 text-right">
+                    <span className="font-bold text-gray-800">{formatMontant(depense.montant, displayCurrency)}</span>
+                  </div>
+                  {/* Actions - col 12 */}
+                  <div className="col-span-1 text-right">
                     <button
                       onClick={() => handleDeleteDepense(depense.id)}
                       className="p-2 text-red-600 hover:bg-red-100 rounded-lg transition-colors"

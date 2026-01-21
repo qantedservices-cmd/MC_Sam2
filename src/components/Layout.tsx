@@ -42,8 +42,8 @@ export default function Layout() {
   return (
     <div className="min-h-screen bg-gray-100">
       <header className="bg-gradient-to-r from-amber-500 to-amber-600 text-white shadow-lg sticky top-0 z-40">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between h-14 sm:h-16">
+        <div className="max-w-full mx-auto px-2 sm:px-4">
+          <div className="flex items-center justify-between h-14 sm:h-16 max-w-full">
             <div className="flex items-center gap-3">
               <button onClick={() => setMobileMenuOpen(true)} className="sm:hidden p-2 -ml-2 rounded-lg hover:bg-amber-600" aria-label="Menu">
                 <Menu className="w-6 h-6" />
@@ -61,7 +61,7 @@ export default function Layout() {
               </Link>
             </div>
 
-            <nav className="hidden sm:flex items-center gap-1 md:gap-2">
+            <nav className="hidden sm:flex items-center gap-0.5 md:gap-1 lg:gap-2 flex-shrink min-w-0">
               {navItems.map(item => {
                 const isActive = location.pathname === item.to || (item.to !== '/' && location.pathname.startsWith(item.to));
                 const el = <Link key={item.to} to={item.to} className={`flex items-center gap-1 px-2 md:px-3 py-2 rounded-lg hover:bg-amber-600 ${isActive ? 'bg-amber-600/80' : ''}`}><item.icon className="w-5 h-5" /><span className="hidden md:inline text-sm">{item.label}</span></Link>;
@@ -74,12 +74,12 @@ export default function Layout() {
               </PermissionGate>
 
               {/* Selecteur de devise global */}
-              <div className="flex items-center gap-1 bg-amber-600/50 rounded-lg px-2 py-1.5 ml-1">
+              <div className="flex items-center gap-0.5 bg-amber-600/50 rounded-lg px-1.5 py-1 flex-shrink-0">
                 <Coins className="w-4 h-4 text-yellow-200" />
                 <select
                   value={displayCurrency}
                   onChange={(e) => setDisplayCurrency(e.target.value as DeviseType)}
-                  className="bg-transparent border-none text-sm font-medium focus:outline-none cursor-pointer text-white"
+                  className="bg-transparent border-none text-xs font-medium focus:outline-none cursor-pointer text-white w-12"
                 >
                   {Object.keys(DEVISES).map(code => (
                     <option key={code} value={code} className="text-gray-800">{code}</option>
