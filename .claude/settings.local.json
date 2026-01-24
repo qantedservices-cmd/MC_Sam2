@@ -27,7 +27,9 @@
       "Bash(docker rmi:*)",
       "Bash(docker compose exec:*)",
       "Bash(docker exec:*)",
-      "Bash(npx tsc:*)"
+      "Bash(npx tsc:*)",
+      "WebSearch",
+      "Bash(npx prisma generate:*)"
     ]
   }
 }
