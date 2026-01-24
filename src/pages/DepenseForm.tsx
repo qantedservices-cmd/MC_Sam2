@@ -2,20 +2,23 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { createDepense, getChantier } from '../services/api';
 import { useToast } from '../contexts/ToastContext';
+import { useCurrency } from '../contexts/CurrencyContext';
 import HierarchicalCategorySelect from '../components/HierarchicalCategorySelect';
 import { ArrowLeft, Save, Loader2 } from 'lucide-react';
 import type { DeviseType } from '../types';
-import { DEVISES } from '../types';
+import { DEVISES, DEVISE_DISPLAY } from '../types';
 
 export default function DepenseForm() {
   const { id: chantierId } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { showSuccess, showError } = useToast();
+  const { rates } = useCurrency();
 
   const [formData, setFormData] = useState({
     description: '',
     montant: 0,
     devise: 'DNT' as DeviseType,
+    tauxChange: null as number | null,
     date: new Date().toISOString().split('T')[0],
     categorieId: ''
   });
@@ -52,6 +55,7 @@ export default function DepenseForm() {
     try {
       await createDepense({
         ...formData,
+        tauxChange: formData.tauxChange || undefined,
         chantierId
       });
       showSuccess('Dépense ajoutée avec succès');
@@ -122,15 +126,42 @@ export default function DepenseForm() {
               <select
                 id="devise"
                 value={formData.devise}
-                onChange={e => setFormData({ ...formData, devise: e.target.value as DeviseType })}
+                onChange={e => {
+                  const newDevise = e.target.value as DeviseType;
+                  setFormData({
+                    ...formData,
+                    devise: newDevise,
+                    tauxChange: newDevise !== 'DNT' ? rates[newDevise] : null
+                  });
+                }}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               >
                 {Object.entries(DEVISES).map(([code, label]) => (
-                  <option key={code} value={code}>{code} - {label}</option>
+                  <option key={code} value={code}>{DEVISE_DISPLAY[code as DeviseType]} - {label}</option>
                 ))}
               </select>
             </div>
           </div>
+
+          {formData.devise !== 'DNT' && (
+            <div>
+              <label htmlFor="tauxChange" className="block text-sm font-medium text-gray-700 mb-1">
+                Taux de change (1 {DEVISE_DISPLAY[formData.devise]} = ? TND)
+              </label>
+              <input
+                type="number"
+                id="tauxChange"
+                min="0.01"
+                step="0.01"
+                value={formData.tauxChange || rates[formData.devise]}
+                onChange={e => setFormData({ ...formData, tauxChange: parseFloat(e.target.value) || null })}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              />
+              <p className="text-xs text-gray-500 mt-1">
+                Taux actuel config: 1 {DEVISE_DISPLAY[formData.devise]} = {rates[formData.devise]} TND
+              </p>
+            </div>
+          )}
 
           <div>
             <label htmlFor="date" className="block text-sm font-medium text-gray-700 mb-1">

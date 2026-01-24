@@ -19,7 +19,7 @@ export default function ChantierDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { showSuccess, showError } = useToast();
-  const { formatAmount } = useCurrency();
+  const { formatAmount, rates } = useCurrency();
 
   const [chantier, setChantier] = useState<Chantier | null>(null);
   const [depenses, setDepenses] = useState<Depense[]>([]);
@@ -90,7 +90,9 @@ export default function ChantierDetail() {
     const grouped: Record<string, number> = {};
     depenses.forEach(d => {
       const catId = d.categorieId || 'autre';
-      grouped[catId] = (grouped[catId] || 0) + d.montant;
+      const devise = d.devise || 'DNT';
+      // Convertir en DNT avec taux du jour pour les totaux
+      grouped[catId] = (grouped[catId] || 0) + d.montant * (rates[devise] || 1);
     });
     return Object.entries(grouped)
       .map(([categorieId, value]) => ({
@@ -99,7 +101,7 @@ export default function ChantierDetail() {
         value
       }))
       .sort((a, b) => b.value - a.value);
-  }, [depenses, categories]);
+  }, [depenses, categories, rates]);
 
   // Analytics data - évolution dans le temps (must be before conditional returns)
   const evolutionMois = useMemo(() => {
@@ -112,7 +114,8 @@ export default function ChantierDetail() {
       if (!parMoisMap[mois]) {
         parMoisMap[mois] = { depenses: 0, cumul: 0 };
       }
-      parMoisMap[mois].depenses += d.montant;
+      const devise = d.devise || 'DNT';
+      parMoisMap[mois].depenses += d.montant * (rates[devise] || 1);
     });
 
     // Compute cumul
@@ -124,7 +127,7 @@ export default function ChantierDetail() {
     return Object.entries(parMoisMap)
       .map(([date, data]) => ({ date: `${date}-01`, ...data }))
       .sort((a, b) => a.date.localeCompare(b.date));
-  }, [depenses]);
+  }, [depenses, rates]);
 
   // Filtrer les dépenses selon la sélection analytics
   const filteredDepenses = useMemo(() => {
@@ -346,7 +349,11 @@ export default function ChantierDetail() {
     );
   }
 
-  const totalDepenses = depenses.reduce((sum, d) => sum + d.montant, 0);
+  // Total en DNT avec taux du jour (global) pour chaque dépense
+  const totalDepenses = depenses.reduce((sum, d) => {
+    const devise = d.devise || 'DNT';
+    return sum + d.montant * (rates[devise] || 1);
+  }, 0);
   const reste = chantier.budgetPrevisionnel - totalDepenses;
   const progression = (totalDepenses / chantier.budgetPrevisionnel) * 100;
   const isOverBudget = progression > 100;
@@ -966,7 +973,7 @@ export default function ChantierDetail() {
                   </div>
                   {/* Montant - col 10-11 */}
                   <div className="col-span-2 text-right">
-                    <span className="font-bold text-gray-800">{formatAmount(depense.montant, depense.devise)}</span>
+                    <span className="font-bold text-gray-800">{formatAmount(depense.montant, depense.devise, depense.tauxChange)}</span>
                   </div>
                   {/* Actions - col 12 */}
                   <div className="col-span-1 text-right">

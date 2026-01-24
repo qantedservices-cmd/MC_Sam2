@@ -137,6 +137,7 @@ model Depense {
   description String
   montant     Float
   devise      String   @default("DNT")
+  tauxChange  Float?   // Taux de change au moment de la saisie (ex: 1 EUR = 3.35 DNT)
   date        DateTime
   payeur      String?  // Qui paie? (Walid, Samir, etc.)
   beneficiaire String? // A qui? (Hdid, Mounir, etc.)

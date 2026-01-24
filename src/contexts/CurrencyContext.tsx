@@ -9,7 +9,7 @@ interface CurrencyContextType {
   config: AppConfig | null;
   rates: { EUR: number; USD: number; DNT: number };
   loading: boolean;
-  formatAmount: (montant: number, fromDevise?: DeviseType) => string;
+  formatAmount: (montant: number, fromDevise?: DeviseType, customRate?: number | null) => string;
 }
 
 const CURRENCY_MAP: Record<DeviseType, string> = {
@@ -51,12 +51,16 @@ export function CurrencyProvider({ children }: { children: ReactNode }) {
   }, [config]);
 
   // Convertit et formate un montant depuis fromDevise vers displayCurrency
-  const formatAmount = useCallback((montant: number, fromDevise: DeviseType = 'DNT'): string => {
+  // customRate: taux saisi dans la dépense (1 fromDevise = customRate DNT)
+  // Si null/undefined, utilise le taux global (taux du jour)
+  const formatAmount = useCallback((montant: number, fromDevise: DeviseType = 'DNT', customRate?: number | null): string => {
     let convertedAmount = montant;
 
     if (fromDevise !== displayCurrency) {
+      // Taux à utiliser: celui de la dépense si fourni, sinon le taux global
+      const rateToUse = customRate || rates[fromDevise];
       // Convertir d'abord en DNT (monnaie de base)
-      const amountInDNT = montant * rates[fromDevise];
+      const amountInDNT = montant * rateToUse;
       // Puis convertir vers la devise d'affichage
       convertedAmount = amountInDNT / rates[displayCurrency];
     }

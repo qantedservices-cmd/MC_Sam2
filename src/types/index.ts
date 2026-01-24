@@ -113,6 +113,7 @@ export interface Depense {
   description: string;
   montant: number;
   devise?: DeviseType;  // Devise de la dépense (défaut: devise du chantier)
+  tauxChange?: number;  // Taux de change au moment de la saisie (ex: 1 EUR = 3.35 DNT)
   date: string;
   categorieId: string;
   // Nouveaux champs pour import Forms
