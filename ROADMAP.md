@@ -10,9 +10,10 @@ Serveur:  Docker Compose sur 72.61.105.112:8080
 ```
 
 ### Statistiques du Code
-- **Frontend:** ~25 composants, 10 pages, 6 utilitaires
+- **Frontend:** ~30 composants, 10 pages, 6 utilitaires, 3 contextes
 - **Backend:** 22 routes API, 1 service auth
-- **Total:** ~60 fichiers sources, ~10,000 lignes de code
+- **Total:** ~65 fichiers sources, ~12,000 lignes de code
+- **Donnees:** 7 chantiers, 229 depenses, 32 transferts, 66 photos
 
 ---
 
@@ -156,10 +157,16 @@ Serveur:  Docker Compose sur 72.61.105.112:8080
 
 ---
 
-## Phase 14 : Analytics (COMPLETE - NEW)
+## Phase 14 : Analytics Interactifs (COMPLETE - UPDATED)
 
-- [x] Graphique depenses par lot (camembert)
-- [x] Graphique evolution temporelle (barres)
+- [x] Graphique depenses par categorie (camembert)
+- [x] Graphique evolution temporelle (area chart)
+- [x] Clics sur camembert pour filtrer les depenses
+- [x] Legendes cliquables pour filtrage
+- [x] Clic sur mois pour filtrer par periode
+- [x] Multi-selection avec Ctrl+clic
+- [x] Bouton reinitialiser les filtres
+- [x] Tooltip enrichi (nom, montant, pourcentage)
 - [x] Integration dans page ChantierDetail
 - [x] Section analytics toggleable
 
@@ -172,6 +179,41 @@ Serveur:  Docker Compose sur 72.61.105.112:8080
 - [x] Reorganisation par drag (boutons haut/bas)
 - [x] Sauvegarde des preferences localStorage
 - [x] Reinitialisation possible
+
+---
+
+## Phase 16 : Import Donnees Excel & Bilan (COMPLETE - NEW)
+
+### 16.1 Import des depenses
+- [x] Import de 229 depenses depuis Excel (Forms Google)
+- [x] Champs payeur, beneficiaire, photosUrls
+- [x] Ajout categories manquantes (ferronnerie, marbre)
+- [x] Correction encodage UTF-8 (81 enregistrements)
+
+### 16.2 Transferts budgetaires
+- [x] Import de 32 transferts avec montants convertis
+- [x] Support montants negatifs (regularisations)
+- [x] Taux de change historiques
+
+### 16.3 Bilan par acteur
+- [x] Graphique ChartBilanActeurs (barres horizontales)
+- [x] Calcul: Solde = Recus - Donnes - Depenses
+- [x] Tableau recapitulatif par acteur
+- [x] Acteurs: Walid, Wissem, Samir, Anis, Ommi, Babay
+
+---
+
+## Phase 17 : Affichage & UX (COMPLETE - NEW)
+
+- [x] Devise globale (contexte CurrencyContext)
+- [x] Selecteur de devise dans le header
+- [x] Affichage DNT/EUR/USD dynamique
+- [x] Tableau depenses avec colonnes structurees
+- [x] Colonne Photo dediee (lien vers factures)
+- [x] Colonne Payeur/Beneficiaire
+- [x] En-tete du tableau depenses
+- [x] Header responsive sans debordement
+- [x] Liens photos factures (Google Drive)
 
 ---
 
@@ -246,9 +288,12 @@ Serveur:  Docker Compose sur 72.61.105.112:8080
 | Authentification JWT | OK | 12 |
 | Permissions par role | OK | 12 |
 | Photos chantier | OK | 13 |
-| Analytics graphiques | OK | 14 |
+| Analytics interactifs | OK | 14 |
 | Filtre/Ordre chantiers | OK | 15 |
-| Multi-devises | OK | 2 |
+| Import Excel (229 dep.) | OK | 16 |
+| Bilan par acteur | OK | 16 |
+| Multi-devises dynamique | OK | 17 |
+| Tableau depenses structure | OK | 17 |
 | Backend PostgreSQL | OK | 11 |
 | Deploiement Docker | OK | 11 |
 
@@ -283,6 +328,6 @@ docker compose exec db psql -U monchantier -d monchantier
 
 ---
 
-**Derniere mise a jour:** 19 Janvier 2026
-**Version:** 2.0.0
-**Statut:** PRODUCTION - Fonctionnel avec points d'amelioration identifies
+**Derniere mise a jour:** 21 Janvier 2026
+**Version:** 2.1.0
+**Statut:** PRODUCTION - Fonctionnel avec donnees Excel importees et analytics interactifs
