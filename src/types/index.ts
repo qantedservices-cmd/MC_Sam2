@@ -154,6 +154,13 @@ export const DEVISES: Record<DeviseType, string> = {
   USD: 'Dollar US'
 } as const;
 
+// Codes ISO pour l'affichage (DNT interne → TND affichage)
+export const DEVISE_DISPLAY: Record<DeviseType, string> = {
+  DNT: 'TND',
+  EUR: 'EUR',
+  USD: 'USD'
+} as const;
+
 export interface TransfertBudget {
   id: string;
   date: string;

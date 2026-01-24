@@ -3,7 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { getChantier, getDepenses, deleteChantier, deleteDepense, deleteDepensesByChantier, getCategories, getCategoryLabel, getChantierActors, getPhotosChantier, createPhotoChantier, deletePhotoChantier, updateChantier } from '../services/api';
 import type { Chantier, Depense, Categorie, Client, MOA, MOE, Entreprise, PhotoChantier } from '../types';
 import { STATUTS_CHANTIER } from '../types';
-import { formatMontant, formatDate } from '../utils/format';
+import { formatDate } from '../utils/format';
 import { useToast } from '../contexts/ToastContext';
 import { useCurrency } from '../contexts/CurrencyContext';
 import Loading from '../components/Loading';
@@ -19,7 +19,7 @@ export default function ChantierDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { showSuccess, showError } = useToast();
-  const { displayCurrency } = useCurrency();
+  const { formatAmount } = useCurrency();
 
   const [chantier, setChantier] = useState<Chantier | null>(null);
   const [depenses, setDepenses] = useState<Depense[]>([]);
@@ -451,16 +451,16 @@ export default function ChantierDetail() {
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
           <div className="bg-blue-50 rounded-lg p-4">
             <p className="text-sm text-gray-500">Budget prévisionnel</p>
-            <p className="text-xl font-bold text-blue-600">{formatMontant(chantier.budgetPrevisionnel, displayCurrency)}</p>
+            <p className="text-xl font-bold text-blue-600">{formatAmount(chantier.budgetPrevisionnel)}</p>
           </div>
           <div className="bg-red-50 rounded-lg p-4">
             <p className="text-sm text-gray-500">Total dépenses</p>
-            <p className="text-xl font-bold text-red-600">{formatMontant(totalDepenses, displayCurrency)}</p>
+            <p className="text-xl font-bold text-red-600">{formatAmount(totalDepenses)}</p>
           </div>
           <div className={`${reste >= 0 ? 'bg-green-50' : 'bg-red-50'} rounded-lg p-4`}>
             <p className="text-sm text-gray-500">Reste</p>
             <p className={`text-xl font-bold ${reste >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-              {formatMontant(reste, displayCurrency)}
+              {formatAmount(reste)}
             </p>
           </div>
         </div>
@@ -855,7 +855,7 @@ export default function ChantierDetail() {
                     <div className="flex-1">
                       <div className="flex justify-between text-sm mb-1">
                         <span className="font-medium text-gray-700">{cat.name}</span>
-                        <span className="text-gray-600">{formatMontant(cat.value, displayCurrency)}</span>
+                        <span className="text-gray-600">{formatAmount(cat.value)}</span>
                       </div>
                       <div className="w-full bg-gray-100 rounded-full h-1.5">
                         <div
@@ -966,7 +966,7 @@ export default function ChantierDetail() {
                   </div>
                   {/* Montant - col 10-11 */}
                   <div className="col-span-2 text-right">
-                    <span className="font-bold text-gray-800">{formatMontant(depense.montant, displayCurrency)}</span>
+                    <span className="font-bold text-gray-800">{formatAmount(depense.montant, depense.devise)}</span>
                   </div>
                   {/* Actions - col 12 */}
                   <div className="col-span-1 text-right">

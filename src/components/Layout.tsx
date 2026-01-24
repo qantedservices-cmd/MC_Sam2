@@ -3,7 +3,7 @@ import { Link, Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { PlusCircle, HardHat, Users, Upload, BarChart3, User, LogOut, ChevronDown, Shield, Menu, X, UserCheck, Package, Building2, Coins } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useCurrency } from '../contexts/CurrencyContext';
-import { USER_ROLES, DEVISES, type DeviseType } from '../types';
+import { USER_ROLES, DEVISES, DEVISE_DISPLAY, type DeviseType } from '../types';
 import { PermissionGate } from './ProtectedRoute';
 
 export default function Layout() {
@@ -82,7 +82,7 @@ export default function Layout() {
                   className="bg-transparent border-none text-xs font-medium focus:outline-none cursor-pointer text-white w-12"
                 >
                   {Object.keys(DEVISES).map(code => (
-                    <option key={code} value={code} className="text-gray-800">{code}</option>
+                    <option key={code} value={code} className="text-gray-800">{DEVISE_DISPLAY[code as DeviseType]}</option>
                   ))}
                 </select>
               </div>

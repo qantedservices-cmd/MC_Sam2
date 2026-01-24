@@ -9,7 +9,14 @@ interface CurrencyContextType {
   config: AppConfig | null;
   rates: { EUR: number; USD: number; DNT: number };
   loading: boolean;
+  formatAmount: (montant: number, fromDevise?: DeviseType) => string;
 }
+
+const CURRENCY_MAP: Record<DeviseType, string> = {
+  DNT: 'TND',
+  EUR: 'EUR',
+  USD: 'USD'
+};
 
 const CurrencyContext = createContext<CurrencyContextType | null>(null);
 
@@ -43,8 +50,25 @@ export function CurrencyProvider({ children }: { children: ReactNode }) {
     }
   }, [config]);
 
+  // Convertit et formate un montant depuis fromDevise vers displayCurrency
+  const formatAmount = useCallback((montant: number, fromDevise: DeviseType = 'DNT'): string => {
+    let convertedAmount = montant;
+
+    if (fromDevise !== displayCurrency) {
+      // Convertir d'abord en DNT (monnaie de base)
+      const amountInDNT = montant * rates[fromDevise];
+      // Puis convertir vers la devise d'affichage
+      convertedAmount = amountInDNT / rates[displayCurrency];
+    }
+
+    return new Intl.NumberFormat('fr-FR', {
+      style: 'currency',
+      currency: CURRENCY_MAP[displayCurrency]
+    }).format(convertedAmount);
+  }, [displayCurrency, rates]);
+
   return (
-    <CurrencyContext.Provider value={{ displayCurrency, setDisplayCurrency, config, rates, loading }}>
+    <CurrencyContext.Provider value={{ displayCurrency, setDisplayCurrency, config, rates, loading, formatAmount }}>
       {children}
     </CurrencyContext.Provider>
   );
