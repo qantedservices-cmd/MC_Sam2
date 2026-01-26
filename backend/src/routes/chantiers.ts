@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { prisma } from '../server.js';
+import type { AuthRequest } from '../middleware/auth.js';
 
 const router = Router();
 
@@ -59,7 +60,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // POST create chantier
-router.post('/', async (req, res) => {
+router.post('/', async (req: AuthRequest, res) => {
   try {
     const { entrepriseIds, dateCreation, dateFin, ...data } = req.body;
 
@@ -74,6 +75,16 @@ router.post('/', async (req, res) => {
         } : undefined
       }
     });
+
+    // Auto-assign the creator to this chantier (so they can see it)
+    if (req.userId) {
+      await prisma.userChantier.create({
+        data: {
+          userId: req.userId,
+          chantierId: chantier.id
+        }
+      });
+    }
 
     res.status(201).json({ ...chantier, entrepriseIds: entrepriseIds || [] });
   } catch (error) {
