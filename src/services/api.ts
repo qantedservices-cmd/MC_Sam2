@@ -166,7 +166,7 @@ export async function getConfig(): Promise<AppConfig> {
 export async function updateConfig(config: Partial<AppConfig>): Promise<AppConfig> {
   const response = await fetch(`${API_URL}/config`, {
     method: 'PATCH',
-    headers: { 'Content-Type': 'application/json' },
+    headers: getAuthHeaders(),
     body: JSON.stringify(config),
   });
   if (!response.ok) {
@@ -341,7 +341,9 @@ export const getUsers = usersApi.getAll;
 export const getUser = usersApi.getById;
 
 export async function createUser(userData: Omit<User, 'id'>): Promise<User> {
-  const existing = await fetch(`${API_URL}/users?email=${encodeURIComponent(userData.email)}`);
+  const existing = await fetch(`${API_URL}/users?email=${encodeURIComponent(userData.email)}`, {
+    headers: getAuthHeaders()
+  });
   const existingUsers: User[] = await existing.json();
   if (existingUsers.length > 0) {
     throw new Error('Cet email est deja utilise');

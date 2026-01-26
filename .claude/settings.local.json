@@ -29,7 +29,8 @@
       "Bash(docker exec:*)",
       "Bash(npx tsc:*)",
       "WebSearch",
-      "Bash(npx prisma generate:*)"
+      "Bash(npx prisma generate:*)",
+      "Bash(npx next build)"
     ]
   }
 }

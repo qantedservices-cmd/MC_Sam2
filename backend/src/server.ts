@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import { PrismaClient } from '@prisma/client';
+import { authMiddleware } from './middleware/auth.js';
 
 // Routes
 import chantiersRouter from './routes/chantiers.js';
@@ -31,16 +32,41 @@ export const prisma = new PrismaClient();
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// Middleware
-app.use(cors());
+// CORS - restreint aux origines autorisées
+const allowedOrigins = [
+  'http://localhost:5173',           // Dev local Vite
+  'http://localhost:8080',           // Dev local Docker
+  'http://72.61.105.112:8080',       // Production
+  process.env.FRONTEND_URL           // Variable d'environnement si définie
+].filter(Boolean);
+
+app.use(cors({
+  origin: (origin, callback) => {
+    // Autoriser les requêtes sans origin (curl, Postman, etc.) en dev
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Non autorisé par CORS'));
+    }
+  },
+  credentials: true
+}));
+
 app.use(express.json());
 
-// Health check
+// Health check (public)
 app.get('/health', (req, res) => {
   res.json({ status: 'ok', database: 'postgresql' });
 });
 
-// Routes API
+// Routes publiques (sans auth)
+app.use('/auth', authRouter);
+app.use('/config', configRouter);  // Config publique pour charger les taux
+
+// Middleware auth pour toutes les routes protégées
+app.use(authMiddleware);
+
+// Routes protégées (requièrent authentification)
 app.use('/chantiers', chantiersRouter);
 app.use('/depenses', depensesRouter);
 app.use('/clients', acteursRouter);
@@ -49,7 +75,6 @@ app.use('/moes', acteursRouter);
 app.use('/entreprises', acteursRouter);
 app.use('/categories', categoriesRouter);
 app.use('/users', usersRouter);
-app.use('/auth', authRouter);
 app.use('/employes', employesRouter);
 app.use('/pointages', pointagesRouter);
 app.use('/paiements-employes', paiementsEmployeRouter);
@@ -63,7 +88,6 @@ app.use('/pv-avancements', pvAvancementsRouter);
 app.use('/paiements-client', paiementsClientRouter);
 app.use('/photos-chantier', photosChantierRouter);
 app.use('/etats-avancement', etatsAvancementRouter);
-app.use('/config', configRouter);
 app.use('/devis', devisRouter);
 app.use('/transferts', transfertsRouter);
 

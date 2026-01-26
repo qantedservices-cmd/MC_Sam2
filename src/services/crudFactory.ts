@@ -1,8 +1,18 @@
 /**
  * Factory CRUD generique pour reduire la duplication de code API
  */
+import { AUTH_TOKEN_KEY } from '../utils/crypto';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+
+// Helper pour ajouter le token aux requetes
+function getAuthHeaders(): HeadersInit {
+  const token = localStorage.getItem(AUTH_TOKEN_KEY);
+  return {
+    'Content-Type': 'application/json',
+    ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+  };
+}
 
 export interface CrudApi<T, CreateT = Omit<T, 'id'>> {
   getAll: (filter?: string) => Promise<T[]>;
@@ -19,7 +29,7 @@ export function createCrudApi<T extends { id: string }, CreateT = Omit<T, 'id'>>
   return {
     async getAll(filter?: string): Promise<T[]> {
       const url = filter ? `${API_URL}/${endpoint}?${filter}` : `${API_URL}/${endpoint}`;
-      const response = await fetch(url);
+      const response = await fetch(url, { headers: getAuthHeaders() });
       if (!response.ok) {
         throw new Error(`Erreur lors de la recuperation des ${entityName}s`);
       }
@@ -27,7 +37,7 @@ export function createCrudApi<T extends { id: string }, CreateT = Omit<T, 'id'>>
     },
 
     async getById(id: string): Promise<T> {
-      const response = await fetch(`${API_URL}/${endpoint}/${id}`);
+      const response = await fetch(`${API_URL}/${endpoint}/${id}`, { headers: getAuthHeaders() });
       if (!response.ok) {
         throw new Error(`${entityName} non trouve`);
       }
@@ -37,7 +47,7 @@ export function createCrudApi<T extends { id: string }, CreateT = Omit<T, 'id'>>
     async create(data: CreateT): Promise<T> {
       const response = await fetch(`${API_URL}/${endpoint}`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getAuthHeaders(),
         body: JSON.stringify(data),
       });
       if (!response.ok) {
@@ -49,7 +59,7 @@ export function createCrudApi<T extends { id: string }, CreateT = Omit<T, 'id'>>
     async update(id: string, data: Partial<T>): Promise<T> {
       const response = await fetch(`${API_URL}/${endpoint}/${id}`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getAuthHeaders(),
         body: JSON.stringify(data),
       });
       if (!response.ok) {
@@ -61,6 +71,7 @@ export function createCrudApi<T extends { id: string }, CreateT = Omit<T, 'id'>>
     async delete(id: string): Promise<void> {
       const response = await fetch(`${API_URL}/${endpoint}/${id}`, {
         method: 'DELETE',
+        headers: getAuthHeaders(),
       });
       if (!response.ok) {
         throw new Error(`Erreur lors de la suppression du ${entityName}`);
