@@ -7,7 +7,6 @@ import {
 import type { Chantier, Client, MOA, MOE, Entreprise, DeviseType } from '../types';
 import { DEVISES } from '../types';
 import { useToast } from '../contexts/ToastContext';
-import { useAuth } from '../contexts/AuthContext';
 import Loading from '../components/Loading';
 import ActorSelector from '../components/ActorSelector';
 import { ArrowLeft, Save, Loader2 } from 'lucide-react';
@@ -16,7 +15,6 @@ export default function ChantierForm() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { showSuccess, showError } = useToast();
-  const { addChantierAccess } = useAuth();
   const isEditing = Boolean(id);
 
   const [formData, setFormData] = useState({
@@ -102,13 +100,11 @@ export default function ChantierForm() {
         await updateChantier(id, chantierData);
         showSuccess('Chantier modifie avec succes');
       } else {
-        const newChantier = await createChantier({
+        await createChantier({
           ...chantierData,
           dateCreation: new Date().toISOString().split('T')[0]
         });
         showSuccess('Chantier cree avec succes');
-        // Defer state update to avoid React reconciliation issues during navigation
-        setTimeout(() => addChantierAccess(newChantier.id), 0);
       }
       navigate('/');
     } catch (err) {
