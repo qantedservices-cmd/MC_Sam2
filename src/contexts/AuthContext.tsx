@@ -12,6 +12,7 @@ interface AuthContextType {
   isAuthenticated: boolean;
   hasPermission: (permission: keyof RolePermissions) => boolean;
   canAccessChantier: (chantierId: string) => boolean;
+  addChantierAccess: (chantierId: string) => void;
   permissions: RolePermissions | null;
 }
 
@@ -75,6 +76,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return checkChantierAccess(user.role, user.chantierIds, chantierId);
   }, [user]);
 
+  // Add access to a newly created chantier
+  const addChantierAccess = useCallback((chantierId: string) => {
+    if (!user) return;
+    if (user.chantierIds.includes(chantierId)) return;
+
+    const updatedUser = {
+      ...user,
+      chantierIds: [...user.chantierIds, chantierId]
+    };
+    setUser(updatedUser);
+    localStorage.setItem(AUTH_USER_KEY, JSON.stringify(updatedUser));
+  }, [user]);
+
   const permissions = user ? ROLE_PERMISSIONS[user.role] : null;
 
   return (
@@ -87,6 +101,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         isAuthenticated: !!user,
         hasPermission: checkPermission,
         canAccessChantier,
+        addChantierAccess,
         permissions
       }}
     >
