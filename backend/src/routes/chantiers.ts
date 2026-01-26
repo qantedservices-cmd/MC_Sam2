@@ -61,11 +61,14 @@ router.get('/:id', async (req, res) => {
 // POST create chantier
 router.post('/', async (req, res) => {
   try {
-    const { entrepriseIds, ...data } = req.body;
+    const { entrepriseIds, dateCreation, dateFin, ...data } = req.body;
 
     const chantier = await prisma.chantier.create({
       data: {
         ...data,
+        // Convert date strings to ISO DateTime
+        dateCreation: dateCreation ? new Date(dateCreation).toISOString() : undefined,
+        dateFin: dateFin ? new Date(dateFin).toISOString() : undefined,
         entreprises: entrepriseIds ? {
           create: entrepriseIds.map((id: string) => ({ entrepriseId: id }))
         } : undefined
@@ -82,7 +85,7 @@ router.post('/', async (req, res) => {
 // PATCH/PUT update chantier
 router.patch('/:id', async (req, res) => {
   try {
-    const { entrepriseIds, ...data } = req.body;
+    const { entrepriseIds, dateCreation, dateFin, ...rest } = req.body;
 
     // Update entreprises if provided
     if (entrepriseIds) {
@@ -96,6 +99,13 @@ router.patch('/:id', async (req, res) => {
         }))
       });
     }
+
+    // Build data with converted dates
+    const data = {
+      ...rest,
+      ...(dateCreation && { dateCreation: new Date(dateCreation).toISOString() }),
+      ...(dateFin && { dateFin: new Date(dateFin).toISOString() })
+    };
 
     const chantier = await prisma.chantier.update({
       where: { id: req.params.id },
@@ -111,7 +121,7 @@ router.patch('/:id', async (req, res) => {
 // PUT redirects to PATCH logic
 router.put('/:id', async (req, res) => {
   try {
-    const { entrepriseIds, ...data } = req.body;
+    const { entrepriseIds, dateCreation, dateFin, ...rest } = req.body;
 
     if (entrepriseIds) {
       await prisma.chantierEntreprise.deleteMany({
@@ -124,6 +134,13 @@ router.put('/:id', async (req, res) => {
         }))
       });
     }
+
+    // Build data with converted dates
+    const data = {
+      ...rest,
+      ...(dateCreation && { dateCreation: new Date(dateCreation).toISOString() }),
+      ...(dateFin && { dateFin: new Date(dateFin).toISOString() })
+    };
 
     const chantier = await prisma.chantier.update({
       where: { id: req.params.id },
