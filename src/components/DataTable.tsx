@@ -294,11 +294,19 @@ export default function DataTable<T extends object>({
 }
 
 // Helper to render photo links
-export function renderPhotoLinks(urls?: string[]) {
-  if (!urls || urls.length === 0) return '-';
+export function renderPhotoLinks(urls?: string[] | string) {
+  // Handle both array and CSV string formats
+  let urlArray: string[] = [];
+  if (Array.isArray(urls)) {
+    urlArray = urls;
+  } else if (typeof urls === 'string' && urls.trim()) {
+    urlArray = urls.split(',').map(u => u.trim()).filter(Boolean);
+  }
+
+  if (urlArray.length === 0) return '-';
   return (
     <div className="flex gap-1">
-      {urls.slice(0, 3).map((url, i) => (
+      {urlArray.slice(0, 3).map((url, i) => (
         <a
           key={i}
           href={url}
@@ -309,8 +317,8 @@ export function renderPhotoLinks(urls?: string[]) {
           <ExternalLink className="w-4 h-4" />
         </a>
       ))}
-      {urls.length > 3 && (
-        <span className="text-gray-400 text-xs">+{urls.length - 3}</span>
+      {urlArray.length > 3 && (
+        <span className="text-gray-400 text-xs">+{urlArray.length - 3}</span>
       )}
     </div>
   );
