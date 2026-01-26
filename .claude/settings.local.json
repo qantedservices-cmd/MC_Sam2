@@ -32,7 +32,8 @@
       "Bash(npx prisma generate:*)",
       "Bash(npx next build)",
       "Bash(npx ts-node:*)",
-      "Bash(npx prisma migrate dev:*)"
+      "Bash(npx prisma migrate dev:*)",
+      "Bash(npx prisma format:*)"
     ]
   }
 }

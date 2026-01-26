@@ -106,9 +106,9 @@ export default function ChantierForm() {
           ...chantierData,
           dateCreation: new Date().toISOString().split('T')[0]
         });
-        // Add access to the newly created chantier in the user session
-        addChantierAccess(newChantier.id);
         showSuccess('Chantier cree avec succes');
+        // Defer state update to avoid React reconciliation issues during navigation
+        setTimeout(() => addChantierAccess(newChantier.id), 0);
       }
       navigate('/');
     } catch (err) {
