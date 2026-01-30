@@ -141,11 +141,12 @@ export default function Layout() {
           </div>
         </div>
         <nav className="p-2">
-          {navItems.map(item => {
-            if (item.permission && !hasPermission(item.permission)) return null;
-            const isActive = location.pathname === item.to || (item.to !== '/' && location.pathname.startsWith(item.to));
-            return <Link key={item.to} to={item.to} className={`flex items-center gap-3 px-4 py-3 rounded-lg ${isActive ? 'bg-amber-50 text-amber-600' : 'text-gray-700 hover:bg-gray-100'}`}><item.icon className="w-5 h-5" /><span className="font-medium">{item.label}</span></Link>;
-          })}
+          {navItems
+            .filter(item => !item.permission || hasPermission(item.permission))
+            .map(item => {
+              const isActive = location.pathname === item.to || (item.to !== '/' && location.pathname.startsWith(item.to));
+              return <Link key={item.to} to={item.to} className={`flex items-center gap-3 px-4 py-3 rounded-lg ${isActive ? 'bg-amber-50 text-amber-600' : 'text-gray-700 hover:bg-gray-100'}`}><item.icon className="w-5 h-5" /><span className="font-medium">{item.label}</span></Link>;
+            })}
           {hasPermission('canCreateChantier') && <Link to="/chantiers/nouveau" className="flex items-center gap-3 px-4 py-3 mt-2 bg-amber-500 text-white rounded-lg hover:bg-amber-600"><PlusCircle className="w-5 h-5" /><span className="font-medium">Nouveau chantier</span></Link>}
         </nav>
         <div className="absolute bottom-0 left-0 right-0 p-4 border-t">

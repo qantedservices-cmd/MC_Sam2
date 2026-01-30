@@ -13,9 +13,10 @@ import { STATUTS_PAIEMENT } from '../types';
 import { useToast } from '../contexts/ToastContext';
 import { formatMontant } from '../utils/format';
 import { useAuth } from '../contexts/AuthContext';
+import { canAccessChantier } from '../utils/permissions';
 
 export default function PaiementsPage() {
-  const { hasPermission } = useAuth();
+  const { user, hasPermission } = useAuth();
   const { showSuccess, showError } = useToast();
 
   const [loading, setLoading] = useState(true);
@@ -35,14 +36,18 @@ export default function PaiementsPage() {
   const loadChantiers = useCallback(async () => {
     try {
       const data = await getChantiers();
-      setChantiers(data);
-      if (data.length > 0 && !selectedChantier) {
-        setSelectedChantier(data[0].id);
+      // Filtrer selon les permissions de l'utilisateur
+      const accessibleData = user && !hasPermission('canViewAllChantiers')
+        ? data.filter(c => canAccessChantier(user.role, user.chantierIds, c.id))
+        : data;
+      setChantiers(accessibleData);
+      if (accessibleData.length > 0 && !selectedChantier) {
+        setSelectedChantier(accessibleData[0].id);
       }
     } catch {
       showError('Erreur lors du chargement des chantiers');
     }
-  }, [showError, selectedChantier]);
+  }, [showError, selectedChantier, user, hasPermission]);
 
   const loadData = useCallback(async () => {
     if (!selectedChantier) return;

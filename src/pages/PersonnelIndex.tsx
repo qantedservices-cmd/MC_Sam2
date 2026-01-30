@@ -10,9 +10,10 @@ import { TYPES_CONTRAT, STATUTS_EMPLOYE } from '../types';
 import { useToast } from '../contexts/ToastContext';
 import { formatMontant } from '../utils/format';
 import { useAuth } from '../contexts/AuthContext';
+import { canAccessChantier } from '../utils/permissions';
 
 export default function PersonnelIndex() {
-  const { hasPermission } = useAuth();
+  const { user, hasPermission } = useAuth();
   const { showSuccess, showError } = useToast();
 
   const [loading, setLoading] = useState(true);
@@ -49,14 +50,18 @@ export default function PersonnelIndex() {
         getEmployes(),
         getChantiers()
       ]);
+      // Filtrer les chantiers selon les permissions
+      const accessibleChantiers = user && !hasPermission('canViewAllChantiers')
+        ? chantiersData.filter(c => canAccessChantier(user.role, user.chantierIds, c.id))
+        : chantiersData;
       setEmployes(employesData);
-      setChantiers(chantiersData);
+      setChantiers(accessibleChantiers);
     } catch {
       showError('Erreur lors du chargement des donnees');
     } finally {
       setLoading(false);
     }
-  }, [showError]);
+  }, [showError, user, hasPermission]);
 
   useEffect(() => {
     loadData();

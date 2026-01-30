@@ -190,9 +190,10 @@ export default function ChantierFilterPanel({
 
             {/* Liste des chantiers */}
             <div className="max-h-64 overflow-y-auto p-2 space-y-1">
-              {selection.orderedIds.map((id, index) => {
-                const chantier = getChantierById(id);
-                if (!chantier) return null;
+              {selection.orderedIds
+                .map(id => ({ id, chantier: getChantierById(id) }))
+                .filter((item): item is { id: string; chantier: Chantier } => !!item.chantier)
+                .map(({ id, chantier }, index) => {
                 const isSelected = selection.selectedIds.includes(id);
 
                 return (

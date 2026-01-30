@@ -14,6 +14,7 @@ import { TYPES_MATERIEL, TYPES_DEPLACEMENT } from '../types';
 import { useToast } from '../contexts/ToastContext';
 import { formatMontant } from '../utils/format';
 import { useAuth } from '../contexts/AuthContext';
+import { canAccessChantier } from '../utils/permissions';
 
 interface UtilisationForm {
   id?: string;
@@ -30,7 +31,7 @@ interface UtilisationForm {
 const TAUX_KM_DEFAULT = 0.25; // DNT par km
 
 export default function UtilisationMaterielPage() {
-  const { user } = useAuth();
+  const { user, hasPermission } = useAuth();
   const { showSuccess, showError } = useToast();
 
   const [loading, setLoading] = useState(true);
@@ -52,15 +53,19 @@ export default function UtilisationMaterielPage() {
         getChantiers(),
         getMaterielsActifs()
       ]);
-      setChantiers(chantiersData);
+      // Filtrer les chantiers selon les permissions
+      const accessibleChantiers = user && !hasPermission('canViewAllChantiers')
+        ? chantiersData.filter(c => canAccessChantier(user.role, user.chantierIds, c.id))
+        : chantiersData;
+      setChantiers(accessibleChantiers);
       setMateriels(materielsData);
-      if (chantiersData.length > 0 && !selectedChantier) {
-        setSelectedChantier(chantiersData[0].id);
+      if (accessibleChantiers.length > 0 && !selectedChantier) {
+        setSelectedChantier(accessibleChantiers[0].id);
       }
     } catch {
       showError('Erreur lors du chargement');
     }
-  }, [showError, selectedChantier]);
+  }, [showError, selectedChantier, user, hasPermission]);
 
   const loadData = useCallback(async () => {
     if (!selectedChantier) return;

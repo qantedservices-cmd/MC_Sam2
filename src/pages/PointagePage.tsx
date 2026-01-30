@@ -9,9 +9,10 @@ import type { Employe, Chantier, Pointage, TypePointage } from '../types';
 import { TYPES_POINTAGE } from '../types';
 import { useToast } from '../contexts/ToastContext';
 import { useAuth } from '../contexts/AuthContext';
+import { canAccessChantier } from '../utils/permissions';
 
 export default function PointagePage() {
-  const { user } = useAuth();
+  const { user, hasPermission } = useAuth();
   const { showSuccess, showError } = useToast();
 
   const [loading, setLoading] = useState(true);
@@ -29,14 +30,18 @@ export default function PointagePage() {
   const loadChantiers = useCallback(async () => {
     try {
       const data = await getChantiers();
-      setChantiers(data);
-      if (data.length > 0 && !selectedChantier) {
-        setSelectedChantier(data[0].id);
+      // Filter chantiers based on user permissions
+      const accessibleData = user && !hasPermission('canViewAllChantiers')
+        ? data.filter(c => canAccessChantier(user.role, user.chantierIds, c.id))
+        : data;
+      setChantiers(accessibleData);
+      if (accessibleData.length > 0 && !selectedChantier) {
+        setSelectedChantier(accessibleData[0].id);
       }
     } catch {
       showError('Erreur lors du chargement des chantiers');
     }
-  }, [showError, selectedChantier]);
+  }, [showError, selectedChantier, user, hasPermission]);
 
   const loadEmployesAndPointages = useCallback(async () => {
     if (!selectedChantier) return;

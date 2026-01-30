@@ -449,10 +449,10 @@ export default function EtatsAvancementPage() {
                             Factures liees ({etat.facturationIds.length})
                           </h3>
                           <div className="space-y-2">
-                            {etat.facturationIds.map(fId => {
-                              const f = factures.find(fac => fac.id === fId);
-                              if (!f) return null;
-                              return (
+                            {etat.facturationIds
+                              .map(fId => ({ fId, f: factures.find(fac => fac.id === fId) }))
+                              .filter((item): item is { fId: string; f: NonNullable<typeof item.f> } => !!item.f)
+                              .map(({ fId, f }) => (
                                 <div key={fId} className="bg-white border rounded-lg p-2 text-sm">
                                   <div className="flex justify-between">
                                     <span className="font-medium">{f.numero}</span>
@@ -460,8 +460,7 @@ export default function EtatsAvancementPage() {
                                   </div>
                                   <p className="text-gray-500 text-xs">{formatDate(f.date)}</p>
                                 </div>
-                              );
-                            })}
+                              ))}
                           </div>
                         </div>
                       )}

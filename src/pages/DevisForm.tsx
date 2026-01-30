@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { createDevis, getChantiers } from '../services/api';
 import { useToast } from '../contexts/ToastContext';
+import { useAuth } from '../contexts/AuthContext';
+import { canAccessChantier } from '../utils/permissions';
 import HierarchicalCategorySelect from '../components/HierarchicalCategorySelect';
 import { ArrowLeft, Save, Loader2, FileText } from 'lucide-react';
 import type { Chantier, StatutDevis } from '../types';
@@ -10,6 +12,7 @@ import { STATUTS_DEVIS } from '../types';
 export default function DevisForm() {
   const navigate = useNavigate();
   const { showSuccess, showError } = useToast();
+  const { user, hasPermission } = useAuth();
 
   const [chantiers, setChantiers] = useState<Chantier[]>([]);
   const [formData, setFormData] = useState({
@@ -30,7 +33,11 @@ export default function DevisForm() {
     async function loadChantiers() {
       try {
         const data = await getChantiers();
-        setChantiers(data);
+        // Filtrer les chantiers selon les permissions
+        const accessibleData = user && !hasPermission('canViewAllChantiers')
+          ? data.filter(c => canAccessChantier(user.role, user.chantierIds, c.id))
+          : data;
+        setChantiers(accessibleData);
       } catch {
         showError('Erreur lors du chargement des chantiers');
       } finally {
@@ -38,7 +45,7 @@ export default function DevisForm() {
       }
     }
     loadChantiers();
-  }, [showError]);
+  }, [showError, user, hasPermission]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
