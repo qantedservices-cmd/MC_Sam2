@@ -20,6 +20,8 @@ const DevisForm = lazy(() => import('./pages/DevisForm'));
 const TransfertForm = lazy(() => import('./pages/TransfertForm'));
 const LoginPage = lazy(() => import('./pages/LoginPage'));
 const RegisterPage = lazy(() => import('./pages/RegisterPage'));
+const ForgotPasswordPage = lazy(() => import('./pages/ForgotPasswordPage'));
+const ResetPasswordPage = lazy(() => import('./pages/ResetPasswordPage'));
 const UsersManagement = lazy(() => import('./pages/UsersManagement'));
 const PersonnelIndex = lazy(() => import('./pages/PersonnelIndex'));
 const PointagePage = lazy(() => import('./pages/PointagePage'));
@@ -66,6 +68,8 @@ function App() {
             <Routes>
               <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<RegisterPage />} />
+              <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+              <Route path="/reset-password" element={<ResetPasswordPage />} />
               <Route path="/unauthorized" element={<UnauthorizedPage />} />
 
               <Route path="/" element={
