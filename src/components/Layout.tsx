@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { Link, Outlet, useNavigate, useLocation } from 'react-router-dom';
-import { PlusCircle, HardHat, Users, Upload, BarChart3, User, LogOut, ChevronDown, Shield, Menu, X, UserCheck, Package, Building2, Coins } from 'lucide-react';
+import { PlusCircle, HardHat, Users, Upload, BarChart3, User, LogOut, ChevronDown, Shield, Menu, X, UserCheck, Package, Building2, Coins, Settings } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useCurrency } from '../contexts/CurrencyContext';
 import { USER_ROLES, DEVISES, DEVISE_DISPLAY, type DeviseType } from '../types';
@@ -12,8 +12,10 @@ export default function Layout() {
   const navigate = useNavigate();
   const location = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const settingsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => { setMobileMenuOpen(false); }, [location.pathname]);
 
@@ -21,6 +23,9 @@ export default function Layout() {
     function handleClickOutside(event: MouseEvent) {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
         setMenuOpen(false);
+      }
+      if (settingsRef.current && !settingsRef.current.contains(event.target as Node)) {
+        setSettingsOpen(false);
       }
     }
     document.addEventListener('mousedown', handleClickOutside);
@@ -35,9 +40,14 @@ export default function Layout() {
     { to: '/acteurs', icon: Users, label: 'Acteurs', permission: null },
     { to: '/personnel', icon: UserCheck, label: 'Personnel', permission: 'canSaisiePointage' as const },
     { to: '/materiel', icon: Package, label: 'Materiel', permission: 'canSaisiePointage' as const },
-    { to: '/import', icon: Upload, label: 'Import', permission: 'canImportData' as const },
+  ];
+
+  const settingsItems = [
+    { to: '/import', icon: Upload, label: 'Import données', permission: 'canImportData' as const },
     { to: '/users', icon: Shield, label: 'Utilisateurs', permission: 'canManageUsers' as const },
   ];
+
+  const hasAnySettingsPermission = settingsItems.some(item => hasPermission(item.permission));
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -67,6 +77,45 @@ export default function Layout() {
                 const el = <Link key={item.to} to={item.to} className={`flex items-center gap-1 px-2 md:px-3 py-2 rounded-lg hover:bg-amber-600 ${isActive ? 'bg-amber-600/80' : ''}`}><item.icon className="w-5 h-5" /><span className="hidden md:inline text-sm">{item.label}</span></Link>;
                 return item.permission ? <PermissionGate key={item.to} permission={item.permission}>{el}</PermissionGate> : el;
               })}
+
+              {/* Menu Paramètres */}
+              {hasAnySettingsPermission && (
+                <div className="relative" ref={settingsRef}>
+                  <button
+                    onClick={() => setSettingsOpen(!settingsOpen)}
+                    className={`flex items-center gap-1 px-2 md:px-3 py-2 rounded-lg hover:bg-amber-600 ${
+                      settingsOpen || settingsItems.some(item => location.pathname === item.to) ? 'bg-amber-600/80' : ''
+                    }`}
+                  >
+                    <Settings className="w-5 h-5" />
+                    <span className="hidden md:inline text-sm">Paramètres</span>
+                    <ChevronDown className={`w-4 h-4 transition-transform ${settingsOpen ? 'rotate-180' : ''}`} />
+                  </button>
+                  {settingsOpen && (
+                    <div className="absolute top-full left-0 mt-1 w-48 bg-white rounded-lg shadow-xl py-1 z-50">
+                      {settingsItems
+                        .filter(item => hasPermission(item.permission))
+                        .map(item => {
+                          const isActive = location.pathname === item.to;
+                          return (
+                            <Link
+                              key={item.to}
+                              to={item.to}
+                              onClick={() => setSettingsOpen(false)}
+                              className={`flex items-center gap-3 px-4 py-2 text-sm ${
+                                isActive ? 'bg-amber-50 text-amber-700' : 'text-gray-700 hover:bg-gray-50'
+                              }`}
+                            >
+                              <item.icon className="w-4 h-4" />
+                              {item.label}
+                            </Link>
+                          );
+                        })}
+                    </div>
+                  )}
+                </div>
+              )}
+
               <PermissionGate permission="canCreateChantier">
                 <Link to="/chantiers/nouveau" className="flex items-center gap-1 px-2 md:px-3 py-2 bg-white text-amber-600 rounded-lg hover:bg-amber-50 font-medium">
                   <PlusCircle className="w-5 h-5" /><span className="hidden md:inline text-sm">Nouveau</span>
@@ -147,6 +196,22 @@ export default function Layout() {
               const isActive = location.pathname === item.to || (item.to !== '/' && location.pathname.startsWith(item.to));
               return <Link key={item.to} to={item.to} className={`flex items-center gap-3 px-4 py-3 rounded-lg ${isActive ? 'bg-amber-50 text-amber-600' : 'text-gray-700 hover:bg-gray-100'}`}><item.icon className="w-5 h-5" /><span className="font-medium">{item.label}</span></Link>;
             })}
+
+          {/* Section Paramètres mobile */}
+          {hasAnySettingsPermission && (
+            <>
+              <div className="px-4 py-2 mt-3 border-t">
+                <p className="text-xs font-medium text-gray-400 uppercase tracking-wider">Paramètres</p>
+              </div>
+              {settingsItems
+                .filter(item => hasPermission(item.permission))
+                .map(item => {
+                  const isActive = location.pathname === item.to;
+                  return <Link key={item.to} to={item.to} className={`flex items-center gap-3 px-4 py-3 rounded-lg ${isActive ? 'bg-amber-50 text-amber-600' : 'text-gray-700 hover:bg-gray-100'}`}><item.icon className="w-5 h-5" /><span className="font-medium">{item.label}</span></Link>;
+                })}
+            </>
+          )}
+
           {hasPermission('canCreateChantier') && <Link to="/chantiers/nouveau" className="flex items-center gap-3 px-4 py-3 mt-2 bg-amber-500 text-white rounded-lg hover:bg-amber-600"><PlusCircle className="w-5 h-5" /><span className="font-medium">Nouveau chantier</span></Link>}
         </nav>
         <div className="absolute bottom-0 left-0 right-0 p-4 border-t">
