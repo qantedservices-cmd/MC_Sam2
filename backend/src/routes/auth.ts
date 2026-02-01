@@ -8,6 +8,7 @@ const router = Router();
 const JWT_SECRET = process.env.JWT_SECRET || 'monchantier-secret-key';
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
 const APP_URL = process.env.APP_URL || 'http://localhost:5173';
+const EMAIL_FROM = process.env.EMAIL_FROM || 'MonChantier <onboarding@resend.dev>';
 
 const resend = RESEND_API_KEY ? new Resend(RESEND_API_KEY) : null;
 
@@ -104,7 +105,7 @@ router.post('/forgot-password', async (req, res) => {
     // Envoyer l'email si Resend est configuré
     if (resend) {
       await resend.emails.send({
-        from: 'MonChantier <noreply@monchantier.com>',
+        from: EMAIL_FROM,
         to: email,
         subject: 'Réinitialisation de votre mot de passe - MonChantier',
         html: `
